@@ -1,0 +1,35 @@
+{
+  "users": [
+    {
+      "id": "17ac",
+      "fnName": "Muhammed",
+      "lastName": "Erfan",
+      "email": "erfanpv786@gmail.com",
+      "password": "Erfan@123",
+      "cpassword": "Erfan@123",
+      "cart": []
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Modern Leather Sofa",
+      "type": "Sofa",
+      "src": "https://m.media-amazon.com/images/I/81ZzPbZt1pL._AC_UL600_FMwebp_QL65_.jpg",
+      "price": 799,
+      "description": "A sleek and comfortable leather sofa for your living room.",
+      "qty": 1,
+      "star": 4
+    },
+    {
+      "id": "3",
+      "name": "Elegant Leather Sofa",
+      "type": "Sofa",
+      "src": "https://m.media-amazon.com/images/I/71-u6xZhSjL._AC_UL480_FMwebp_QL65_.jpg",
+      "price": 702,
+      "description": "A luxurious leather sofa for your living room.",
+      "qty": 1,
+      "star": 4
+    }
+  ]
+}
