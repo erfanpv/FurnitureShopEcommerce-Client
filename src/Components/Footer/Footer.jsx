@@ -59,7 +59,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href="#"
+                  href=""
                   rel="noreferrer"
                   target="_blank"
                   className="text-gray-700 transition hover:opacity-75"
