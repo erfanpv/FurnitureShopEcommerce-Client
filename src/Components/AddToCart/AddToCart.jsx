@@ -3,32 +3,31 @@ import { useParams } from "react-router-dom";
 import AddCartProduct from "./AddCartProduct";
 import MyContext from "../../utils/Context";
 import axios from "axios";
+import ProdutShimmer from "../ShimmerUI/ProductShimmer/ProductShimmer";
 
 const AddToCart = () => {
-  const { filteredItems, setFilteredItems, user } = useContext(MyContext);
+  const { filteredItems } = useContext(MyContext);
   const { id } = useParams();
-  const idNum = Number(id.slice(1));
-  console.log(idNum);
+  const idNum = id.slice(1); 
 
-  const [productItem, setProductItem] = useState(() => {
-    return filteredItems.find((item) => item.id === idNum);
-  });
+  const [productItem, setProductItem] = useState(null); 
 
   useEffect(() => {
-    if (!productItem) {
-      // Fetch product data if not found in filteredItems
+    const foundProduct = filteredItems.find((item) => item.id === idNum);
+    if (foundProduct) {
+      setProductItem(foundProduct);
+    } else {
       axios
         .get(`http://localhost:5000/products/${idNum}`)
         .then((res) => setProductItem(res.data))
-        .catch((err) => console.log("Error fetching product data:", err));
+        .catch((err) => {
+          console.log("Error fetching product data:", err);
+          setProductItem(null); 
+        });
     }
-  }, [idNum, productItem]);
+  }, [idNum, filteredItems]);
 
-  return productItem ? (
-    <AddCartProduct productItem={productItem} />
-  ) : (
-    <div>Loading...</div>
-  );
+  return productItem ? <AddCartProduct productItem={productItem} /> : <ProdutShimmer />;
 };
 
 export default AddToCart;

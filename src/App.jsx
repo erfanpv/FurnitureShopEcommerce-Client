@@ -1,129 +1,73 @@
-import React, { useEffect, useId, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, json } from "react-router-dom";
-import Header from "./Components/Header/Header";
-import LoginForm from "./Components/User/Login/LoginForm";
-import UserRegistration from "./Components/User/Register/UserRegistration";
-import Home from "./Components/Home/Home";
-import Footer from "./Components/Footer/Footer";
-import Products from "./Components/Products/Products";
-import AddToCartPage from "./Components/AddToCart/AddToCart";
-import Beds from "./Components/Products/CatogeryProduct/Beds";
-import Sofas from "./Components/Products/CatogeryProduct/Sofas";
-import Tables from "./Components/Products/CatogeryProduct/Tables";
-import Mycart from "./Components/Cart/Mycart";
-import MyContext from "./utils/Context";
-import PaymentSection from "./Components/PaymentSections/Payment";
-import productList from "./data/productList";
+import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home/Home";
+import HomePage from "./Pages/HomePage/HomePage";
+import ProductStore from "./Pages/ProductStore/Products";
+import ViewProduct from "./Pages/SingleProduct/ViewProduct";
+import UserCart from "./Pages/MyCart/UserCart";
+import PaymentPage from "./Pages/PaymentPage/PaymentPage";
+import LoginForm from "./Components/User/Login/LoginForm";
+import UserRegistration from "./Components/User/Register/UserRegistration";
+import CatogoryCard from "./Components/Products/CatogeryProduct/CatogoryCard";
+import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
+import ClientOrders from "./Pages/ClientOrders/ClientOrders";
 {
-  /***Admin Side */
+  /*Import Admin Details*/
 }
-// import AdminPanel from "./Admin/AdminPanel/AdminPanel";
-// import Dashboard from "./Admin/Dashboard.jsx/Dasboard";
-// import Productsadm from "./Admin/Products/AdProductList";
-// import AdminNav from "./Admin/AdminNav/AdminNav";
+import AdminLayout from "./Admin/AdminLayOut/AdminLayout";
+import AdminProducts from "./Admin/AdminProducts/AdminProducts";
+import Dashboard from "./Admin/Dashboard/Dasboard";
+import AddProduct from "./Admin/AddProduct/AddProductForm/AddProductForm";
+import UserList from "./Admin/UsersList/UserList";
+import CustomerCart from "./Admin/UsersList/CustomerCart/CustomerCart"
+import EditProduct from "./Admin/AdminProducts/AdminFurnitureCard/EditForm/EditForm";
+import FurnitureType from "./Admin/FurniturTypes/FurnitureType";
+import UserOrders from "./Admin/UsersList/CustomerOrders/userOrders";
+import Allorders from "./Admin/Allorders/Allorders";
 
-function App() {
-  const [addCart, setAddCart] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [isloggedIn, setLoggedIn] = useState(false);
-  const [productItems, setProductItems] = useState(0);
-  const [cartItems, setCartItems] = useState([]);
-  const [user, setUser] = useState("");
-  const [userId, setUserId] = useState(0);
-
-  const userFound = localStorage.getItem("id");
-
-  useEffect(() => {
-    if (userFound) {
-      setLoggedIn(true);
-      setUserId(userFound);
-    }
-  }, []);
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/users/" + userFound).then((res) => {
-      setUser(res?.data);
-    });
-  }, [userFound]);
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/users/" + userFound).then((res) => {
-      setAddCart(res?.data?.cart);
-    });
-  }, []);
-
+const App = () => {
   return (
     <>
+      <Router>
+        <Routes>
+          {/*---User Side---*/}
+          <Route path="/" element={<Home />}>
+            <Route index element={<HomePage />} />
+            <Route path="products" element={<ProductStore />} />
+            <Route path={"/products/cart/:id"} element={<ViewProduct />} />
+            <Route path={"/products/cart/mycart"} element={<UserCart />} />
+            <Route path={"/products/:type"} element={<CatogoryCard/>} />
+            <Route path={"/profile/"} element={<UserProfilePage/>} />
+            <Route path={"/orders/:id"} element={<ClientOrders/>} />
+
+
+          </Route>
+          <Route path={"/payment/:id"} element={<PaymentPage />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="register" element={<UserRegistration />} />
+
+          {/*---Admin Side---*/}
+          <Route path="admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="/admin/productlist" element={<AdminProducts />} />
+            <Route path={"/admin/productlist/addproduct"} element={<AddProduct/>} />
+            <Route path={"/admin/userslist"} element={<UserList/>} />
+            <Route path={"/admin/userslist/viewcart/:id"} element={<CustomerCart/>} />
+            <Route path={"/admin/userslist/orders/:id"} element={<UserOrders/>} />
+            <Route path={"/admin/productlist/update/:id"} element={<EditProduct/>} />
+            <Route path={"/admin/productlist/:type"} element={<FurnitureType/>} />
+            <Route path={"/admin/allorders"} element={<Allorders/>} />
+
+            {/* <Route path={"/admin/userlist/orders/:type"} element={<FurnitureType/>} /> */}
+          </Route>
+
+        </Routes>
+      </Router>
       <ToastContainer />
-      <MyContext.Provider
-        value={{
-          addCart,
-          setAddCart,
-          filteredItems,
-          setFilteredItems,
-          isloggedIn,
-          setLoggedIn,
-          productItems,
-          setProductItems,
-          cartItems,
-          setCartItems,
-          user,
-          setUser,
-          userId,
-          setUserId,
-        }}
-      >
-        <Router>
-          <div className="bg-slate-100">
-            {/* Conditionally render Header based on the route */}
-            <Routes>
-              <Route path="/" element={<Header />} />
-              <Route path="/login" element={null} />
-              <Route path="/register" element={null} />
-              {/* <Route path={"/admin"} element={null} />
-              <Route path={"/productsadm"} element={null} />
-              <Route path={"/adminnav"} element={null} /> */}
-              <Route path="/*" element={<Header />} />
-            </Routes>
-
-            {/* Define routes using Routes and Route components */}
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<LoginForm />} />
-              <Route path="/register" element={<UserRegistration />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/beds" element={<Beds />} />
-              <Route path="/sofas" element={<Sofas />} />
-              <Route path="/tables" element={<Tables />} />
-              <Route path={"/products/cart/:id"} element={<AddToCartPage />} />
-              <Route path={"/products/cart/mycart"} element={<Mycart />} />
-              <Route path={"/payment"} element={<PaymentSection />} />
-
-              {/**Admin router */}
-              {/* <Route path={"/admin"} element={<AdminPanel />} />
-              <Route path={"/productsadm"} element={<Productsadm />} />
-              <Route path={"/adminnav"} element={<AdminNav />} /> */}
-            </Routes>
-
-            {/* Conditionally render Footer based on the route */}
-            <Routes>
-              <Route path="/" element={<Footer />} />
-              <Route path="/login" element={null} />
-              <Route path="/register" element={null} />
-              <Route path={"/other"} element={null} />
-              <Route path={"/dashboard"} element={null} />
-              <Route path={"/productsadm"} element={null} />
-              <Route path="/*" element={<Footer />} />
-            </Routes>
-          </div>
-        </Router>
-      </MyContext.Provider>
     </>
   );
-}
+};
 
 export default App;

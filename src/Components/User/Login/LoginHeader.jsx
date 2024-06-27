@@ -26,7 +26,7 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
-import Logo from "../../../assets/Images/Slide-1.jpg";
+import StoreLogo from "../../../assets/Icons/StoreLgo.jpg"
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -44,7 +44,7 @@ export default function LoginHeader() {
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
-            <img className="h-16 rounded-md" src={Logo} alt="" />
+            <img className="h-16 rounded-md" src={StoreLogo} alt="" />
           </Link>
         </div>
 
@@ -87,7 +87,7 @@ export default function LoginHeader() {
           <div className="flex items-center justify-between">
             <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img className="h-8 w-auto" src={Logo} alt="" />
+              <img className="h-8 w-auto" src={StoreLogo} alt="" />
             </Link>
 
             <button

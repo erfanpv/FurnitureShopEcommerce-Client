@@ -16,7 +16,8 @@ const UserRegistration = () => {
       email: "",
       password: "",
       cpassword: "",
-      cart:[]
+      cart: [],
+      orderData: [],
     },
     validationSchema: Yup.object({
       fnName: Yup.string().required("Required"),
@@ -217,7 +218,7 @@ const UserRegistration = () => {
                 <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
                   <button
                     type="submit"
-                    className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500"
+                    className="inline-block shrink-0 rounded-md border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
                   >
                     Create an account
                   </button>

@@ -1,4 +1,4 @@
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Dialog,
@@ -34,39 +34,12 @@ import {
 import Logo from "../../assets/Images/Slide-1.jpg";
 import MyContext from "../../utils/Context";
 import SearchWithSuggestions from "./Search/Search";
+import axios from "axios";
+import CatogoryButton from "../Products/CatogeryProduct/Catogory";
+import MobileMenuCatogory from "../Products/CatogeryProduct/mobileMenu";
+import StoreLogo from "../../assets/Icons/StoreLgo.jpg"
 
-const products = [
-  {
-    name: "All",
-    description: "Check our stor and Explore your life",
-    href: "/products",
-    icon: "https://m.media-amazon.com/images/I/519esrrcuUL._AC_UL600_FMwebp_QL65_.jpg",
-  },
-  {
-    name: "Beds",
-    description: "Check our stor and Explore your life",
-    href: "/beds",
-    icon: "https://m.media-amazon.com/images/I/71Ih3hH7WmL._AC_UL600_FMwebp_QL65_.jpg",
-  },
-  {
-    name: "SofaS",
-    description: "Check our stor and Explore your life",
-    href: "/sofas",
-    icon: "https://m.media-amazon.com/images/I/81ZzPbZt1pL._AC_UL600_FMwebp_QL65_.jpg",
-  },
-  {
-    name: "Tables",
-    description: "Check our stor and Explore your life",
-    href: "/tables",
-    icon: "https://m.media-amazon.com/images/I/91rTGlUZBHL._AC_UL600_FMwebp_QL65_.jpg",
-  },
-];
 
-const userNavigation = [
-  { name: "Your Profile", href: "/profile" },
-  { name: "Settings", href: "/setting" },
-  { name: "Sign out", href: "/" },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -75,6 +48,25 @@ function classNames(...classes) {
 export default function Header() {
   const { isloggedIn, setLoggedIn, cartItems, user } = useContext(MyContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartLength, setCartLength] = useState(0);
+  const [userName, setUserName] = useState("");
+  const userFound = localStorage.getItem("id");
+
+  const userNavigation = [
+    { name: "Your Profile", href: "/profile" },
+    { name: "Order Details", href: `/orders/${userFound}` },
+    { name: "Sign out", href: "/" },
+  ];
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/users/${userFound}`)
+      .then((response) => {
+        setCartLength(response.data.cart);
+        setUserName(response.data.lastName);
+      })
+      .catch((err) => console.log("header fethch failed", err));
+  }, [cartItems]);
 
   const handleLogout = () => {
     localStorage.removeItem("id");
@@ -89,16 +81,17 @@ export default function Header() {
       >
         <div className="flex lg:flex-1">
           <div className="-m-1.5 p-1.5">
+            <Link to={"/"}>
             <span className="sr-only">Your Company</span>
-            <img className="h-16 rounded-md" src={Logo} alt="" />
+            <img className="hidden sm:block h-20 rounded-md" src={StoreLogo} alt="" />
+            </Link>
           </div>
         </div>
 
         {/**Search-bar */}
-        <Link to={"/products"}>
-          <SearchWithSuggestions />
-        </Link>
-
+       
+        <SearchWithSuggestions />
+       
         {/***Hamber Icon for mobile menu */}
         <div className="flex lg:hidden">
           <button
@@ -125,49 +118,7 @@ export default function Header() {
             Products
           </Link>
 
-          <Popover className="relative">
-            <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-              Catogories
-              <ChevronDownIcon
-                className="h-5 w-5 flex-none text-gray-400"
-                aria-hidden="true"
-              />
-            </PopoverButton>
-
-            <Transition
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <PopoverPanel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                <div className="p-4">
-                  {products.map((item) => (
-                    <div
-                      key={item.name}
-                      className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
-                    >
-                      <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                        <img src={item.icon} />
-                      </div>
-                      <div className="flex-auto">
-                        <Link
-                          to={item.href}
-                          className="block font-semibold text-gray-900"
-                        >
-                          {item.name}
-                          <span className="absolute inset-0" />
-                        </Link>
-                        <p className="mt-1 text-gray-600">{item.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </PopoverPanel>
-            </Transition>
-          </Popover>
+          <CatogoryButton />
         </PopoverGroup>
 
         {isloggedIn === true ? (
@@ -179,7 +130,7 @@ export default function Header() {
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <h1 className="text-sm font-semibold leading-6 text-gray-900">
-                      {user.lastName}
+                      {userName}
                     </h1>
                   </MenuButton>
                 </div>
@@ -211,9 +162,9 @@ export default function Header() {
               to="/products/cart/mycart"
               className="text-sm font-semibold leading-6 w-14 lg:ms-20 text-gray-900 "
             >
-              <span className="bg-rose-600 ms-2.5 top-7 absolute text-white p-.5 px-1.5 text-sm rounded-full">
+              <span className="bg-rose-600 ms-2.5 top-5 lg:top-9 md:top-9 sm:top-9 absolute text-white p-.5 px-1.5 text-sm rounded-full">
                 {" "}
-                {cartItems.length > 0 ? cartItems.length : null}{" "}
+                {cartLength.length}
               </span>
               <img
                 className="h-6 w-auto  "
@@ -280,7 +231,7 @@ export default function Header() {
           <div className="flex items-center justify-between">
             <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
-              <img className="h-8 w-auto" src={Logo} alt="" />
+              <img className="h-20 w-auto" src={StoreLogo} alt="" />
             </Link>
 
             <button
@@ -297,47 +248,21 @@ export default function Header() {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 <Link
+                  onClick={() => setMobileMenuOpen(false)}
                   to="/"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Home
                 </Link>
                 <Link
+                  onClick={() => setMobileMenuOpen(false)}
                   to="/products"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Products
                 </Link>
 
-                <Disclosure as="div" className="-mx-3">
-                  {({ open }) => (
-                    <>
-                      <DisclosureButton className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-                        Catogories
-                        <ChevronDownIcon
-                          className={classNames(
-                            open ? "rotate-180" : "",
-                            "h-5 w-5 flex-none"
-                          )}
-                          aria-hidden="true"
-                        />
-                      </DisclosureButton>
-                      <DisclosurePanel className="mt-2 space-y-2">
-                        {products.map((item, index) => (
-                          <Link to={item.href} key={index}>
-                            <DisclosureButton
-                              key={item.name}
-                              as="a"
-                              className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                            >
-                              {item.name}
-                            </DisclosureButton>
-                          </Link>
-                        ))}
-                      </DisclosurePanel>
-                    </>
-                  )}
-                </Disclosure>
+                <MobileMenuCatogory />
               </div>
               <div className="py-6">
                 {isloggedIn === true ? (

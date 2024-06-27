@@ -1,35 +1,108 @@
 {
   "users": [
     {
-      "id": "17ac",
+      "id": "dd00",
       "fnName": "Muhammed",
       "lastName": "Erfan",
       "email": "erfanpv786@gmail.com",
       "password": "Erfan@123",
       "cpassword": "Erfan@123",
-      "cart": []
+      "cart": [
+        {
+          "name": "Elegant Leather Sofa",
+          "type": "Sofa",
+          "src": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          "price": 2499,
+          "description": "Sleek and stylish L-shaped sofa with reversible chaise.",
+          "stock": 10,
+          "qty": 2,
+          "id": "0e80"
+        }
+      ],
+      "orderData": []
+    },
+    {
+      "id": "4a77",
+      "fnName": "Muhammed",
+      "lastName": "Ijas",
+      "email": "ijas@gmail.com",
+      "password": "Ijas@123",
+      "cpassword": "Ijas@123",
+      "cart": [
+        {
+          "name": "Sleepin Bed",
+          "type": "Bed",
+          "src": "https://cdn.pixabay.com/photo/2024/04/21/01/27/ai-generated-8709665_1280.png",
+          "price": "3999",
+          "description": "Classic vintage Beds with an giving to you good comfortness",
+          "stock": "15",
+          "qty": 11,
+          "id": "e4c5"
+        }
+      ],
+      "orderData": [
+        {
+          "cartItems": [
+            {
+              "name": "Elegant Leather Sofa",
+              "type": "Sofa",
+              "src": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "price": 2499,
+              "description": "Sleek and stylish L-shaped sofa with reversible chaise.",
+              "stock": 10,
+              "qty": 1,
+              "id": "0e80"
+            },
+            {
+              "name": "Dining Room Table Set",
+              "type": "Table",
+              "src": "https://images.unsplash.com/photo-1602872029796-f4ab2010b10b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "price": 5999,
+              "description": "A complete dining room table set with chairs included",
+              "stock": 10,
+              "qty": 3,
+              "id": "368c"
+            }
+          ],
+          "total": 22545.6,
+          "email": "ijas@gmail.com",
+          "cardHolder": "Ijas",
+          "billingAddress": "KInfra,Kakkanchery",
+          "orderDate": "2024-06-26T19:16:03.791Z"
+        }
+      ]
     }
   ],
   "products": [
     {
-      "id": "1",
-      "name": "Modern Leather Sofa",
-      "type": "Sofa",
-      "src": "https://m.media-amazon.com/images/I/81ZzPbZt1pL._AC_UL600_FMwebp_QL65_.jpg",
-      "price": 799,
-      "description": "A sleek and comfortable leather sofa for your living room.",
-      "qty": 1,
-      "star": 4
-    },
-    {
-      "id": "3",
       "name": "Elegant Leather Sofa",
       "type": "Sofa",
-      "src": "https://m.media-amazon.com/images/I/71-u6xZhSjL._AC_UL480_FMwebp_QL65_.jpg",
-      "price": 702,
-      "description": "A luxurious leather sofa for your living room.",
+      "src": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "price": 2499,
+      "description": "Sleek and stylish L-shaped sofa with reversible chaise.",
+      "stock": 10,
       "qty": 1,
-      "star": 4
+      "id": "0e80"
+    },
+    {
+      "name": "Dining Room Table Set",
+      "type": "Table",
+      "src": "https://images.unsplash.com/photo-1602872029796-f4ab2010b10b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "price": 5999,
+      "description": "A complete dining room table set with chairs included",
+      "stock": 10,
+      "qty": 1,
+      "id": "368c"
+    },
+    {
+      "name": "Sleepin Bed",
+      "type": "Bed",
+      "src": "https://cdn.pixabay.com/photo/2024/04/21/01/27/ai-generated-8709665_1280.png",
+      "price": "3999",
+      "description": "Classic vintage Beds with an giving to you good comfortness",
+      "stock": "15",
+      "qty": 1,
+      "id": "e4c5"
     }
   ]
 }

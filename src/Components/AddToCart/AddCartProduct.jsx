@@ -1,23 +1,31 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../../utils/Context";
 import { toast } from "react-toastify";
 import axios from "axios";
+import MyContext from "../../utils/Context";
 
 const AddCartProduct = ({ productItem }) => {
   const navigate = useNavigate();
-  const [quantity, setQuantity] = useState(1);
-  const [productItem1, setProductItem] = useState(productItem);
-
   const { addCart, setAddCart, isloggedIn } = useContext(MyContext);
   const userFound = localStorage.getItem("id");
 
+  const [quantity, setQuantity] = useState(1);
+  const [productItem1, setProductItem] = useState(productItem);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (productItem.id) {
+      setLoading(true);
       axios
         .get(`http://localhost:5000/products/${productItem.id}`)
-        .then((res) => setProductItem(res?.data))
-        .catch((err) => console.log("Error fetching product data:", err));
+        .then((res) => {
+          setProductItem(res.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching product data:", err);
+          setLoading(false);
+        });
     }
   }, [productItem.id]);
 
@@ -27,7 +35,8 @@ const AddCartProduct = ({ productItem }) => {
         cart: updatedCart,
       });
     } catch (err) {
-      console.log("Error updating cart:", err);
+      console.error("Error updating cart:", err);
+      toast.error("Failed to update cart. Please try again.");
     }
   };
 
@@ -36,7 +45,9 @@ const AddCartProduct = ({ productItem }) => {
       const existingItem = prevCart.find((item) => item.id === newItem.id);
       const updatedCart = existingItem
         ? prevCart.map((item) =>
-            item.id === newItem.id ? { ...item, qty: item.qty + quantity } : item
+            item.id === newItem.id
+              ? { ...item, qty: item.qty + quantity }
+              : item
           )
         : [...prevCart, { ...newItem, qty: quantity }];
       updateCart(updatedCart);
@@ -45,16 +56,20 @@ const AddCartProduct = ({ productItem }) => {
   };
 
   const handleQuantityChange = (e) => {
-    setQuantity(e.target.value);
+    setQuantity(parseInt(e.target.value, 10));
   };
 
   const handleAddToCart = () => {
-    if (Number(quantity) > 0) {
-      toast.success(
-        `${productItem1.name} added to cart with quantity: ${quantity}`
-      );
-      addToCart(productItem1, Number(quantity));
-      navigate("/products/cart/mycart");
+    if (quantity > 0) {
+      if (productItem1 && productItem1.id) {
+        toast.success(
+          `${productItem1.name} added to cart with quantity: ${quantity}`
+        );
+        addToCart(productItem1, quantity);
+        navigate("/products/cart/mycart");
+      } else {
+        toast.error("Product data is not fully loaded. Please try again.");
+      }
     } else {
       toast.error("You have entered an invalid quantity");
     }
@@ -62,8 +77,12 @@ const AddCartProduct = ({ productItem }) => {
 
   const handleLoginRedirect = () => {
     navigate("/login");
-    toast.warning("You must be logged in");
+    toast.warning("You must be logged in to add items to the cart");
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="bg-white shadow-md rounded-md overflow-hidden flex flex-col lg:flex-row justify-center my-5 mx-5 lg:mx-14">
@@ -84,7 +103,7 @@ const AddCartProduct = ({ productItem }) => {
             #furniture
           </span>
           <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-            #{productItem.type.toLowerCase()}
+            #{productItem1.type.toLowerCase()}
           </span>
         </div>
         <p className="text-gray-700 text-center lg:text-left">
@@ -100,7 +119,7 @@ const AddCartProduct = ({ productItem }) => {
           />
           <button
             onClick={isloggedIn ? handleAddToCart : handleLoginRedirect}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            className="inline-block rounded border border-indigo-600 bg-indigo-600 px-6 py-2 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500 lg:ml-64 mr-5 ml-5 md:ml-64 sm:ml-64"
           >
             Add to Cart
           </button>

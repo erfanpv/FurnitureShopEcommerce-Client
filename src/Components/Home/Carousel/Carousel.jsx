@@ -50,7 +50,7 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative" >
+    <div className="relative">
       <div className="absolute inset-x-0 bottom-0 flex justify-center mb-4 space-x-3">
         {slides.map((_, index) => (
           <button
@@ -65,16 +65,23 @@ const Carousel = () => {
           ></button>
         ))}
       </div>
-      <div className="relative w-full overflow-hidden" style={{ height: "100%" }}>
+      <div
+        className="relative w-full overflow-hidden"
+        style={{ height: "100%" }}
+      >
         <div
           className="flex transition-transform duration-500"
           style={{
             transform: `translateX(-${activeIndex * 100}%)`,
-            height: "100%"
+            height: "100%",
           }}
         >
           {slides.map((slide, index) => (
-            <div key={index} className="relative w-full flex-shrink-0" style={{ height: "100%" }}>
+            <div
+              key={index}
+              className="relative w-full flex-shrink-0"
+              style={{ height: "100%" }}
+            >
               <img
                 src={slide.imgSrc}
                 className="block w-full h-full object-cover"
@@ -94,52 +101,6 @@ const Carousel = () => {
           ))}
         </div>
       </div>
-      <button
-        className="absolute top-0 bottom-0 left-0 z-30 flex items-center justify-center px-4 focus:outline-none"
-        type="button"
-        onClick={handlePrev}
-      >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black bg-opacity-50">
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-          <span className="sr-only">Previous</span>
-        </span>
-      </button>
-      <button
-        className="absolute top-0 bottom-0 right-0 z-30 flex items-center justify-center px-4 focus:outline-none"
-        type="button"
-        onClick={handleNext}
-      >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-black bg-opacity-50">
-          <svg
-            className="w-6 h-6 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-          <span className="sr-only">Next</span>
-        </span>
-      </button>
     </div>
   );
 };

@@ -20,7 +20,9 @@ const SearchWithSuggestions = () => {
     } else {
       setShowSuggestions(false);
     }
+    
   };
+
 
   const handleSuggestionClick = (suggestion) => {
     setSearchQuery(suggestion.name);
