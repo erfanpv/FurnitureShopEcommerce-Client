@@ -47,6 +47,7 @@ const EditProduct = () => {
         .then((response) => {
           console.log("Product updated successfully:", response.data);
           toast.success("Product updated successfully");
+          navigate("/admin/productlist");
         })
         .catch((error) => {
           console.error("Error updating product:", error);
@@ -72,6 +73,7 @@ const EditProduct = () => {
           <h2 className="text-2xl font-bold mb-6">Edit Product</h2>
 
           <Formik
+            enableReinitialize
             initialValues={{
               name: productData.name,
               type: productData.type,
@@ -79,12 +81,11 @@ const EditProduct = () => {
               price: productData.price.toString(),
               description: productData.description,
               stock: productData.stock.toString(),
-              qty: 1,
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting, setFieldValue }) => (
+            {({ isSubmitting }) => (
               <Form>
                 <div className="mb-4 flex items-start">
                   <label

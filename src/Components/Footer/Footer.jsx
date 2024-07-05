@@ -15,7 +15,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href=""
+                  href="https://www.instagram.com/erfan__p_v?igsh=bjl2ZGV1ZjV1bXcx"
                   rel="noreferrer"
                   target="_blank"
                   className="text-gray-700 transition hover:opacity-75"
@@ -39,7 +39,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href="#"
+                  href="https://x.com/erfan__p_v?t=GRtBOQyD-AF666ZNhh56Lg&s=09"
                   rel="noreferrer"
                   target="_blank"
                   className="text-gray-700 transition hover:opacity-75"
@@ -59,7 +59,7 @@ const Footer = () => {
 
               <li>
                 <a
-                  href=""
+                  href="https://github.com/erfanpv"
                   rel="noreferrer"
                   target="_blank"
                   className="text-gray-700 transition hover:opacity-75"

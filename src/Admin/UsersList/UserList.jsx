@@ -7,16 +7,17 @@ import MyContext from "../../utils/Context";
 import UserDeleteModal from "../../Components/Modal/DeleteModal/UserDeleteModal";
 
 const UserList = () => {
-  const { users, setUsers, openModal, closeModal, isModalOpen, setRender } = useContext(MyContext);
+  const { users, setUsers, openModal, closeModal, isModalOpen, setRender } =
+    useContext(MyContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [editingUser, setEditingUser] = useState(null);
-  const [formData, setFormData] = useState({
-    fnName: "",
-    lastName: "",
-    email: "",
-  });
+  // const [editingUser, setEditingUser] = useState(null);
+  // const [formData, setFormData] = useState({
+  //   fnName: "",
+  //   lastName: "",
+  //   email: "",
+  // });
   const [uid, setUid] = useState(null);
 
   useEffect(() => {
@@ -34,24 +35,24 @@ const UserList = () => {
     fetchUsers();
   }, [setUsers]);
 
-  const handleEdit = (user) => {
-    setEditingUser(user.id);
-    setFormData({
-      fnName: user.fnName,
-      lastName: user.lastName,
-      email: user.email,
-    });
-  };
+  // const handleEdit = (user) => {
+  //   setEditingUser(user.id);
+  //   setFormData({
+  //     fnName: user.fnName,
+  //     lastName: user.lastName,
+  //     email: user.email,
+  //   });
+  // };
 
-  const handleCancelEdit = () => {
-    setEditingUser(null);
-    setFormData({ fnName: "", lastName: "", email: "" });
-  };
+  // const handleCancelEdit = () => {
+  //   setEditingUser(null);
+  //   setFormData({ fnName: "", lastName: "", email: "" });
+  // };
 
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  // const handleFormChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+  // };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -70,7 +71,7 @@ const UserList = () => {
         users.map((user) => (user.id === editingUser ? updatedUser : user))
       );
       toast.success("Successfully updated");
-      handleCancelEdit();
+      // handleCancelEdit();
     } catch (error) {
       toast.error("Failed to update user");
     }
@@ -133,12 +134,7 @@ const UserList = () => {
                     >
                       Orders
                     </button>
-                    <button
-                      className="text-indigo-600 hover:text-indigo-900 ml-4"
-                      onClick={() => handleEdit(user)}
-                    >
-                      Edit
-                    </button>
+
                     <button
                       className="text-red-600 hover:text-red-900 ml-4"
                       onClick={() => {
@@ -154,64 +150,12 @@ const UserList = () => {
             </tbody>
           </table>
         </div>
-        {isModalOpen && <UserDeleteModal id={uid} closeModal={closeModal} setRender={setRender} />}
-
-        {editingUser && (
-          <form onSubmit={handleFormSubmit} className="mt-6">
-            <h3 className="text-xl font-bold mb-4">Edit User</h3>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                First Name
-              </label>
-              <input
-                type="text"
-                name="fnName"
-                value={formData.fnName}
-                onChange={handleFormChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Last Name
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleFormChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleFormChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                type="submit"
-                className="inline-block rounded border border-indigo-600 bg-indigo-600 px-6 py-2 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:outline-none focus:ring active:text-indigo-500"
-              >
-                Update
-              </button>
-
-              <button
-                type="button"
-                onClick={handleCancelEdit}
-                className="inline-block rounded border border-rose-600 bg-rose-600 px-6 py-2 text-sm font-medium text-white hover:bg-transparent hover:text-rose-600 focus:outline-none focus:ring active:text-rose-500"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+        {isModalOpen && (
+          <UserDeleteModal
+            id={uid}
+            closeModal={closeModal}
+            setRender={setRender}
+          />
         )}
       </div>
     </>

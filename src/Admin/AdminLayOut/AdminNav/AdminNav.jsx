@@ -47,7 +47,7 @@ function classNames(...classes) {
 export default function Header() {
   const { isloggedIn, setLoggedIn, cartItems, user } = useContext(MyContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("id");
@@ -71,8 +71,6 @@ export default function Header() {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-
-              
       </nav>
 
       {/**Mobile Widget */}
@@ -256,7 +254,7 @@ export default function Header() {
                         </nav>
 
                         <span className="ml-3 mt-10 mb-2 block text-xs font-semibold text-gray-500">
-                           Management
+                          Management
                         </span>
 
                         <nav>
@@ -285,6 +283,28 @@ export default function Header() {
 
                           <Link
                             onClick={() => setMobileMenuOpen(false)}
+                            to="/admin/allorders"
+                            className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4"
+                          >
+                            <svg
+                              className="mr-4 h-5 w-5 align-middle"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                              />
+                            </svg>
+                            All Orders
+                          </Link>
+
+                          <Link
+                            onClick={() => setMobileMenuOpen(false)}
                             to="/admin/userslist"
                             className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4"
                           >
@@ -304,27 +324,6 @@ export default function Header() {
                             </svg>
                             Customers
                           </Link>
-                          {/* 
-                <Link
-                  to="#"
-                  className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4"
-                >
-                  <svg
-                    className="mr-4 h-5 w-5 align-middle"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                    />
-                  </svg>
-                  Orders
-                </Link> */}
                         </nav>
 
                         <span className="ml-3 mt-10 mb-2 block text-xs font-semibold text-gray-500">

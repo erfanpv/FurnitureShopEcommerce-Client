@@ -22,7 +22,7 @@ const UserOrders = () => {
     fetchUsers();
   }, []);
 
-  if (loading) return <ProductShimmer/>;
+  if (loading) return <ProductShimmer />;
 
   return (
     <div className="  pb-20 px-5 sm:ml-64">

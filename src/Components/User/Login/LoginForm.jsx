@@ -6,7 +6,7 @@ import axios from "axios";
 import LoginHeader from "./LoginHeader";
 import MyContext from "../../../utils/Context";
 import { toast } from "react-toastify";
-import StoreLogo from "../../../assets/Icons/StoreLgo.jpg"
+import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
 
 const LoginForm = () => {
   const { isloggedIn, setLoggedIn } = useContext(MyContext);
@@ -40,41 +40,36 @@ const LoginForm = () => {
             (user) =>
               user.email == values.email && user.password === values.password
           );
-          if (
-            inputUSer.email === "erfanpv786@gmail.com" &&
-            inputUSer.password === "Erfan@123"
-          ) {
-            navigate("/admin");
-            localStorage.setItem("id", inputUSer.id);
+
+          if (inputUSer) {
+            toast.success("Successfully Login");
             setLoggedIn(true);
-          } else {
-            if (inputUSer) {
-              localStorage.setItem("id", inputUSer.id);
-              setLoggedIn(true);
-              toast.success("Successfully Login");
-              navigate("/");
+            localStorage.setItem("id", inputUSer.id);
+            if (
+              inputUSer.email === "erfanpv786@gmail.com" &&
+              inputUSer.password === "Erfan@123"
+            ) {
+              navigate("/admin");
             } else {
-              toast.error("Invalid Credentials");
+              navigate("/");
             }
+          } else {
+            toast.error("Invalid Credentials");
           }
         });
     },
-
-    
   });
 
   return (
     <>
       <LoginHeader />
-      
+
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
-        <div className="flex lg:flex-1 justify-center">
-          
+          <div className="flex lg:flex-1 justify-center">
             <span className="sr-only">Your Company</span>
             <img className="h-20 rounded-md" src={StoreLogo} alt="" />
-          
-        </div>
+          </div>
           <h1 className="text-2xl font-bold sm:text-3xl">Get started today!</h1>
           <p className="mt-4 text-gray-500">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Et libero

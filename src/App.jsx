@@ -59,8 +59,6 @@ const App = () => {
             <Route path={"/admin/productlist/update/:id"} element={<EditProduct/>} />
             <Route path={"/admin/productlist/:type"} element={<FurnitureType/>} />
             <Route path={"/admin/allorders"} element={<Allorders/>} />
-
-            {/* <Route path={"/admin/userlist/orders/:type"} element={<FurnitureType/>} /> */}
           </Route>
 
         </Routes>
@@ -71,3 +69,19 @@ const App = () => {
 };
 
 export default App;
+
+{
+  /*
+  User Profile Adding tp Edit Option and Address Option
+  Protected Component
+  Google signup mail automatically 
+  otp system
+  buynow button seperate cart
+  
+  add wishlist
+  Admin Side
+  Including search to All orders dertails
+  Including Message  reply option
+  Navbar fixed at top mobile menu
+  */
+}

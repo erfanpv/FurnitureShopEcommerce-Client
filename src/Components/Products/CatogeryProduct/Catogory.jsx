@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import MyContext from "../../../utils/Context";
 
 const CatogoryButton = () => {
@@ -65,6 +65,7 @@ const CatogoryButton = () => {
           >
             <Link
               to={`/products`}
+              onClick={() => setMobileMenuOpen(false)}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               role="menuitem"
             >
@@ -73,6 +74,7 @@ const CatogoryButton = () => {
             {items.map((item, index) => (
               <Link
                 to={`/products/${item.toLowerCase()}`}
+                onClick={() => setMobileMenuOpen(false)}
                 key={index}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 role="menuitem"

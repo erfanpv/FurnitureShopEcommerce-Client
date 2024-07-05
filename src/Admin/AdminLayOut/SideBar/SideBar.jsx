@@ -28,7 +28,7 @@ const AdminSidebar = () => {
         </nav>
       </header>
 
-      <div className="flex h-screen w-fit flex-col justify-between border-e sm:visible invisible bg-white top-0 absolute">
+      <div className="flex h-screen w-fit flex-col justify-between border-e sm:visible invisible bg-white top-0 fixed">
         <div className="h-screen w-56 ">
           <div className="flex h-full flex-col overflow-y-auto rounded-br-lg rounded-tr-lg bg-white pt-5 shadow-md">
             <div className="flex  items-center px-4">
