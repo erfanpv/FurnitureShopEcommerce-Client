@@ -85,16 +85,4 @@ export const fetchCart = createAsyncThunk("products/fetchCart", async (id) => {
   return response.data.cart;
 });
 
-export const updatedCart = createAsyncThunk(
-  "cart/updatedCart",
-  async ({ userId, cart }) => {
-    try {
-      await axios.patch(`http://localhost:5000/users/${userId}`, { cart });
-      return cart;
-    } catch (err) {
-      console.error("Error updating cart:", err);
-      toast.error("Failed to update cart. Please try again.");
-      throw err;
-    }
-  }
-);
+
