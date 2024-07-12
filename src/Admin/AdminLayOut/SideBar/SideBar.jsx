@@ -5,16 +5,19 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import AdminNav from "../AdminNav/AdminNav";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
 import MyContext from "../../../utils/Context";
+import { setLoggedIn } from "../../../app/Slice/usersSlice/usersSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminSidebar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isloggedIn, setLoggedIn } = useContext(MyContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.users);
 
   const handleLogout = () => {
     localStorage.removeItem("id");
-    setLoggedIn(false);
-    navigate("/login")
+    dispatch(setLoggedIn(false));
+    navigate("/login");
   };
 
   return (
@@ -181,13 +184,12 @@ const AdminSidebar = () => {
               </nav>
 
               <span className="ml-3 mt-10 mb-2 block text-xs font-semibold text-gray-500">
-               Management
+                Management
               </span>
 
               <nav>
                 <Link to={"/admin/productlist"}>
-                  <div 
-                  className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4">
+                  <div className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4">
                     <svg
                       className="mr-4 h-5 w-5 align-middle"
                       xmlns="http://www.w3.org/2000/svg"
@@ -205,7 +207,7 @@ const AdminSidebar = () => {
                     Products
                   </div>
                 </Link>
-                
+
                 <Link
                   to={"/admin/allorders"}
                   className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4"
@@ -254,9 +256,8 @@ const AdminSidebar = () => {
               </span>
 
               <nav>
-                {isloggedIn ? (
+                {isLoggedIn ? (
                   <div
-                  
                     onClick={handleLogout}
                     className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4"
                   >
@@ -277,7 +278,7 @@ const AdminSidebar = () => {
                     Logout
                   </div>
                 ) : (
-                 navigate("/login")
+                  navigate("/login")
                 )}
               </nav>
             </div>

@@ -14,8 +14,9 @@ import CatogoryCard from "./Components/Products/CatogeryProduct/CatogoryCard";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import ClientOrders from "./Pages/ClientOrders/ClientOrders";
 {
-  /*Import Admin Details*/
+  /* Import Admin Details */
 }
+
 import AdminLayout from "./Admin/AdminLayOut/AdminLayout";
 import AdminProducts from "./Admin/AdminProducts/AdminProducts";
 import Dashboard from "./Admin/Dashboard/Dasboard";
@@ -49,7 +50,7 @@ const App = () => {
           <Route path="register" element={<UserRegistration />} />
 
           {/*---Admin Side---*/}
-          <Route path="admin" element={<AdminLayout />}>
+          <Route path="admin" element={<AdminLayout />}> 
             <Route index element={<Dashboard />} />
             <Route path="/admin/productlist" element={<AdminProducts />} />
             <Route path={"/admin/productlist/addproduct"} element={<AddProduct/>} />

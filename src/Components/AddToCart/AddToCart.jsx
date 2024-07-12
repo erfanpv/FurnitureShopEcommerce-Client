@@ -1,33 +1,31 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AddCartProduct from "./AddCartProduct";
-import MyContext from "../../utils/Context";
+import { useDispatch } from "react-redux";
 import axios from "axios";
-import ProdutShimmer from "../ShimmerUI/ProductShimmer/ProductShimmer";
+import AddCartProduct from "./AddCartProduct";
+import ProductShimmer from "../ShimmerUI/ProductShimmer/ProductShimmer";
 
 const AddToCart = () => {
-  const { filteredItems } = useContext(MyContext);
   const { id } = useParams();
-  const idNum = id.slice(1); 
-
-  const [productItem, setProductItem] = useState(null); 
+  const idNum = id.slice(1);
+  const dispatch = useDispatch();
+  const [productItem, setProductItem] = useState(null);
 
   useEffect(() => {
-    const foundProduct = filteredItems.find((item) => item.id === idNum);
-    if (foundProduct) {
-      setProductItem(foundProduct);
-    } else {
-      axios
-        .get(`http://localhost:5000/products/${idNum}`)
-        .then((res) => setProductItem(res.data))
-        .catch((err) => {
-          console.log("Error fetching product data:", err);
-          setProductItem(null); 
-        });
-    }
-  }, [idNum, filteredItems]);
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/products/${idNum}`);
+        setProductItem(response.data);
+      } catch (err) {
+        console.error("Error fetching product data:", err);
+        setProductItem(null);
+      }
+    };
 
-  return productItem ? <AddCartProduct productItem={productItem} /> : <ProdutShimmer />;
+    fetchProduct();
+  }, [idNum]);
+
+  return productItem ? <AddCartProduct productItem={productItem} /> : <ProductShimmer />;
 };
 
 export default AddToCart;

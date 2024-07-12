@@ -9,7 +9,6 @@ const MyCart = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr,350px] gap-3">
         <SingleCart />
-        {/*Order Details*/}
         <OrderSummary />
       </div>
     </div>

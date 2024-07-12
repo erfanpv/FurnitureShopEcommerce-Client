@@ -1,12 +1,23 @@
-import React, { useContext } from "react";
-import MyContext from "../../../utils/Context";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchCart,
+  removeFromCartAsync,
+  quantityIncrementAsync,
+  quantityDecrementAsync,
+} from "../../../app/Slice/addCartSlice/addCartSlice";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import ProductShimmer from "../../ShimmerUI/ProductShimmer/ProductShimmer";
 
 const SingleCart = () => {
-  const { setAddCart, cartItems, setCartItems } = useContext(MyContext);
-
+  const dispatch = useDispatch();
+  const { cart, loading } = useSelector((state) => state.cart);
   const userFound = localStorage.getItem("id");
+
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   const updateCart = async (updatedCart) => {
     try {
@@ -19,18 +30,28 @@ const SingleCart = () => {
   };
 
   const removeItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
-    setAddCart(updatedCart);
+    const updatedCart = cart.filter((item) => item.id !== id);
+    dispatch(removeFromCartAsync(id));
     updateCart(updatedCart);
-    
   };
+
+  const incrementQuantity = (id) => {
+    dispatch(quantityIncrementAsync(id));
+  };
+
+  const decrementQuantity = (id) => {
+    dispatch(quantityDecrementAsync(id));
+  };
+
+  if (loading) {
+    return <ProductShimmer />;
+  }
 
   return (
     <div>
       <div className="bg-white">
-        {cartItems.length > 0 ? (
-          cartItems.map((item) => (
+        {cart.length > 0 ? (
+          cart.map((item) => (
             <div
               key={item.id}
               className="border border-gray-300 rounded-lg p-4 mb-3 shadow-md"
@@ -47,21 +68,29 @@ const SingleCart = () => {
                 <div className="space-y-2">
                   <div className="font-bold">{item.name}</div>
                   <div className="text-red-700 font-bold">${item.price}</div>
-                  <div className="flex items-center space-x-1">
-                    <span>
-                      Quantity: <span className="font-bold">{item.qty}</span>
-                    </span>
-                    <Link to={`/products/cart/:${item.id}`}>
-                      <span className="text-indigo-600 hover:text-indigo-900">
-                        Update
-                      </span>
-                    </Link>
-                    <span
-                      className="cursor-pointer text-rose-600 hover:text-red-900 ml-4"
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center">
+                      <button
+                        className="text-white bg-indigo-500 hover:bg-indigo-600 rounded-full px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        onClick={() => decrementQuantity(item.id)}
+                      >
+                        -
+                      </button>
+                      <span className="mx-2 font-bold">{item.qty}</span>
+                      <button
+                        className="text-white bg-indigo-500 hover:bg-indigo-600 rounded-full px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        onClick={() => incrementQuantity(item.id)}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <button
+                      className="text-red-600 hover:text-red-900 focus:outline-none"
                       onClick={() => removeItem(item.id)}
                     >
                       Delete
-                    </span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -69,7 +98,10 @@ const SingleCart = () => {
           ))
         ) : (
           <p className="text-center text-rose-600 mt-4 font-bold text-2xl">
-            Your cart is empty. <Link to="/products" className="text-indigo-700">Shop now!</Link>
+            Your cart is empty.{" "}
+            <Link to="/products" className="text-indigo-700">
+              Shop now!
+            </Link>
           </p>
         )}
       </div>

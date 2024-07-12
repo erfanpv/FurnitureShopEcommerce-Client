@@ -3,11 +3,13 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import RegisterImg from "../../../assets/Images/Slide-2.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../../app/Thunk/Thunk";
 
 const UserRegistration = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -19,6 +21,7 @@ const UserRegistration = () => {
       cart: [],
       orderData: [],
     },
+
     validationSchema: Yup.object({
       fnName: Yup.string().required("Required"),
       lastName: Yup.string().required("Required"),
@@ -34,33 +37,7 @@ const UserRegistration = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values);
-      axios.get(`http://localhost:5000/users`).then((data) => {
-        const userData = data.data;
-        const existEmail = userData.find((user) => user.email == values.email);
-
-        if (existEmail) {
-          alert("The email is already exist");
-          navigate("/login");
-        } else {
-          axios
-            .post("http://localhost:5000/users", JSON.stringify(values), {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-            .then((response) => {
-              // Handle successful registration
-              console.log("Create Successfully", response.data);
-              toast.success("Registered Successfully");
-              navigate("/login");
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-              toast.error("Registration Failed");
-            });
-        }
-      });
+      dispatch(registerUser({ values, navigate, toast }));
     },
   });
 

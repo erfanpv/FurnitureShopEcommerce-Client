@@ -1,17 +1,17 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import LoginHeader from "./LoginHeader";
-import MyContext from "../../../utils/Context";
 import { toast } from "react-toastify";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../app/Thunk/Thunk";
 
 const LoginForm = () => {
-  const { isloggedIn, setLoggedIn } = useContext(MyContext);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -32,38 +32,13 @@ const LoginForm = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      axios
-        .get("http://localhost:5000/users")
-        .then((users) => users.data)
-        .then((data) => {
-          const inputUSer = data.find(
-            (user) =>
-              user.email == values.email && user.password === values.password
-          );
-
-          if (inputUSer) {
-            toast.success("Successfully Login");
-            setLoggedIn(true);
-            localStorage.setItem("id", inputUSer.id);
-            if (
-              inputUSer.email === "erfanpv786@gmail.com" &&
-              inputUSer.password === "Erfan@123"
-            ) {
-              navigate("/admin");
-            } else {
-              navigate("/");
-            }
-          } else {
-            toast.error("Invalid Credentials");
-          }
-        });
+      dispatch(loginUser({ values, navigate, toast }));
     },
   });
 
   return (
     <>
       <LoginHeader />
-
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
           <div className="flex lg:flex-1 justify-center">

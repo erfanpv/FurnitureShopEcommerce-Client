@@ -26,13 +26,13 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
-import StoreLogo from "../../../assets/Icons/StoreLgo.jpg"
+import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function LoginHeader() {
+function LoginHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -123,3 +123,5 @@ export default function LoginHeader() {
     </header>
   );
 }
+
+export default LoginHeader;

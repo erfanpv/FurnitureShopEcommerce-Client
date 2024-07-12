@@ -37,21 +37,23 @@ import SearchWithSuggestions from "./Search/Search";
 import axios from "axios";
 import CatogoryButton from "../Products/CatogeryProduct/Catogory";
 import MobileMenuCatogory from "../Products/CatogeryProduct/mobileMenu";
-import StoreLogo from "../../assets/Icons/StoreLgo.jpg"
-
-
+import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  const { isloggedIn, setLoggedIn, cartItems, user } = useContext(MyContext);
+  const { isLoggedIn } = useSelector((state) => state.users);
+  const { cartItems, user } = useContext(MyContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartLength, setCartLength] = useState(0);
   const [userName, setUserName] = useState("");
   const userFound = localStorage.getItem("id");
 
+  const dispatch = useDispatch();
   const userNavigation = [
     { name: "Your Profile", href: "/profile" },
     { name: "Order Details", href: `/orders/${userFound}` },
@@ -70,7 +72,7 @@ export default function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("id");
-    setLoggedIn(false);
+    dispatch(setLoggedIn(false));
   };
 
   return (
@@ -82,16 +84,20 @@ export default function Header() {
         <div className="flex lg:flex-1">
           <div className="-m-1.5 p-1.5">
             <Link to={"/"}>
-            <span className="sr-only">Your Company</span>
-            <img className="hidden sm:block h-20 rounded-md" src={StoreLogo} alt="" />
+              <span className="sr-only">Your Company</span>
+              <img
+                className="hidden sm:block h-20 rounded-md"
+                src={StoreLogo}
+                alt=""
+              />
             </Link>
           </div>
         </div>
 
         {/**Search-bar */}
-       
+
         <SearchWithSuggestions />
-       
+
         {/***Hamber Icon for mobile menu */}
         <div className="flex lg:hidden">
           <button
@@ -121,7 +127,7 @@ export default function Header() {
           <CatogoryButton />
         </PopoverGroup>
 
-        {isloggedIn === true ? (
+        {isLoggedIn === true ? (
           <>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end mr-10">
               <Menu as="div" className="relative ml-3">
@@ -265,7 +271,7 @@ export default function Header() {
                 <MobileMenuCatogory />
               </div>
               <div className="py-6">
-                {isloggedIn === true ? (
+                {isLoggedIn === true ? (
                   <div>
                     <Menu as="div" className="relative ml-3">
                       <div>

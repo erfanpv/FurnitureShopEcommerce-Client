@@ -31,27 +31,25 @@ import {
   PhoneIcon,
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
-import MyContext from "../../../utils/Context";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
+import { setLoggedIn } from "../../../app/Slice/usersSlice/usersSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const userNavigation = [
-  { name: "Your Profile", href: "/profile" },
-  { name: "Settings", href: "/setting" },
-  { name: "Sign out", href: "/" },
-];
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  const { isloggedIn, setLoggedIn, cartItems, user } = useContext(MyContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((state) => state.users);
 
   const handleLogout = () => {
     localStorage.removeItem("id");
-    setLoggedIn(false);
+    dispatch(setLoggedIn(false));
   };
 
   return (
@@ -61,7 +59,7 @@ export default function Header() {
         aria-label="Global"
       >
         {/***Hamber Icon for mobile menu */}
-        <div className="flex lg:hidden absolute right-0 ">
+        <div className="flex sm:hidden md:hidden lg:hidden absolute right-0 ">
           <button
             type="button"
             className="-m-2.5 inline-flex items-center  rounded-md p-2.5 text-gray-700 mr-1"
@@ -331,7 +329,7 @@ export default function Header() {
                         </span>
 
                         <nav>
-                          {isloggedIn ? (
+                          {isLoggedIn ? (
                             <div
                               onClick={handleLogout}
                               className="flex cursor-pointer items-center border-l-rose-600 py-2 px-4 text-sm font-medium text-gray-600 outline-none transition-all duration-100 ease-in-out hover:border-l-4 hover:border-l-rose-600 hover:text-rose-600 focus:border-l-4"

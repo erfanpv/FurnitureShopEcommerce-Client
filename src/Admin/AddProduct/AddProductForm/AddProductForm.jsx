@@ -11,7 +11,7 @@ const AddProduct = ({ onAddProduct }) => {
     src: "",
     price: "",
     description: "",
-    qty: 1,
+    qty: 0,
     stock: "",
   };
 
@@ -30,8 +30,6 @@ const AddProduct = ({ onAddProduct }) => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    console.log(values);
-
     axios
       .post("http://localhost:5000/products", JSON.stringify(values), {
         headers: {

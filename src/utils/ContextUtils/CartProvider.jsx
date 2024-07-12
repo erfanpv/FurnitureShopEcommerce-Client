@@ -1,7 +1,9 @@
 import React, { Children, useContext, useEffect, useState } from "react";
-import MyContext from "../../utils/Context";
+import MyContext from "../Context";
 import axios, { all } from "axios";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setLoggedIn as setAsLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
+import { fetchCart } from "../../app/Slice/addCartSlice/addCartSlice";
 const CartProvider = ({ children }) => {
   const [addCart, setAddCart] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -17,7 +19,6 @@ const CartProvider = ({ children }) => {
   const [filterUser, setFilteUser] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   const searchFilter = (searchValue) => {
     const filtered = searchfilteredItems.filter((product) => {
       return product.name.toLowerCase().includes(searchValue.toLowerCase());
@@ -30,11 +31,15 @@ const CartProvider = ({ children }) => {
     setFilteredItems(filtered);
   };
 
+  const { isLoggedIn } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+
   const userFound = localStorage.getItem("id");
 
   useEffect(() => {
     if (userFound) {
-      setLoggedIn(true);
+      dispatch(setAsLoggedIn(true));
+      dispatch(fetchCart(userFound));
       setUserId(userFound);
     }
   }, []);
@@ -73,13 +78,12 @@ const CartProvider = ({ children }) => {
     setIsModalOpen(true);
     document.body.classList.add("overflow-y-hidden");
   };
-  
+
   const closeModal = () => {
     setIsModalOpen(false);
     document.body.classList.remove("overflow-y-hidden");
   };
-  
-  
+
   return (
     <MyContext.Provider
       value={{
