@@ -1,6 +1,5 @@
-// src/features/user/userSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, loginUser } from "../../Thunk/Thunk";
+import { registerUser, loginUsers, loginUser } from "../../Thunk/Thunk";
 
 const userSlice = createSlice({
   name: "users",
@@ -30,18 +29,23 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUsers.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
         state.isLoggedIn = true;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        console.log("fetch failed");
       });
   },
 });

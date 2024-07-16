@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
-import MyContext from "../../../utils/Context";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const SearchWithSuggestions = () => {
-  const { filteredItems, setFilteredItems } = useContext(MyContext);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const { products } = useSelector((state) => state.productsAll);
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -14,22 +14,18 @@ const SearchWithSuggestions = () => {
 
     if (query) {
       setSuggestions(
-        filteredItems.filter((item) => item.name.toLowerCase().includes(query))
+        products.filter((item) => item.name.toLowerCase().includes(query))
       );
       setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
     }
-    
   };
-
 
   const handleSuggestionClick = (suggestion) => {
     setSearchQuery(suggestion.name);
     setShowSuggestions(false);
   };
-
-
 
   return (
     <div className="relative mx-10">
@@ -75,7 +71,7 @@ const SearchWithSuggestions = () => {
                   className="px-4 py-2 cursor-pointer hover:bg-blue-100"
                   onClick={() => {
                     handleSuggestionClick(suggestion);
-                    setSearchQuery("")
+                    setSearchQuery("");
                   }}
                 >
                   {suggestion.name}

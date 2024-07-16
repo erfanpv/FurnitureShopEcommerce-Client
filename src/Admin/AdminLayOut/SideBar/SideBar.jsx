@@ -1,15 +1,10 @@
-import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import AdminNav from "../AdminNav/AdminNav";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
-import MyContext from "../../../utils/Context";
 import { setLoggedIn } from "../../../app/Slice/usersSlice/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const AdminSidebar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoggedIn } = useSelector((state) => state.users);

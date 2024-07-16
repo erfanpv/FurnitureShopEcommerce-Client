@@ -32,10 +32,10 @@ const Carousel = () => {
       setActiveIndex((prevIndex) =>
         prevIndex === slides.length - 1 ? 0 : prevIndex + 1
       );
-    }, 3000); // Change slides every 3 seconds (3000ms)
+    }, 3000); 
 
     return () => clearInterval(interval);
-  }, []); // Empty dependency array ensures effect runs only once on component mount
+  }, []); 
 
   const handlePrev = () => {
     setActiveIndex((prevIndex) =>

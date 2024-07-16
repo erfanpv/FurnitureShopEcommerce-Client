@@ -1,12 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import FurnitureCard from "../../Components/Products/ProductCard/Cards";
-import MyContext from "../../utils/Context";
 import ProductShimmer from "../../Components/ShimmerUI/ProductShimmer/ProductShimmer";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../app/Thunk/Thunk";
+import { fetchProducts } from "../../app/Slice/ProductsSlice/ProductSliceThunk";
 
 const Products = () => {
-
   const { products } = useSelector((state) => state.productsAll);
 
   const dispatch = useDispatch();
@@ -20,7 +18,7 @@ const Products = () => {
         {products?.length === 0 ? (
           <ProductShimmer />
         ) : (
-          products.map((productItem) => {
+          products?.map((productItem) => {
             return (
               <FurnitureCard productItem={productItem} key={productItem.id} />
             );
@@ -32,19 +30,3 @@ const Products = () => {
 };
 
 export default Products;
-
-
-  // const { filteredItems, setFilteredItems } = useContext(MyContext);
-
-
-{
-  /* {filteredItems?.length === 0 ? (
-          <ProductShimmer />
-        ) : (
-          filteredItems.map((productItem) => {
-            return (
-              <FurnitureCard productItem={productItem} key={productItem.id} />
-            );
-          })
-        )} */
-}

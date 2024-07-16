@@ -1,9 +1,11 @@
-import React, { Children, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyContext from "../Context";
-import axios, { all } from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 import { setLoggedIn as setAsLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
 import { fetchCart } from "../../app/Slice/addCartSlice/addCartSlice";
+import { fetchProducts } from "../../app/Slice/ProductsSlice/ProductSliceThunk";
+
 const CartProvider = ({ children }) => {
   const [addCart, setAddCart] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -30,19 +32,6 @@ const CartProvider = ({ children }) => {
     setUsers(filteredUsers);
     setFilteredItems(filtered);
   };
-
-  const { isLoggedIn } = useSelector((state) => state.users);
-  const dispatch = useDispatch();
-
-  const userFound = localStorage.getItem("id");
-
-  useEffect(() => {
-    if (userFound) {
-      dispatch(setAsLoggedIn(true));
-      dispatch(fetchCart(userFound));
-      setUserId(userFound);
-    }
-  }, []);
 
   useEffect(() => {
     axios.get("http://localhost:5000/products").then((res) => {
@@ -83,6 +72,18 @@ const CartProvider = ({ children }) => {
     setIsModalOpen(false);
     document.body.classList.remove("overflow-y-hidden");
   };
+
+  const dispatch = useDispatch();
+  const userFound = localStorage.getItem("id");
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+    if (userFound) {
+      dispatch(setAsLoggedIn(true));
+      dispatch(fetchCart(userFound));
+      setUserId(userFound);
+    }
+  }, []);
 
   return (
     <MyContext.Provider

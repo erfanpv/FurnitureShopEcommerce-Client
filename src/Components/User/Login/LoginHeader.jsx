@@ -1,36 +1,8 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Dialog,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Transition,
-} from "@headlessui/react";
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
+import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 function LoginHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

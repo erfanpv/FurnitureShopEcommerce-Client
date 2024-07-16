@@ -3,9 +3,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import RegisterImg from "../../../assets/Images/Slide-2.jpg";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../../app/Thunk/Thunk";
+import{ toast} from "react-hot-toast";
+
 
 const UserRegistration = () => {
   const navigate = useNavigate();

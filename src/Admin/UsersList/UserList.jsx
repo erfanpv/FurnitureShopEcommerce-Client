@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import SearchInput from "../../Components/Search/Search";
 import MyContext from "../../utils/Context";
 import UserDeleteModal from "../../Components/Modal/DeleteModal/UserDeleteModal";
@@ -11,13 +10,7 @@ const UserList = () => {
     useContext(MyContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  // const [editingUser, setEditingUser] = useState(null);
-  // const [formData, setFormData] = useState({
-  //   fnName: "",
-  //   lastName: "",
-  //   email: "",
-  // });
+
   const [uid, setUid] = useState(null);
 
   useEffect(() => {
@@ -26,7 +19,7 @@ const UserList = () => {
         const data = await axios.get("http://localhost:5000/users");
         setUsers(data.data);
       } catch (error) {
-        setError("Failed to fetch users");
+        console.log(error);
       } finally {
         setLoading(false);
       }
@@ -35,50 +28,7 @@ const UserList = () => {
     fetchUsers();
   }, [setUsers]);
 
-  // const handleEdit = (user) => {
-  //   setEditingUser(user.id);
-  //   setFormData({
-  //     fnName: user.fnName,
-  //     lastName: user.lastName,
-  //     email: user.email,
-  //   });
-  // };
-
-  // const handleCancelEdit = () => {
-  //   setEditingUser(null);
-  //   setFormData({ fnName: "", lastName: "", email: "" });
-  // };
-
-  // const handleFormChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData({ ...formData, [name]: value });
-  // };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.patch(
-        `http://localhost:5000/users/${editingUser}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const updatedUser = response.data;
-      setUsers(
-        users.map((user) => (user.id === editingUser ? updatedUser : user))
-      );
-      toast.success("Successfully updated");
-      // handleCancelEdit();
-    } catch (error) {
-      toast.error("Failed to update user");
-    }
-  };
-
   if (loading) return <p className="text-center mt-6">Loading...</p>;
-  if (error) return <p className="text-center mt-6 text-red-500">{error}</p>;
 
   return (
     <>

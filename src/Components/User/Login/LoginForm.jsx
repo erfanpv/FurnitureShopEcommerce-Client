@@ -3,10 +3,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import LoginHeader from "./LoginHeader";
-import { toast } from "react-toastify";
+import{ toast} from "react-hot-toast";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../../../app/Thunk/Thunk";
+import { loginUsers } from "../../../app/Thunk/Thunk";
 
 const LoginForm = () => {
 
@@ -32,7 +32,7 @@ const LoginForm = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      dispatch(loginUser({ values, navigate, toast }));
+      dispatch(loginUsers({ values, navigate, toast }));
     },
   });
 

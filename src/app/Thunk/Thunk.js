@@ -1,22 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
-
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
-  async () => {
-    const response = await axios.get("http://localhost:5000/products");
-    return response.data;
-  }
-);
-
-export const fetchSingleProducts = createAsyncThunk(
-  "products/fetchSingleProducts",
-  async (id) => {
-    const response = await axios.get(`http://localhost:5000/products/${id}`);
-    return response.data;
-  }
-);
 
 export const registerUser = createAsyncThunk(
   "users/registerUser",
@@ -48,7 +31,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
+export const loginUsers = createAsyncThunk(
   "users/loginUser",
   async ({ values, navigate, toast }) => {
     try {
@@ -80,9 +63,10 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const fetchCart = createAsyncThunk("products/fetchCart", async (id) => {
+const id = localStorage.getItem("id");
+export const loginUser = createAsyncThunk("products/loginUser", async () => {
   const response = await axios.get(`http://localhost:5000/users/${id}`);
-  return response.data.cart;
+  return response.data;
 });
 
 

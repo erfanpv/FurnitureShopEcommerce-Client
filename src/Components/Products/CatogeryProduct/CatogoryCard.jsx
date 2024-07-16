@@ -4,11 +4,14 @@ import { useParams } from "react-router-dom";
 import FurnitureCard from "../ProductCard/Cards";
 import ProductShimmer from "../../ShimmerUI/ProductShimmer/ProductShimmer";
 import MyContext from "../../../utils/Context";
+import { useSelector } from "react-redux";
 
 const CatogoryCard = () => {
   const { filteredItems } = useContext(MyContext);
   const { type } = useParams();
   const [productItems, setProductItems] = useState(filteredItems || []);
+  const { products  }= useSelector((state) => state.productsAll);
+  console.log(products);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -114,8 +114,6 @@ export const quantityDecrementAsync = createAsyncThunk(
   }
 );
 
-
-// Slice
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
@@ -133,7 +131,6 @@ const cartSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.loading = false;
         state.cart = action.payload;
-        console.log("succeess", action.payload);
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
@@ -141,7 +138,6 @@ const cartSlice = createSlice({
       })
       .addCase(addToCartAsync.fulfilled, (state, action) => {
         state.cart = action.payload;
-        console.log("succeess ab", action.payload);
       })
       .addCase(removeFromCartAsync.fulfilled, (state, action) => {
         state.cart = action.payload;

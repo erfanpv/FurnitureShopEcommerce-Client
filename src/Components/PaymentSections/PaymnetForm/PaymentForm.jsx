@@ -14,7 +14,6 @@ const PaymentForm = () => {
   const [isVisible, setVisible] = useState(false);
   const navigate = useNavigate();
   const { TotalAmount, addCart, setAddCart } = useContext(MyContext);
-  const [orders, setOrders] = useState([]);
   const [orderData, setOrderData] = useState([]);
 
   useEffect(() => {

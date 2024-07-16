@@ -1,35 +1,28 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
-import MyContext from "../../../utils/Context";
+import { useSelector } from "react-redux";
+
 
 const CatogoryButton = () => {
-  const { render } = useContext(MyContext);
   const [isOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState([]);
+  const { products } = useSelector((state) => state.productsAll);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/products")
-      .then((response) => {
-        const uniqueTypes = [
-          ...new Set(response.data.map((item) => item.type)),
-        ];
-        setItems(uniqueTypes);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [render]);
+    const uniqueTypes = [...new Set(products.map((item) => item.type))];
+    setItems(uniqueTypes);
+  }, [products]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+
+
+
   return (
     <div className="relative inline-block text-left">
       <div>
-        {/*focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500*/}
         <button
           type="button"
           className="inline-flex justify-center w-full rounded-md  px-4  bg-white text-sm font-medium text-black  focus:outline-non items-center align-middle"

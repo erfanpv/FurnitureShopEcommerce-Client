@@ -20,19 +20,18 @@ const DashboardStats = () => {
           harum sequi.
         </p>
       </div>
-      {/* Total Products*/}
+      
       <Link to={"/admin/productlist"}>
         <TotalProducts />
       </Link>
 
-      {/*Total Customers*/}
+     
       <Link to={"/admin/userslist"}>
         <TotalCustomers />
       </Link>
 
       <TotalRevenue />
 
-      {/* Total Stocks */}
       <Link to={"/admin/productlist"}>
         <TotalStocks />
       </Link>

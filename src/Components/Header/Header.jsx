@@ -1,59 +1,35 @@
-import { Fragment, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Popover,
-  PopoverButton,
   PopoverGroup,
-  PopoverPanel,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
-  Transition,
 } from "@headlessui/react";
-
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-} from "@heroicons/react/20/solid";
-import Logo from "../../assets/Images/Slide-1.jpg";
-import MyContext from "../../utils/Context";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import SearchWithSuggestions from "./Search/Search";
-import axios from "axios";
 import CatogoryButton from "../Products/CatogeryProduct/Catogory";
 import MobileMenuCatogory from "../Products/CatogeryProduct/mobileMenu";
 import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
+import { loginUser } from "../../app/Thunk/Thunk";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  const { isLoggedIn } = useSelector((state) => state.users);
-  const { cartItems, user } = useContext(MyContext);
+  const { isLoggedIn, user } = useSelector((state) => state.users);
+  const { cart } = useSelector((state) => state.cart);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartLength, setCartLength] = useState(0);
-  const [userName, setUserName] = useState("");
-  const userFound = localStorage.getItem("id");
 
+  const userFound = localStorage.getItem("id");
   const dispatch = useDispatch();
+
   const userNavigation = [
     { name: "Your Profile", href: "/profile" },
     { name: "Order Details", href: `/orders/${userFound}` },
@@ -61,14 +37,8 @@ export default function Header() {
   ];
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/users/${userFound}`)
-      .then((response) => {
-        setCartLength(response.data.cart);
-        setUserName(response.data.lastName);
-      })
-      .catch((err) => console.log("header fethch failed", err));
-  }, [cartItems]);
+    dispatch(loginUser());
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("id");
@@ -136,7 +106,7 @@ export default function Header() {
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <h1 className="text-sm font-semibold leading-6 text-gray-900">
-                      {userName}
+                      {user?.lastName}
                     </h1>
                   </MenuButton>
                 </div>
@@ -170,7 +140,7 @@ export default function Header() {
             >
               <span className="bg-rose-600 ms-2.5 top-5 lg:top-9 md:top-9 sm:top-9 absolute text-white p-.5 px-1.5 text-sm rounded-full">
                 {" "}
-                {cartLength.length}
+                {cart.length}
               </span>
               <img
                 className="h-6 w-auto  "
@@ -279,7 +249,7 @@ export default function Header() {
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
                           <p className="text-black hover:bg-gray-700 hover:text-white font-bold">
-                            {user.lastName}
+                            {user?.lastName}
                           </p>
                         </MenuButton>
                       </div>

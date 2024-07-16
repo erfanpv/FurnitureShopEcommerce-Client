@@ -1,26 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import React, { useState, useEffect} from "react";
 import { Link } from "react-router-dom";
-import MyContext from "../../../utils/Context";
+import { useSelector } from "react-redux";
 
 const MobileCatogory = () => {
-  const { render } = useContext(MyContext);
   const [isOpen, setIsOpen] = useState(false);
   const [items, setItems] = useState([]);
+  const { products } = useSelector((state) => state.productsAll);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/products")
-      .then((response) => {
-        const uniqueTypes = [
-          ...new Set(response.data.map((item) => item.type)),
-        ];
-        setItems(uniqueTypes);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [render]);
+    const uniqueTypes = [...new Set(products.map((item) => item.type))];
+    setItems(uniqueTypes);
+  }, [products]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -29,7 +19,6 @@ const MobileCatogory = () => {
   return (
     <div className="relative inline-block text-left -mx-3">
       <div>
-        {/*focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500*/}
         <button
           type="button"
           className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"

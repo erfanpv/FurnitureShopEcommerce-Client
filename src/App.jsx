@@ -1,6 +1,7 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import HomePage from "./Pages/HomePage/HomePage";
@@ -64,6 +65,7 @@ const App = () => {
 
         </Routes>
       </Router>
+      <Toaster />
       <ToastContainer />
     </>
   );
