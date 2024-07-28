@@ -11,7 +11,7 @@ const DashboardStats = () => {
     <div className="flex flex-wrap gap-x-4 lg:gap-x-16 gap-y-12 bg-white px-4 py-10 lg:px-20  mr-5 ml-5 md:ml-64 sm:ml-64 lg:ml-64">
       <div className="mx-auto max-w-3xl text-center">
         <h2 className="text-3xl font-bold text-indigo-800 sm:text-4xl">
-          E-commerce Furniture Store
+          Wood Gallery
         </h2>
 
         <p className="mt-4 text-gray-500 sm:text-xl mb-5">

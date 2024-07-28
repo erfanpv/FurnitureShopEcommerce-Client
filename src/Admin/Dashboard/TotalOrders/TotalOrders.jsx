@@ -7,11 +7,9 @@ const TotalOrders = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/users").then((res) => {
       setTotalOrders(res.data);
-      console.log(res.data);
     });
   }, []);
 
-  // Calculate the total number of orders
   const totalOrderCount = totalOrders.reduce((acc, user) => {
     return acc + user.orderData.length;
   }, 0);
@@ -50,9 +48,7 @@ const TotalOrders = () => {
         </div>
         <hr className="opacity-50" />
         <div className="p-4">
-          <p className="font-light">
-            Total Orders
-          </p>
+          <p className="font-light">Total Orders</p>
         </div>
       </div>
     </div>

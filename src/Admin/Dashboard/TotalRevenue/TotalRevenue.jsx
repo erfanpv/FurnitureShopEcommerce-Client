@@ -10,7 +10,6 @@ const TotalRevenue = () => {
         const res = await axios.get("http://localhost:5000/users");
         const users = res.data;
 
-        // Calculate the total revenue
         const totalIncome = users.reduce((acc, user) => {
           const userRevenue = user.orderData.reduce((orderAcc, order) => {
             return orderAcc + order.total;
