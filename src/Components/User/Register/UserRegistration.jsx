@@ -10,21 +10,20 @@ import{ toast} from "react-hot-toast";
 
 const UserRegistration = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
+
 
   const formik = useFormik({
     initialValues: {
-      fnName: "",
+      firstName: "",
       lastName: "",
       email: "",
       password: "",
       cpassword: "",
-      cart: [],
-      orderData: [],
     },
 
     validationSchema: Yup.object({
-      fnName: Yup.string().required("Required"),
+      firstName: Yup.string().required("Required"),
       lastName: Yup.string().required("Required"),
       email: Yup.string().email("Invalid Email address").required("Required"),
       password: Yup.string()
@@ -34,11 +33,12 @@ const UserRegistration = () => {
         )
         .required("Required"),
       cpassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Passwords does not match")
-        .required("Required"),
+        .oneOf([Yup.ref("password"), null], "Passwords do not match"),
     }),
+
     onSubmit: (values) => {
-      dispatch(registerUser({ values, navigate, toast }));
+      const { cpassword, ...userDetails } = values;
+      dispatch(registerUser({ values: userDetails, navigate, toast }));
     },
   });
 
@@ -76,18 +76,18 @@ const UserRegistration = () => {
                     First Name
                   </label>
                   <input
-                    {...formik.getFieldProps("fnName")}
+                    {...formik.getFieldProps("firstName")}
                     type="text"
                     id="FirstName"
                     placeholder="First Name"
                     className={`mt-1 w-full rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm py-2 pl-2 border-2 ${
-                      formik.touched.fnName && formik.errors.fnName
+                      formik.touched.firstName && formik.errors.firstName
                         ? "border-red-500"
                         : ""
                     }`}
                   />
-                  {formik.touched.fnName && formik.errors.fnName ? (
-                    <p className="text-red-500">{formik.errors.fnName}</p>
+                  {formik.touched.firstName && formik.errors.firstName ? (
+                    <p className="text-red-500">{formik.errors.firstName}</p>
                   ) : null}
                 </div>
                 <div className="col-span-6 sm:col-span-3">

@@ -3,60 +3,67 @@ import axios from "axios";
 
 export const registerUser = createAsyncThunk(
   "users/registerUser",
-  async ({ values, navigate, toast }) => {
+  async ({ values, navigate, toast }, { rejectWithValue }) => {
     try {
-      const { data: userData } = await axios.get("http://localhost:5000/users");
-      const existEmail = userData.find((user) => user.email === values.email);
-
-      if (existEmail) {
-        toast.error("The email already exists");
-        navigate("/login");
+      const response = await axios.post("http://localhost:3000/api/users/register", values);
+      if (response.status >= 200 && response.status < 300) {
+        toast.success("Registration Successful");
+        navigate("/login"); 
+        return response.data; 
       } else {
-        const response = await axios.post(
-          "http://localhost:5000/users",
-          JSON.stringify(values),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        toast.success("Registered Successfully");
-        navigate("/login");
-        return response.data;
+        toast.error("Unexpected response from the server");
+        return rejectWithValue(response.data);
       }
     } catch (error) {
-      toast.error("Registration Failed");
+      if (error.response.status===409) {
+        toast.error("User already exist")
+        navigate("/login")
+      }else if (error.response.data.message || "Registration Failed") {
+        toast.error(error.response.data.message || "Registration Failed");
+        return rejectWithValue(error.response.data);
+      } else if (error.request) {
+        toast.error("No response from the server. Please try again later.");
+        return rejectWithValue("No response from server");
+      } else {
+        toast.error("An error occurred during registration");
+        return rejectWithValue("Request setup error");
+      }
     }
   }
 );
+
 
 export const loginUsers = createAsyncThunk(
   "users/loginUser",
   async ({ values, navigate, toast }) => {
     try {
-      const { data: users } = await axios.get("http://localhost:5000/users");
-      const inputUser = users.find(
-        (user) =>
-          user.email === values.email && user.password === values.password
-      );
 
-      if (inputUser) {
-        toast.success("Successfully Login");
-        localStorage.setItem("id", inputUser.id);
+      console.log(values);
+      
 
-        if (
-          inputUser.email === "erfanpv786@gmail.com" &&
-          inputUser.password === "Erfan@123"
-        ) {
-          navigate("/admin");
-        } else {
-          navigate("/");
-        }
-        return inputUser;
-      } else {
-        toast.error("Invalid Credentials");
-      }
+
+      // const { data: users } = await axios.get("http://localhost:5000/users");
+      // const inputUser = users.find(
+      //   (user) =>
+      //     user.email === values.email && user.password === values.password
+      // );
+
+      // if (inputUser) {
+      //   toast.success("Successfully Login");
+      //   localStorage.setItem("id", inputUser.id);
+
+      //   if (
+      //     inputUser.email === "erfanpv786@gmail.com" &&
+      //     inputUser.password === "Erfan@123"
+      //   ) {
+      //     navigate("/admin");
+      //   } else {
+      //     navigate("/");
+      //   }
+      //   return inputUser;
+      // } else {
+      //   toast.error("Invalid Credentials");
+      // }
     } catch (error) {
       toast.error("Internal Server Down");
     }

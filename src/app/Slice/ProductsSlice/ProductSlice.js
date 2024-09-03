@@ -10,9 +10,7 @@ const productSlice = createSlice({
   name: "products",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchProducts.pending, (state, action) => {
-      console.log("Pending");
-    });
+    builder.addCase(fetchProducts.pending, (state, action) => { });
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
       state.products = action.payload;
     });
