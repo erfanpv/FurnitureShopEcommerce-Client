@@ -1,22 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProducts } from "./ProductSliceThunk";
+import { fetchProducts, fetchProductbyId } from "./productThunk.js";
 
 const initialState = {
   products: [],
-  singleItem: null,
+  productItem: null,
+  isLoading: false,
+  error: null,
 };
 
 const productSlice = createSlice({
   name: "products",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(fetchProducts.pending, (state, action) => { });
-    builder.addCase(fetchProducts.fulfilled, (state, action) => {
-      state.products = action.payload;
-    });
-    builder.addCase(fetchProducts.rejected, (state, action) => {
-      console.log("Rejected");
-    });
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.products = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.isLoading = true;
+        state.error = action.payload;
+      })
+      .addCase(fetchProductbyId.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchProductbyId.fulfilled, (state, action) => {
+        state.productItem = action.payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchProductbyId.rejected, (state, action) => {
+        state.isLoading = true;
+        state.error = action.payload;
+      });
   },
 });
 
