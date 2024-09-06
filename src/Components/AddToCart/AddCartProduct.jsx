@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartAsync } from "../../app/Slice/addCartSlice/addCartSlice";
-import ProductShimmer from "../ShimmerUI/ProductShimmer/ProductShimmer";
+import SingleProductShimmer from "../ShimmerUI/ProductViewShimmer/ProductViewShimmer";
 
 function AddCartProduct({ productItem }) {
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ function AddCartProduct({ productItem }) {
     toast.warning("You must be logged in to add items to the cart");
   };
 
-  if (!productItem) return <ProductShimmer />;
+  if (!productItem) return <SingleProductShimmer />;
 
   return (
     <div key={productItem._id} className="p-5">

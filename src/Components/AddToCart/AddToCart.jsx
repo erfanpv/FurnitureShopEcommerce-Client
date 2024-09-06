@@ -4,6 +4,7 @@ import AddCartProduct from "./AddCartProduct";
 import ProductShimmer from "../ShimmerUI/ProductShimmer/ProductShimmer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductbyId } from "../../app/Slice/ProductsSlice/productThunk.js";
+import ProductDetails from "../ShimmerUI/ProductViewShimmer/ProductViewShimmer.jsx";
 
 const AddToCart = () => {
   const { id } = useParams();
@@ -16,13 +17,13 @@ const AddToCart = () => {
   }, [dispatch, id]);
 
   if (isLoading) {
-    return <ProductShimmer />;
+    return <ProductDetails />;
   }
 
   return productItem ? (
     <AddCartProduct productItem={productItem} />
   ) : (
-    <ProductShimmer />
+    <ProductDetails />
   );
 };
 
