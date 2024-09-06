@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import RegisterImg from "../../../assets/Images/Slide-2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../../app/Thunk/Thunk";
+import { registerUser } from "../../../app/Slice/usersSlice/userThunk";
 import{ toast} from "react-hot-toast";
 
 
