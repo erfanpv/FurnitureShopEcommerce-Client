@@ -6,7 +6,8 @@ import LoginHeader from "./LoginHeader";
 import{ toast} from "react-hot-toast";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
 import { useDispatch } from "react-redux";
-import { loginUsers } from "../../../app/Thunk/Thunk";
+import { loginUsers } from "../../../app/Slice/usersSlice/userThunk";
+
 
 const LoginForm = () => {
 
