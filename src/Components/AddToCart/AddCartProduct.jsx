@@ -12,16 +12,13 @@ function AddCartProduct({ productItem }) {
 
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (productItem) => {    
     if (quantity > 0) {
-      if (productItem && productItem.id) {
-        toast.success(
-          `${productItem.name} added to cart with quantity: ${quantity}`
-        );
-
+      if (productItem && productItem._id) {
+        toast.success(`${productItem.productName} added to cart with quantity: ${quantity}`);
         dispatch(addToCartAsync({ ...productItem, quantity }));
 
-        navigate("/products/cart/mycart");
+        // navigate("/products/cart/mycart");
       } else {
         toast.error("Product data is not fully loaded. Please try again.");
       }
@@ -38,14 +35,14 @@ function AddCartProduct({ productItem }) {
   if (!productItem) return <ProductShimmer />;
 
   return (
-    <div key={productItem.id} className="p-5">
+    <div key={productItem._id} className="p-5">
       <main className="mt-5 pt-4">
         <div className="container mx-auto mt-5">
           <div className="flex flex-wrap lg:flex-nowrap gap-5">
             <div className="w-full lg:w-1/2 mb-4">
               <div className="shadow-lg rounded-lg">
                 <img
-                  src={productItem.src}
+                  src={productItem.image}
                   className="w-full h-auto sm:h-96 lg:h-auto object-cover rounded-lg"
                   alt="Product"
                 />
@@ -56,7 +53,7 @@ function AddCartProduct({ productItem }) {
               <div className="shadow-lg rounded-lg p-4">
                 <div className="p-4">
                   <h1 className="text-3xl font-bold mb-2">
-                    {productItem.name}
+                    {productItem.productName}
                   </h1>
                   <h5 className="text-xl line-through">${productItem.price}</h5>
                   <h3 className="text-2xl">
@@ -79,9 +76,7 @@ function AddCartProduct({ productItem }) {
                     />
                     <button
                       className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-                      onClick={
-                        isLoggedIn ? handleAddToCart : handleLoginRedirect
-                      }
+                      onClick={() => handleAddToCart(productItem)}
                     >
                       Add to cart
                       <i className="fas fa-shopping-cart ml-1"></i>

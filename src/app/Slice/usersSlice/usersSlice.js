@@ -1,3 +1,4 @@
+
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, loginUsers, loginUser } from "../../Thunk/Thunk";
 
@@ -44,9 +45,7 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.user = action.payload;
       })
-      .addCase(loginUser.rejected, (state, action) => {
-        console.log("fetch failed");
-      });
+      .addCase(loginUser.rejected, (state, action) => {});
   },
 });
 

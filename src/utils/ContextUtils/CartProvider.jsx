@@ -4,7 +4,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setLoggedIn as setAsLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
 import { fetchCart } from "../../app/Slice/addCartSlice/addCartSlice";
-import { fetchProducts } from "../../app/Slice/ProductsSlice/ProductSliceThunk";
+import { fetchProducts } from "../../app/Slice/ProductsSlice/productThunk.js";
 
 const CartProvider = ({ children }) => {
   const [addCart, setAddCart] = useState([]);
