@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { searchProductsUsers } from "../../../app/Slice/ProductsSlice/productThunk";
 
 const SearchWithSuggestions = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const { products } = useSelector((state) => state.productsAll);
+  const { products, } = useSelector((state) => state.productsAll);  
+  const dispatch = useDispatch()
 
+  
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
 
     if (query) {
+      dispatch(searchProductsUsers({query}))
       setSuggestions(
-        products.filter((item) => item.name.toLowerCase().includes(query))
+        products.filter((item) => item.productName.toLowerCase().includes(query))
       );
       setShowSuggestions(true);
     } else {
@@ -23,7 +27,7 @@ const SearchWithSuggestions = () => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    setSearchQuery(suggestion.name);
+    setSearchQuery(suggestion.productName);
     setShowSuggestions(false);
   };
 
@@ -66,7 +70,7 @@ const SearchWithSuggestions = () => {
         {showSuggestions && suggestions.length > 0 && (
           <ul className="absolute left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-auto z-10">
             {suggestions.map((suggestion) => (
-              <Link to={`/products/cart/:${suggestion.id}`} key={suggestion.id}>
+              <Link to={`/products/cart/${suggestion._id}`} key={suggestion._id}>
                 <li
                   className="px-4 py-2 cursor-pointer hover:bg-blue-100"
                   onClick={() => {
@@ -74,12 +78,15 @@ const SearchWithSuggestions = () => {
                     setSearchQuery("");
                   }}
                 >
-                  {suggestion.name}
+                  {suggestion.productName}
                 </li>
               </Link>
             ))}
           </ul>
         )}
+      </div>
+      <div>
+
       </div>
     </div>
   );
