@@ -1,37 +1,44 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUniqueProductCategories } from "../../../app/Slice/ProductsSlice/productThunk";
 
-
-const CatogoryButton = () => {
+const CategoryDropdown = ({ isMobile, onCloseMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [items, setItems] = useState([]);
-  const { products } = useSelector((state) => state.productsAll);
+  const { uniqueProductCategories } = useSelector((state) => state.productsAll);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const uniqueTypes = [...new Set(products.map((item) => item.type))];
-    setItems(uniqueTypes);
-  }, [products]);
+    dispatch(fetchUniqueProductCategories());
+  }, [dispatch]);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-
-
+  const handleLinkClick = () => {
+    if (isMobile && onCloseMenu) {
+      onCloseMenu(); 
+    }
+    setIsOpen(false); 
+  };
 
   return (
-    <div className="relative inline-block text-left">
+    <div className={`relative inline-block text-left ${isMobile ? "-mx-3" : ""}`}>
       <div>
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md  px-4  bg-white text-sm font-medium text-black  focus:outline-non items-center align-middle"
+          className={`${
+            isMobile
+              ? "flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+              : "inline-flex justify-center w-full rounded-md px-4 bg-white text-sm font-medium text-black focus:outline-none items-center align-middle"
+          }`}
           id="options-menu"
           aria-expanded="true"
           aria-haspopup="true"
           onClick={toggleDropdown}
         >
-          Catogories
+          Categories
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +56,11 @@ const CatogoryButton = () => {
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+        <div
+          className={`${
+            isMobile ? "mt-2 space-y-2" : "origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+          } focus:outline-none z-10`}
+        >
           <div
             className="py-1 max-h-60 overflow-y-auto"
             role="menu"
@@ -58,18 +69,26 @@ const CatogoryButton = () => {
           >
             <Link
               to={`/products`}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={handleLinkClick}
+              className={`${
+                isMobile
+                  ? "block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              }`}
               role="menuitem"
             >
               All
             </Link>
-            {items.map((item, index) => (
+            {uniqueProductCategories.map((item, index) => (
               <Link
                 to={`/products/${item.toLowerCase()}`}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={handleLinkClick}
                 key={index}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className={`${
+                  isMobile
+                    ? "block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    : "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                }`}
                 role="menuitem"
               >
                 {item}
@@ -82,4 +101,4 @@ const CatogoryButton = () => {
   );
 };
 
-export default CatogoryButton;
+export default CategoryDropdown;

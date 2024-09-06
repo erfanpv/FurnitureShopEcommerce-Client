@@ -1,43 +1,38 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import FurnitureCard from "../ProductCard/Cards";
 import ProductShimmer from "../../ShimmerUI/ProductShimmer/ProductShimmer";
-import MyContext from "../../../utils/Context";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProductsWithCategory } from "../../../app/Slice/ProductsSlice/productThunk";
 
-const CatogoryCard = () => {
-  const { filteredItems } = useContext(MyContext);
-  const { type } = useParams();
-  const [productItems, setProductItems] = useState(filteredItems || []);
-  const { products  }= useSelector((state) => state.productsAll);
-  console.log(products);
+const CategoryCard = () => {
+  const { category } = useParams();
+  const { productWithCategory, isLoading } = useSelector((state) => state.productsAll);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/products");
-        setProductItems(response.data);
+        dispatch(fetchProductsWithCategory({ category }));
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-
     fetchData();
-  }, []);
-
-  const filteredProducts = productItems.filter(
-    (productItem) => productItem.type.toLowerCase() === type
-  );
+  }, [category, dispatch]); 
 
   return (
-    <div className="">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center mt-10 mr-5 ml-5">
-        {filteredProducts.length === 0 ? (
-          <ProductShimmer />
+    <div className="mt-10 mx-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-items-center">
+        {isLoading ? (
+          [...Array(6)].map((_, index) => <ProductShimmer key={index} />)
+        ) : productWithCategory.length === 0 ? (
+          <div className="col-span-full text-center text-gray-500">
+            No products found in this category.
+          </div>
         ) : (
-          filteredProducts.map((productItem) => (
-            <FurnitureCard key={productItem.id} productItem={productItem} />
+          productWithCategory.map((productItem) => (
+            <FurnitureCard key={productItem._id} productItem={productItem} />
           ))
         )}
       </div>
@@ -45,4 +40,4 @@ const CatogoryCard = () => {
   );
 };
 
-export default CatogoryCard;
+export default CategoryCard;
