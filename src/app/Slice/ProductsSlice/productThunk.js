@@ -28,3 +28,47 @@ export const fetchProductbyId = createAsyncThunk(
     }
   }
 );
+
+
+export const fetchProductsWithCategory = createAsyncThunk(
+  "products/fetchProductWithCategory",
+  async ({ category }, { rejectWithValue }) => {
+    try {
+      let categoryName =category.slice(0,1).toUpperCase()+category.slice(1).toLowerCase();      
+      const response = await axios.get(`${userBaseUrl}/products/category/${categoryName}`);      
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message || "Failed to fetch the product.");
+    }
+  }
+);
+
+export const fetchUniqueProductCategories = createAsyncThunk(
+  "products/fetchUniqueProductCategories ",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${userBaseUrl}/products/categorylist/unique`);     
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message || "Failed to fetch the product.");
+    }
+  }
+);
+
+
+export const searchProductsUsers = createAsyncThunk(
+  "products/searchProductsUsers",
+  async ({ query }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${userBaseUrl}/search/products`, {
+        params: { searchQuery: query },
+      });
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response.data.message || "Failed to fetch the product."
+      );
+    }
+  }
+);
