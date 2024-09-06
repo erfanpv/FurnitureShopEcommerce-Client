@@ -11,28 +11,32 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import SearchWithSuggestions from "./Search/Search";
-import CatogoryButton from "../Products/CatogeryProduct/Catogory";
-import MobileMenuCatogory from "../Products/CatogeryProduct/mobileMenu";
+import CategoryDropdown from "../Products/CatogeryProduct/Catogory";
 import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
-import { loginUser } from "../../app/Thunk/Thunk";
+import { loginUser } from "../../app/Slice/usersSlice/userThunk";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-  const { isLoggedIn, user } = useSelector((state) => state.users);
+  const { isLoggedIn } = useSelector((state) => state.users);
   const { cart } = useSelector((state) => state.cart);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const userFound = localStorage.getItem("id");
+  const accesstoken = localStorage.getItem("accesstoken");
+  const user = localStorage.getItem("username");
   const dispatch = useDispatch();
+
+  if (accesstoken) {
+    dispatch(setLoggedIn(true));
+  }
 
   const userNavigation = [
     { name: "Your Profile", href: "/profile" },
-    { name: "Order Details", href: `/orders/${userFound}` },
+    { name: "Order Details", href: `/orders/${accesstoken}` },
     { name: "Sign out", href: "/" },
   ];
 
@@ -41,7 +45,8 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("id");
+    localStorage.removeItem("accesstoken");
+    localStorage.removeItem("username");
     dispatch(setLoggedIn(false));
   };
 
@@ -94,20 +99,37 @@ export default function Header() {
             Products
           </Link>
 
-          <CatogoryButton />
+          {/* Pass the callback to close the mobile menu */}
+          <CategoryDropdown
+            isMobile={false}
+            onCloseMenu={() => setMobileMenuOpen(false)}
+          />
         </PopoverGroup>
 
         {isLoggedIn === true ? (
           <>
             <div className="hidden lg:flex lg:flex-1 lg:justify-end mr-10">
               <Menu as="div" className="relative ml-3">
-                <div>
-                  <MenuButton>
+                <div className="flex items-center">
+                  <MenuButton className="relative flex items-center">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <h1 className="text-sm font-semibold leading-6 text-gray-900">
-                      {user?.lastName}
+                      {user}
                     </h1>
+                    <svg
+                      className="-mr-1 ml-2 h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.293 7.707a1 1 0 011.414 0L10 11.086l3.293-3.379a1 1 0 111.414 1.414l-4 4.104a1 1 0 01-1.414 0l-4-4.104a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
                   </MenuButton>
                 </div>
 
@@ -221,36 +243,52 @@ export default function Header() {
           </div>
 
           <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
+            <div className="-my-6">
               <div className="space-y-2 py-6">
                 <Link
                   onClick={() => setMobileMenuOpen(false)}
                   to="/"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
                 >
                   Home
                 </Link>
                 <Link
                   onClick={() => setMobileMenuOpen(false)}
                   to="/products"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  className="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10"
                 >
                   Products
                 </Link>
-
-                <MobileMenuCatogory />
+                {/* Pass the callback to close the mobile menu */}
+                <CategoryDropdown
+                  isMobile={true}
+                  onCloseMenu={() => setMobileMenuOpen(false)}
+                />
               </div>
               <div className="py-6">
                 {isLoggedIn === true ? (
                   <div>
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <MenuButton>
+                        <MenuButton className="flex items-center">
                           <span className="absolute -inset-1.5" />
                           <span className="sr-only">Open user menu</span>
                           <p className="text-black hover:bg-gray-700 hover:text-white font-bold">
-                            {user?.lastName}
+                            {user}
                           </p>
+                          <svg
+                            className="-mr-1 ml-2 h-5 w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M5.293 7.707a1 1 0 011.414 0L10 11.086l3.293-3.379a1 1 0 111.414 1.414l-4 4.104a1 1 0 01-1.414 0l-4-4.104a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
                         </MenuButton>
                       </div>
 
