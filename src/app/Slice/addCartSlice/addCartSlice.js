@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { addToCartAsync } from "./cartThunk";
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
   try {
@@ -11,17 +12,6 @@ export const fetchCart = createAsyncThunk("cart/fetchCart", async () => {
     throw error;
   }
 });
-
-export const addToCartAsync = createAsyncThunk(
-  "cart/addToCartAsync",
-  async () => {
-    try {
-      
-    } catch (error) {
-      console.log("Failed to add to cart:", error);
-    }
-  }
-);
 
 export const removeFromCartAsync = createAsyncThunk(
   "cart/removeFromCartAsync",

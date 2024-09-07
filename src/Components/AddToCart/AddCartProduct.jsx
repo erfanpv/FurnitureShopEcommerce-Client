@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCartAsync } from "../../app/Slice/addCartSlice/addCartSlice";
+import { addToCartAsync } from "../../app/Slice/addCartSlice/cartThunk";
 import SingleProductShimmer from "../ShimmerUI/ProductViewShimmer/ProductViewShimmer";
 
 function AddCartProduct({ productItem }) {
@@ -12,13 +12,11 @@ function AddCartProduct({ productItem }) {
 
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = (productItem) => {    
+  const handleAddToCart = (productItem,quantity) => {    
     if (quantity > 0) {
       if (productItem && productItem._id) {
-        toast.success(`${productItem.productName} added to cart with quantity: ${quantity}`);
-        dispatch(addToCartAsync({ ...productItem, quantity }));
-
-        // navigate("/products/cart/mycart");
+        const productId = productItem._id;
+        dispatch(addToCartAsync({productId,quantity,navigate, toast}))
       } else {
         toast.error("Product data is not fully loaded. Please try again.");
       }
@@ -76,7 +74,7 @@ function AddCartProduct({ productItem }) {
                     />
                     <button
                       className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-                      onClick={() => handleAddToCart(productItem)}
+                      onClick={() => handleAddToCart(productItem,quantity)}
                     >
                       Add to cart
                       <i className="fas fa-shopping-cart ml-1"></i>
