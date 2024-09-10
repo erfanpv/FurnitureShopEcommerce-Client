@@ -15,7 +15,6 @@ import CategoryDropdown from "../Products/CatogeryProduct/Catogory";
 import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
-import { loginUser } from "../../app/Slice/usersSlice/userThunk";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -39,10 +38,6 @@ export default function Header() {
     { name: "Order Details", href: `/orders/${accesstoken}` },
     { name: "Sign out", href: "/" },
   ];
-
-  useEffect(() => {
-    dispatch(loginUser());
-  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("accesstoken");
