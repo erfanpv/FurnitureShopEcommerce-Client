@@ -174,3 +174,68 @@
 // };
 
 // export default FurnitureCard;
+
+
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleWishListItem } from "../../../app/Slice/wishListSlice/wishListThunk";
+
+const FurnitureCard = ({ productItem }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  // Access the wishlist state from Redux store
+  const wishlistItems = useSelector((state) => state.wishlist.items);
+  
+  // Check if the product is in the wishlist
+  const isInWishlist = wishlistItems.some(item => item._id === productItem?._id);
+
+  const handleWishlistClick = (productId) => {
+    dispatch(toggleWishListItem({ productId }));
+  };
+
+  return (
+    <div className="relative max-w-sm rounded-lg overflow-hidden shadow-lg mb-10 bg-white border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+      <div className="relative">
+        <img
+          className="w-full h-60 object-cover rounded-t-lg"
+          src={productItem.image}
+          alt="Furniture"
+        />
+        <div
+          onClick={() => handleWishlistClick(productItem?._id)}
+          className={`absolute top-2 right-2 inline-block rounded-full border p-2 ${
+            isInWishlist ? "border-rose-600 text-rose-600 bg-white hover:bg-rose-600 hover:text-white" : "border-gray-300 text-gray-400 bg-white hover:bg-gray-300"
+          } focus:outline-none focus:ring active:bg-rose-500 transition-colors duration-300 cursor-pointer`}
+        >
+          <span className="sr-only">Toggle Wishlist</span>
+          {isInWishlist ? (
+            // Filled heart for item in wishlist
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 21C12 21 6 16.5 3 12.5C1 9.5 2.5 6.5 5 5C7.5 3.5 10.5 5 12 7C13.5 5 16.5 3.5 19 5C21.5 6.5 23 9.5 21 12.5C18 16.5 12 21 12 21Z"
+              />
+            </svg>
+          ) : (
+            // Outline heart for item not in wishlist
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 21C12 21 6 16.5 3 12.5C1 9.5 2.5 6.5 5 5C7.5 3.5 10.5 5 12 7C13.5 5 16.5 3.5 19 5C21.5 6.5 23 9.5 21 12.5C18 16.5 12 21 12 21Z"
+              />
+            </svg>
+          )}
+        </div>
+      </div>
+      {/* Rest of the component */}
+    </div>
+  );
+};
+
+export default FurnitureCard;
