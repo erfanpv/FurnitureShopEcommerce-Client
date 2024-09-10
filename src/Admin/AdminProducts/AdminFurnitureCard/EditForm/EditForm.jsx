@@ -5,21 +5,25 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ProductShimmer from "../../../../Components/ShimmerUI/ProductShimmer/ProductShimmer";
+import { useDispatch } from "react-redux";
+import { updateProducts } from "../../../../app/Slice/adminSlices/productSlices/adminProductThunk";
 
 const EditProduct = () => {
   const { id } = useParams();
+  const dispatch = useDispatch()
+  
   const [productData, setProductData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/products/${id}`)
-      .then((response) => {
-        setProductData(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching product:", error);
-      });
+    // axios
+    //   .get(`http://localhost:5000/products/${id}`)
+    //   .then((response) => {
+    //     setProductData(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching product:", error);
+    //   });
   }, [id]);
 
   const validationSchema = Yup.object({
@@ -37,34 +41,33 @@ const EditProduct = () => {
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    const updated = Object.keys(values).some(
-      (key) => values[key] !== productData[key]
-    );
 
-    if (updated) {
-      axios
-        .put(`http://localhost:5000/products/${id}`, values)
-        .then((response) => {
-          console.log("Product updated successfully:", response.data);
-          toast.success("Product updated successfully");
-          navigate("/admin/productlist");
-        })
-        .catch((error) => {
-          console.error("Error updating product:", error);
-          toast.error("Failed updating product");
-        })
-        .finally(() => {
-          setSubmitting(false);
-        });
-    } else {
-      toast.info("No changes applied");
-      setSubmitting(false);
-    }
+    dispatch(updateProducts({values,toast,setSubmitting}))
+    // const updated = Object.keys(values).some(
+    //   (key) => values[key] !== productData[key]
+    // );
+
+    // if (updated) {
+    //   axios
+    //     .put(`http://localhost:5000/products/${id}`, values)
+    //     .then((response) => {
+    //       console.log("Product updated successfully:", response.data);
+    //       toast.success("Product updated successfully");
+    //       navigate("/admin/productlist");
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error updating product:", error);
+    //       toast.error("Failed updating product");
+    //     })
+    //     .finally(() => {
+    //       setSubmitting(false);
+    // //     });
+    // } else {
+    //   toast.info("No changes applied");
+    //   setSubmitting(false);
+    // }
   };
 
-  if (!productData) {
-    return <ProductShimmer />;
-  }
 
   return (
     <div className="max-w-4xl mx-auto mt-8 sm:ml-64 ">

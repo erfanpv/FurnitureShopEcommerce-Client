@@ -6,16 +6,19 @@ import ProductShimmer from "../../Components/ShimmerUI/ProductShimmer/ProductShi
 import { useNavigate } from "react-router-dom";
 import DropDownButton from "../../Components/Header/DropDownButton/DropDownButton";
 import SearchInput from "../../Components/Search/Search";
+import { useDispatch, useSelector } from "react-redux";
+import { adminGetAllProducts } from "../../app/Slice/adminSlices/productSlices/adminProductThunk";
 
 const AdminProducts = () => {
-  const navigate = useNavigate(0);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { filteredItems, setFilteredItems, render } = useContext(MyContext);
 
+  const { products, isLoading } = useSelector((state) => state.adminProducts);
+
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/products")
-      .then((res) => setFilteredItems(res?.data));
-  }, [render]);
+    dispatch(adminGetAllProducts());
+  }, []);
 
   return (
     <>
@@ -35,14 +38,18 @@ const AdminProducts = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center lg:ml-64 mt-5 mr-5 ml-5 md:ml-64 sm:ml-64">
-        {filteredItems?.length === 0 ? (
-          <ProductShimmer />
+        {isLoading ? (
+          [...Array(6)].map((_, index) => <ProductShimmer key={index} />)
+        ) : products?.length === 0 ? (
+          <div className="col-span-full text-center text-gray-500">
+            No products found.
+          </div>
         ) : (
-          filteredItems.map((productItem) => {
+          products.map((productItem) => {
             return (
               <AdminFurnitureCard
                 productItem={productItem}
-                key={productItem.id}
+                key={productItem._id}
               />
             );
           })
