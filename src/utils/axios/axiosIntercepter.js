@@ -1,13 +1,14 @@
 import axios from "axios";
 
-let baseUrl = import.meta.env.VITE_USER_API;
+let baseUrl = import.meta.env.VITE_BASE_API;
+
 const http = axios.create({ baseURL: baseUrl });
 
 http.interceptors.request.use(
   (request) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      request.headers["authorization"] = `${token}`;
+    const accessToken = localStorage.getItem("accesstoken");
+    if (accessToken) {
+      request.headers["authorization"] = `${accessToken}`;
     }
     return request;
   },
@@ -16,13 +17,8 @@ http.interceptors.request.use(
   }
 );
 
-http.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error) {
-    return Promise.reject(error);
-  }
-);
+http.interceptors.response.use((response) => response),
+  (error) => Promise.reject(error);
+
 
 export default http;
