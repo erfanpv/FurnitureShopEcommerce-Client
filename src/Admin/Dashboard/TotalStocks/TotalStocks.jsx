@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, {  useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { totalStocks } from "../../../app/Slice/adminSlices/dashBoardSlices/dashBoardThunk";
 
 const TotalStocks = () => {
-  const [totalStocks, setTotalStocks] = useState([]);
+  const { totalStockCount } = useSelector((state) => state.dashboard);  
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    axios.get("http://localhost:5000/products").then((res) => {
-      setTotalStocks(res.data);
-    });
+    dispatch(totalStocks());
   }, []);
 
-  const totalCount = totalStocks.reduce((acc, item) => {
-    return (acc += Number(item.stock));
-  }, 0);
-
-  console.log(totalCount);
 
   return (
     <div className="flex w-72">
@@ -43,7 +39,7 @@ const TotalStocks = () => {
           <div className="pt-1 text-right">
             <p className="text-sm font-light capitalize">Stocks</p>
             <h4 className="text-2xl font-semibold tracking-tighter xl:text-2xl">
-              {totalCount}
+              {totalStockCount}
             </h4>
           </div>
         </div>

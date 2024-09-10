@@ -1,12 +1,13 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { totalProducts } from "../../../app/Slice/adminSlices/dashBoardSlices/dashBoardThunk";
 
 const TotalProducts = () => {
-  const [totalProducts, setTotalProducts] = useState(0);
+  const { totalProductsCount } = useSelector((state) => state.dashboard);  
+
+  const dispatch = useDispatch();
   useEffect(() => {
-    axios.get("http://localhost:5000/products").then((res) => {
-      setTotalProducts(res.data);
-    });
+    dispatch(totalProducts());
   }, []);
   return (
     <div className="flex w-72">
@@ -36,7 +37,7 @@ const TotalProducts = () => {
           <div className="pt-1 text-right">
             <p className="text-sm font-light capitalize">Products</p>
             <h4 className="text-2xl font-semibold tracking-tighter xl:text-2xl">
-              {totalProducts.length}
+              {totalProductsCount}
             </h4>
           </div>
         </div>

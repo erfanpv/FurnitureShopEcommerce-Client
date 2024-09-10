@@ -1,12 +1,13 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
+import { totalUsers } from "../../../app/Slice/adminSlices/dashBoardSlices/dashBoardThunk";
+import { useDispatch, useSelector } from "react-redux";
 
 const TotalCustomers = () => {
-  const [totalCustomers, setTotalCustomers] = useState(0);
+  const { totalUsersCount } = useSelector((state) => state.dashboard);
+  
+  const dispatch = useDispatch();
   useEffect(() => {
-    axios.get("http://localhost:5000/users").then((res) => {
-      setTotalCustomers(res.data)
-    });
+    dispatch(totalUsers());
   }, []);
   return (
     <div className="flex w-72">
@@ -31,7 +32,7 @@ const TotalCustomers = () => {
           <div className="pt-1 text-right">
             <p className="text-sm font-light capitalize">Users</p>
             <h4 className="text-2xl font-semibold tracking-tighter xl:text-2xl">
-              {totalCustomers.length}
+              {totalUsersCount}
             </h4>
           </div>
         </div>
