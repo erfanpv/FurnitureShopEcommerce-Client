@@ -1,67 +1,89 @@
-import React, { useContext, useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  loadWishList,
+  toggleWishListItem,
+} from "../../app/Slice/wishListSlice/wishListThunk";
+import { Link } from "react-router-dom";
 
-const UserProfilePage = () => {
-  const [userDetails, setUserDetails] = useState(null);
-  const [wishlist, setWishlist] = useState([]);
-
-  const userFound = localStorage.getItem("id");
+const Wishlist = () => {
+  const dispatch = useDispatch();
+  const { wishlistCart, isLoading } = useSelector((state) => state.wishList);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/users/${userFound}`
-        );
-        const data = response.data;
-        setUserDetails(data);
-        setWishlist(data.cart);
-      } catch (error) {
-        console.error("Error fetching user profile data:", error);
-      }
-    };
+    dispatch(loadWishList());
+  }, [dispatch]);
 
-    if (userFound) {
-      fetchUserData();
-    }
-  }, [userFound]);
+  let isInWishlist = true;
+
+  const handleRemoveFromWishlist = (productId) => {
+    dispatch(toggleWishListItem({ productId }));
+  };
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 p-4">
-      <h2 className="text-3xl font-bold mb-8 text-indigo-900">User Profile</h2>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold text-indigo-600 mb-6">Your Wishlist</h1>
 
-      {userDetails && (
-        <div className="bg-white shadow-lg rounded-lg p-6 mb-8 border-l-4 border-indigo-900">
-          <h3 className="text-xl font-semibold mb-4 text-rose-600">Personal Information</h3>
-          <p className="mb-2">
-            <span className="font-medium text-indigo-900">Name:</span> {userDetails.fnName} {userDetails.lastName}
-          </p>
-          <p>
-            <span className="font-medium text-indigo-900">Email:</span> {userDetails.email}
-          </p>
-        </div>
+      {isLoading && (
+        <p className="text-lg text-gray-500">Loading wishlist...</p>
       )}
 
-      <div className="bg-white shadow-lg rounded-lg p-6 border-l-4 border-indigo-900">
-        <h3 className="text-xl font-semibold mb-4 text-rose-600">Wishlist</h3>
-        {wishlist.length > 0 ? (
-          <ul className="space-y-2">
-            {wishlist.map((item) => (
-              <li key={item.itemId} className="flex items-center space-x-4 p-4 bg-gray-100 rounded-lg shadow-sm">
-                <img src={item.src} alt={item.name} className="w-24 h-24 object-cover rounded-lg" />
-                <div>
-                  <p className="font-medium text-indigo-900">{item.name}</p>
-                  <p className="text-gray-600">${item.price}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-600">No items saved in wishlist.</p>
-        )}
-      </div>
+      {wishlistCart?.products?.length === 0 && (
+        <p className="text-lg text-gray-500">Your wishlist is empty!</p>
+      )}
+
+      {wishlistCart?.products?.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {wishlistCart.products.map((item) => (
+            <div
+              key={item?.productId?._id}
+              className="relative bg-white shadow-lg rounded-lg overflow-hidden"
+            >
+              <Link to={`/products/cart/${item.productId?._id}`}>
+                <img
+                  src={item?.productId?.image}
+                  alt={item?.productId?.productName}
+                  className="w-full h-48 object-cover"
+                />
+              </Link>
+              <div className="p-4">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {item?.productId?.productName}
+                </h2>
+                <p className="text-gray-600 mt-2">
+                  {item?.productId?.description}
+                </p>
+              </div>
+              <div
+                onClick={() => handleRemoveFromWishlist(item?.productId?._id)}
+                className={`absolute top-2 right-2 inline-block rounded-full border border-rose-600 p-2 ${
+                  isInWishlist
+                    ? "bg-rose-600 text-white"
+                    : "bg-white text-rose-600"
+                } hover:bg-rose-600 hover:text-white focus:outline-none focus:ring active:bg-rose-500 transition-colors duration-300 cursor-pointer`}
+              >
+                <span className="sr-only">Add to Wishlist</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 21C12 21 6 16.5 3 12.5C1 9.5 2.5 6.5 5 5C7.5 3.5 10.5 5 12 7C13.5 5 16.5 3.5 19 5C21.5 6.5 23 9.5 21 12.5C18 16.5 12 21 12 21Z"
+                  />
+                </svg>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-export default UserProfilePage;
+export default Wishlist;
