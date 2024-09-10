@@ -1,39 +1,27 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchCart } from "../../../app/Slice/addCartSlice/addCartSlice";
+import React from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+  import { stripePaymentIntegration } from "../../../app/Slice/paymentSlice/paymentThunk";
 
 const OrderSummary = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { cart: cartItems} = useSelector((state) => state.cart);
-  const userFound = localStorage.getItem("id");
+  const { cart: cartItems,cartId } = useSelector((state) => state.cart);
 
-  useEffect(() => {
-    if (userFound) {
-      dispatch(fetchCart());
-    }
-  }, [dispatch, userFound]);
-
-
-
+  
   const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.qty,
+    (sum, item) => sum + item.productId.price * item.quantity,
     0
   );
+
   const estimatedTax = totalPrice * 0.1;
   const orderTotal = totalPrice + estimatedTax;
 
-  const handlePlaceOrder = () => {
-    if (orderTotal > 0) {
-      navigate(`/payment/${userFound}`);
+  const handlePlaceOrder = (cartId) => {
+    if (orderTotal > 0) {      
+      stripePaymentIntegration({cartId})
     } else {
       toast.info("Your Cart is Empty");
     }
   };
-
-
 
   return (
     <div className="border border-gray-300 rounded-lg p-6 bg-white shadow-md">
@@ -60,7 +48,7 @@ const OrderSummary = () => {
       </div>
       <button
         className="w-full py-3 rounded-md mt-4 bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 active:bg-indigo-800"
-        onClick={handlePlaceOrder}
+        onClick={() => handlePlaceOrder(cartId)}
       >
         Place your order
       </button>

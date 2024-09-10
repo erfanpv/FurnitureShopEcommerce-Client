@@ -1,51 +1,32 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchCart,
-  removeFromCartAsync,
-  quantityIncrementAsync,
-  quantityDecrementAsync,
-} from "../../../app/Slice/addCartSlice/addCartSlice";
-import axios from "axios";
 import { Link } from "react-router-dom";
-import ProductShimmer from "../../ShimmerUI/ProductShimmer/ProductShimmer";
+import { fetchCart,  quantityIncrementAsync, removeFromCartAsync,quantityDecrementAsync } from "../../../app/Slice/addCartSlice/cartThunk";
+
 
 const SingleCart = () => {
   const dispatch = useDispatch();
-  const { cart, loading } = useSelector((state) => state.cart);
-  const userFound = localStorage.getItem("id");
+  const { cart } = useSelector((state) => state.cart);
 
   useEffect(() => {
     dispatch(fetchCart());
   }, [dispatch]);
-
-  const updateCart = async (updatedCart) => {
-    try {
-      await axios.patch(`http://localhost:5000/users/${userFound}`, {
-        cart: updatedCart,
-      });
-    } catch (err) {
-      console.log("Error updating cart:", err);
-    }
+  
+  const handleIncrement = (productId) => {    
+    if (!productId) return;    
+    dispatch(quantityIncrementAsync(productId));
   };
 
-  const removeItem = (id) => {
-    const updatedCart = cart.filter((item) => item.id !== id);
-    dispatch(removeFromCartAsync(id));
-    updateCart(updatedCart);
+  const handleDecrement = (productId) => {
+    if (!productId) return;    
+    dispatch(quantityDecrementAsync(productId));
   };
 
-  const incrementQuantity = (id) => {
-    dispatch(quantityIncrementAsync(id));
+  const handleRemove = (productId) => {
+    if (!productId) return;
+    dispatch(removeFromCartAsync(productId));
   };
 
-  const decrementQuantity = (id) => {
-    dispatch(quantityDecrementAsync(id));
-  };
-
-  if (loading) {
-    return <ProductShimmer />;
-  }
 
   return (
     <div>
@@ -53,7 +34,7 @@ const SingleCart = () => {
         {cart.length > 0 ? (
           cart.map((item) => (
             <div
-              key={item.id}
+              key={item.productId._id}
               className="border border-gray-300 rounded-lg p-4 mb-3 shadow-md"
             >
               <div className="text-green-700 font-bold text-lg mb-6">
@@ -62,24 +43,24 @@ const SingleCart = () => {
               <div className="grid grid-cols-[100px,1fr,1fr] gap-6 md:grid-cols-[100px,1fr,1fr] md:gap-3">
                 <img
                   className="max-w-full max-h-30 mx-auto rounded"
-                  src={item.src}
-                  alt={item.name}
+                  src={item.productId.image}
+                  alt={item.productId.productName}
                 />
                 <div className="space-y-2">
-                  <div className="font-bold">{item.name}</div>
-                  <div className="text-red-700 font-bold">${item.price}</div>
+                  <div className="font-bold">{item.productId.productName}</div>
+                  <div className="text-red-700 font-bold">${item.productId.price}</div>
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center">
                       <button
                         className="text-white bg-indigo-500 hover:bg-indigo-600 rounded-full px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                        onClick={() => decrementQuantity(item.id)}
+                        onClick={() => handleDecrement(item.productId._id)}
                       >
                         -
                       </button>
-                      <span className="mx-2 font-bold">{item.qty}</span>
+                      <span className="mx-2 font-bold">{item.quantity}</span>
                       <button
                         className="text-white bg-indigo-500 hover:bg-indigo-600 rounded-full px-3 py-1 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                        onClick={() => incrementQuantity(item.id)}
+                        onClick={() => handleIncrement(item.productId._id)}
                       >
                         +
                       </button>
@@ -87,7 +68,7 @@ const SingleCart = () => {
 
                     <button
                       className="text-red-600 hover:text-red-900 focus:outline-none"
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => handleRemove(item.productId._id)}
                     >
                       Delete
                     </button>
