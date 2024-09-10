@@ -1,6 +1,6 @@
 
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, loginUsers, loginUser } from "./userThunk";
+import { registerUser, loginUsers } from "./userThunk";
 
 const userSlice = createSlice({
   name: "users",
@@ -40,10 +40,10 @@ const userSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload;
-      })
-      .addCase(loginUser.rejected, (state, action) => {});
+      // .addCase(loginUser.fulfilled, (state, action) => {
+      //   state.user = action.payload;
+      // })
+      // .addCase(loginUser.rejected, (state, action) => {});
   },
 });
 

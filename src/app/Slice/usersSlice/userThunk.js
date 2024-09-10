@@ -1,8 +1,11 @@
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
 let userBaseUrl = import.meta.env.VITE_USER_API;
 let adminrBaseUrl = import.meta.env.VITE_USER_API;
+
+
 
 export const registerUser = createAsyncThunk(
   "users/registerUser",
@@ -40,17 +43,19 @@ export const loginUsers = createAsyncThunk(
   async ({ values, navigate, toast }) => {
     try {
       const response = await axios.post(`${userBaseUrl}/login`, values);
-      if (response.status >= 200 && response.status < 300) {        
+      if (response.status >= 200 && response.status < 300) {
         if (response.data.data.user.role === "admin") {
-          toast.success(`Admin Loggin Success`);
-          // localStorage.setItem("accesstoken",response.data.data.token)   
-          // localStorage.setItem("id",response.data.data.user._id) 
+          toast.success(`Admin Loggin Success`);          
+          localStorage.setItem("accesstoken",response.data.data.token)
+          localStorage.setItem("id",response.data.data.user._id)
           navigate("/admin");
           return response.data;
         } else {
           toast.success(`${response.data.data.user.lastName} Loggin Success`);
-          localStorage.setItem("accesstoken",response.data.data.token) 
-          localStorage.setItem("username",response.data.data.user.lastName) 
+          localStorage.setItem("accesstoken", response.data.data.token);
+          localStorage.setItem("username", response.data.data.user.lastName);
+          localStorage.setItem("id",response.data.data.user._id)
+
           navigate("/");
           return response.data;
         }
@@ -70,8 +75,7 @@ export const loginUsers = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk("users/loginUserById", async () => {
-  const response = await axios.get(`http://localhost:5000/users/${id}`);
-  return response.data;
-});
-
+// export const loginUser = createAsyncThunk("users/loginUserById", async () => {
+//   const response = await axios.get(`http://localhost:5000/users/${id}`);
+//   return response.data;
+// });
