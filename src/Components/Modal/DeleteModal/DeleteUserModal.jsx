@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 const UserDeleteModal = ({ id, closeModal, setRender }) => {
   const { setUsers, users } = useContext(MyContext);
 
+  
+
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:5000/users/${id}`);
@@ -13,6 +15,7 @@ const UserDeleteModal = ({ id, closeModal, setRender }) => {
       toast.success("User deleted successfully");
       setRender((prev) => !prev); 
       closeModal();
+      
     } catch (error) {
       toast.error("Failed to delete user");
       closeModal();

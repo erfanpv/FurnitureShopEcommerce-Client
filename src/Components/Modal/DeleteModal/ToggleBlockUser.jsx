@@ -1,47 +1,19 @@
-import axios from "axios";
-import React, { useContext, useEffect } from "react";
-import MyContext from "../../../utils/Context";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import { adminGetAllProducts, deleteProduct} from "../../../app/Slice/adminSlices/productSlices/adminProductThunk";
+import React from "react";
+import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { toggleBlockUser } from "../../../app/Slice/adminSlices/userMangementSlices/umsThunk";
 
-const DeleteModal = ({ id }) => {
-  const { isModalOpen, closeModal, setRender } = useContext(MyContext);
-
-  const { deletStatus } = useSelector((state) => state.adminProducts);
-
-  if (deletStatus) {
-    dispatch(adminGetAllProducts())
-  }
-
+const ToggleBlockUser = ({ id, closeModal, is_blocked }) => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.keyCode === 27) {
-        closeModal();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeModal]);
-
-  const handleDelete = async (id) => {
+  const handleBlock = async (id) => {
     try {
-      dispatch(deleteProduct({ id, toast, closeModal }));
-    } catch (err) {
-      toast.error("Failed to delete product");
+      dispatch(toggleBlockUser({ id, toast, closeModal, dispatch }));
+    } catch (error) {
+      toast.error("Failed to delete user");
       closeModal();
     }
   };
-
-  if (!isModalOpen) {
-    return null;
-  }
 
   return (
     <div
@@ -86,10 +58,12 @@ const DeleteModal = ({ id }) => {
             ></path>
           </svg>
           <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
-            Are you sure you want to delete this product?
+            {is_blocked
+              ? "Do you want to unblock this user?"
+              : "Do you want to block this user?"}
           </h3>
           <button
-            onClick={() => handleDelete(id)}
+            onClick={() => handleBlock(id)}
             className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2"
           >
             Yes, I'm sure
@@ -106,4 +80,4 @@ const DeleteModal = ({ id }) => {
   );
 };
 
-export default DeleteModal;
+export default ToggleBlockUser;
