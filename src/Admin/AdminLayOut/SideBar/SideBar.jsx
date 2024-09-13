@@ -10,7 +10,7 @@ const AdminSidebar = () => {
   const { isLoggedIn } = useSelector((state) => state.users);
 
   const handleLogout = () => {
-    localStorage.removeItem("id");
+    localStorage.clear()
     dispatch(setLoggedIn(false));
     navigate("/login");
   };
