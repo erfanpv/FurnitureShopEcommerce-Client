@@ -14,6 +14,8 @@ import UserRegistration from "./Components/User/Register/UserRegistration";
 import CatogoryCard from "./Components/Products/CatogeryProduct/CatogoryCard";
 import UserProfilePage from "./Components/ProfilePage/UserProfilePage";
 import ClientOrders from "./Pages/ClientOrders/ClientOrders";
+import PaymentSuccess from "./Components/PaymentSections/Stripe/StripeSuccess";
+import UserProtectedRoute from "./routes/userRoute/protectRouteUser";
 {
   /* Import Admin Details */
 }
@@ -28,6 +30,7 @@ import EditProduct from "./Admin/AdminProducts/AdminFurnitureCard/EditForm/EditF
 import FurnitureType from "./Admin/FurniturTypes/FurnitureType";
 import UserOrders from "./Admin/UsersList/CustomerOrders/userOrders";
 import Allorders from "./Admin/Allorders/Allorders";
+import AdminProtectedRoute from "./routes/AdminRoute/protectAdmin";
 
 const App = () => {
   return (
@@ -38,30 +41,33 @@ const App = () => {
           <Route path="/" element={<Home />}>
             <Route index element={<HomePage />} />
             <Route path="products" element={<ProductStore />} />
-            <Route path={"/products/cart/:id"} element={<ViewProduct />} />
-            <Route path={"/products/cart/mycart"} element={<UserCart />} />
-            <Route path={"/products/:category"} element={<CatogoryCard/>} />
-            <Route path={"/profile/"} element={<UserProfilePage/>} />
-            <Route path={"/orders/:id"} element={<ClientOrders/>} />
+            <Route path={"/products/cart/:id"} element={<ViewProduct />} /> 
+            <Route path={"/products/:category"}element={<CatogoryCard/>} />
+            <Route path={"/products/cart/mycart"} element={<UserProtectedRoute element={<UserCart />} />} />
+            <Route path={"/profile/"} element={<UserProtectedRoute element={<UserProfilePage/>} />} />
+            <Route path={"/orders/:id"} element={<UserProtectedRoute element={<ClientOrders/>} />} />
 
 
           </Route>
-          <Route path={"/payment/:id"} element={<PaymentPage />} />
+          {/* <Route path={"/payment/:id"} element={<PaymentPage />} /> */}
+          <Route path={"/payment/success"} element={<UserProtectedRoute element={<PaymentSuccess/>} />} />
           <Route path="login" element={<LoginForm />} />
           <Route path="register" element={<UserRegistration />} />
 
           {/*---Admin Side---*/}
-          <Route path="admin" element={<AdminLayout />}> 
-            <Route index element={<Dashboard />} />
-            <Route path="/admin/productlist" element={<AdminProducts />} />
-            <Route path={"/admin/productlist/addproduct"} element={<AddProduct/>} />
-            <Route path={"/admin/userslist"} element={<UserList/>} />
-            <Route path={"/admin/userslist/viewcart/:id"} element={<CustomerCart/>} />
-            <Route path={"/admin/userslist/orders/:id"} element={<UserOrders/>} />
-            <Route path={"/admin/productlist/update/:id"} element={<EditProduct/>} />
-            <Route path={"/admin/productlist/:type"} element={<FurnitureType/>} />
-            <Route path={"/admin/allorders"} element={<Allorders/>} />
-          </Route>
+          <Route element={<AdminProtectedRoute />}>
+            <Route path="admin" element={<AdminLayout />}> 
+              <Route index element={<Dashboard />} />
+              <Route path="/admin/productlist" element={<AdminProducts />} />
+              <Route path={"/admin/productlist/addproduct"} element={<AddProduct/>} />
+              <Route path={"/admin/userslist"} element={<UserList/>} />
+              <Route path={"/admin/userslist/viewcart/:id"} element={<CustomerCart/>} />
+              <Route path={"/admin/userslist/orders/:id"} element={<UserOrders/>} />
+              <Route path={"/admin/productlist/update/:id"} element={<EditProduct/>} />
+              <Route path={"/admin/productlist/:category"} element={<FurnitureType/>} />
+              <Route path={"/admin/allorders"} element={<Allorders/>} />
+            </Route>
+         </Route>
 
         </Routes>
       </Router>
