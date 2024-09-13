@@ -8,6 +8,7 @@ const id = localStorage.getItem("id");
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (_,{ rejectWithValue }) => {
   try {
     const response = await http.get(`/users/${id}/cart`);
+    
     return {cartProduct:response.data.data,cartId:response.data.cartId}
 
   } catch (error) {

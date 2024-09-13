@@ -48,6 +48,7 @@ export const loginUsers = createAsyncThunk(
           toast.success(`Admin Loggin Success`);          
           localStorage.setItem("accesstoken",response.data.data.token)
           localStorage.setItem("id",response.data.data.user._id)
+          localStorage.setItem("email",response.data.data.user.email)
           navigate("/admin");
           return response.data;
         } else {
