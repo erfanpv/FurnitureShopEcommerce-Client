@@ -33,35 +33,7 @@ const CartProvider = ({ children }) => {
     setFilteredItems(filtered);
   };
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/products").then((res) => {
-      setFilteredItems(res?.data);
-      setSearchFilteredItems(res?.data);
-    });
-  }, []);
 
-  useEffect(() => {
-    if (userFound) {
-      axios.get("http://localhost:5000/users/" + userFound).then((res) => {
-        setUser(res?.data);
-        setAddCart(res?.data?.cart);
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await axios.get("http://localhost:5000/users");
-        setFilteUser(data.data);
-        setUsers(data.data);
-      } catch (error) {
-        console.log("users fetch failed", error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
 
   const openModal = () => {
     setIsModalOpen(true);
