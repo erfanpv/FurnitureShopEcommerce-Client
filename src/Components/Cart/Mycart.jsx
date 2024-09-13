@@ -23,14 +23,11 @@ const MyCart = () => {
     <div className="max-w-5xl px-6 mt-5 mx-auto">
       <h1 className="font-bold text-2xl mb-6">Review your order</h1>
       <div className="grid grid-cols-1 md:grid-cols-[1fr,350px] gap-6">
-        <MemoizedSingleCart />
-        <MemoizedOrderSummary />
+        <SingleCart />
+        <OrderSummary />
       </div>
     </div>
   );
 };
 
-const MemoizedSingleCart = React.memo(SingleCart);
-const MemoizedOrderSummary = React.memo(OrderSummary);
-
-export default React.memo(MyCart);
+export default MyCart;

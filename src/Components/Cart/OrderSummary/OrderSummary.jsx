@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 const OrderSummary = () => {
   const { cart: cartItems,cartId } = useSelector((state) => state.cart);
-
   
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.productId.price * item.quantity,
@@ -15,8 +14,8 @@ const OrderSummary = () => {
   const estimatedTax = totalPrice * 0.1;
   const orderTotal = totalPrice + estimatedTax;
 
-  const handlePlaceOrder = (cartId) => {
-    if (orderTotal > 0) {      
+  const handlePlaceOrder = () => {
+    if (orderTotal > 0) {        
       stripePaymentIntegration({cartId})
     } else {
       toast.info("Your Cart is Empty");
@@ -48,7 +47,7 @@ const OrderSummary = () => {
       </div>
       <button
         className="w-full py-3 rounded-md mt-4 bg-indigo-600 text-white font-semibold text-sm hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 active:bg-indigo-800"
-        onClick={() => handlePlaceOrder(cartId)}
+        onClick={handlePlaceOrder}
       >
         Place your order
       </button>
