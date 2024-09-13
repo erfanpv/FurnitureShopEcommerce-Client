@@ -1,73 +1,67 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import ProductShimmer from "../../../../Components/ShimmerUI/ProductShimmer/ProductShimmer";
-import { useDispatch } from "react-redux";
-import { updateProducts } from "../../../../app/Slice/adminSlices/productSlices/adminProductThunk";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  adminGetProductWithId,
+  updateProducts,
+} from "../../../../app/Slice/adminSlices/productSlices/adminProductThunk";
 
 const EditProduct = () => {
   const { id } = useParams();
-  const dispatch = useDispatch()
-  
-  const [productData, setProductData] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { product } = useSelector((state) => state.adminProducts);
 
   useEffect(() => {
-    // axios
-    //   .get(`http://localhost:5000/products/${id}`)
-    //   .then((response) => {
-    //     setProductData(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching product:", error);
-    //   });
-  }, [id]);
+    dispatch(adminGetProductWithId({ id }));
+  }, [dispatch, id]);
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Required"),
-    type: Yup.string().required("Required"),
-    src: Yup.string().url("Invalid URL").required("Required"),
+    productName: Yup.string().required("Required"),
+    category: Yup.string().required("Required"),
+    image: Yup.string().url("Invalid URL").required("Required"),
     price: Yup.number()
       .required("Required")
       .positive("Must be a positive number"),
     description: Yup.string().required("Required"),
-    stock: Yup.number()
+    stockQuantity: Yup.number()
       .required("Required")
       .integer("Must be an integer")
-      .min(0, "Stock can't be negative"),
+      .min(1, "Stock can't be negative"),
+    is_Listed: Yup.string().required("Please select an option"),
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
+    const updated = Object.keys(values).some(
+      (key) => values[key] !== product[key]
+    );
 
-    dispatch(updateProducts({values,toast,setSubmitting}))
-    // const updated = Object.keys(values).some(
-    //   (key) => values[key] !== productData[key]
-    // );
-
-    // if (updated) {
-    //   axios
-    //     .put(`http://localhost:5000/products/${id}`, values)
-    //     .then((response) => {
-    //       console.log("Product updated successfully:", response.data);
-    //       toast.success("Product updated successfully");
-    //       navigate("/admin/productlist");
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error updating product:", error);
-    //       toast.error("Failed updating product");
-    //     })
-    //     .finally(() => {
-    //       setSubmitting(false);
-    // //     });
-    // } else {
-    //   toast.info("No changes applied");
-    //   setSubmitting(false);
-    // }
+    if (updated) {
+      dispatch(updateProducts({ id,values, toast,navigate }));
+      // axios
+      //   .put(`http://localhost:5000/products/${id}`, values)
+      //   .then((response) => {
+      //     console.log("Product updated successfully:", response.data);
+      //     toast.success("Product updated successfully");
+      //     navigate("/admin/productlist");
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error updating product:", error);
+      //     toast.error("Failed to update product");
+      //   })
+      //   .finally(() => {
+      //     setSubmitting(false);
+      //   });
+    } else {
+      toast.info("No changes applied");
+      setSubmitting(false);
+    }
   };
-
 
   return (
     <div className="max-w-4xl mx-auto mt-8 sm:ml-64 ">
@@ -76,34 +70,35 @@ const EditProduct = () => {
           <h2 className="text-2xl font-bold mb-6">Edit Product</h2>
 
           <Formik
-            enableReinitialize
             initialValues={{
-              name: productData.name,
-              type: productData.type,
-              src: productData.src,
-              price: productData.price.toString(),
-              description: productData.description,
-              stock: productData.stock.toString(),
+              productName: product?.productName || "",
+              category: product?.category || "",
+              image: product?.image || "",
+              price: product?.price || 0,
+              description: product?.description || "",
+              stockQuantity: product?.stockQuantity || 0,
+              is_Listed: product?.is_Listed,
             }}
             validationSchema={validationSchema}
+            enableReinitialize
             onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
               <Form>
                 <div className="mb-4 flex items-start">
                   <label
-                    className="w-1/3 md:w-1/4 text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="name"
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="productName"
                   >
                     Name
                   </label>
                   <div className="w-2/3 md:w-3/4">
                     <Field
-                      name="name"
+                      name="productName"
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                     <ErrorMessage
-                      name="name"
+                      name="productName"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -112,18 +107,18 @@ const EditProduct = () => {
 
                 <div className="mb-4 flex items-start">
                   <label
-                    className="w-1/3 md:w-1/4 text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="type"
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="category"
                   >
-                    Type
+                    Category
                   </label>
                   <div className="w-2/3 md:w-3/4">
                     <Field
-                      name="type"
+                      name="category"
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                     <ErrorMessage
-                      name="type"
+                      name="category"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -132,18 +127,18 @@ const EditProduct = () => {
 
                 <div className="mb-4 flex items-start">
                   <label
-                    className="w-1/3 md:w-1/4 text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="src"
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="image"
                   >
                     Image URL
                   </label>
                   <div className="w-2/3 md:w-3/4">
                     <Field
-                      name="src"
+                      name="image"
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                     <ErrorMessage
-                      name="src"
+                      name="image"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -152,7 +147,7 @@ const EditProduct = () => {
 
                 <div className="mb-4 flex items-start">
                   <label
-                    className="w-1/3 md:w-1/4 text-gray-700 text-sm font-bold mb-2"
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
                     htmlFor="price"
                   >
                     Price
@@ -173,7 +168,7 @@ const EditProduct = () => {
 
                 <div className="mb-4 flex items-start">
                   <label
-                    className="w-1/3 md:w-1/4 text-gray-700 text-sm font-bold mb-2"
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
                     htmlFor="description"
                   >
                     Description
@@ -194,19 +189,43 @@ const EditProduct = () => {
 
                 <div className="mb-4 flex items-start">
                   <label
-                    className="w-1/3 md:w-1/4 text-gray-700 text-sm font-bold mb-2"
-                    htmlFor="stock"
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="stockQuantity"
                   >
-                    Stock
+                    Stock Quantity
                   </label>
                   <div className="w-2/3 md:w-3/4">
                     <Field
-                      name="stock"
+                      name="stockQuantity"
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="number"
                     />
                     <ErrorMessage
-                      name="stock"
+                      name="stockQuantity"
+                      component="div"
+                      className="text-red-500 text-sm mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4 flex items-start">
+                  <label
+                    className="w-1/3 text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="is_Listed"
+                  >
+                    Listed Status
+                  </label>
+                  <div className="w-2/3 md:w-3/4">
+                    <Field
+                      as="select"
+                      name="is_Listed"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    >
+                      <option value="true">Listed</option>
+                      <option value="false">Not Listed</option>
+                    </Field>
+                    <ErrorMessage
+                      name="is_Listed"
                       component="div"
                       className="text-red-500 text-sm mt-1"
                     />
@@ -237,7 +256,7 @@ const EditProduct = () => {
         <div className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-xl font-bold mb-4">Product Image Preview</h2>
           <img
-            src={productData.src}
+            src={product?.image}
             alt="Product Image"
             className="w-full h-auto rounded-lg border border-gray-300"
           />

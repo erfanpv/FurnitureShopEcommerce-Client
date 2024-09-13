@@ -1,8 +1,6 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../../../utils/Context";
-import { toast } from "react-toastify";
 import DeleteModal from "../../../Components/Modal/DeleteModal/DeleteModal";
 
 const AdminFurnitureCard = ({ productItem }) => {

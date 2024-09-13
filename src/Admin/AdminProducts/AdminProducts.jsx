@@ -1,7 +1,5 @@
-import React, { useContext, useEffect } from "react";
+import React, {  useEffect } from "react";
 import AdminFurnitureCard from "./AdminFurnitureCard/AdminCard";
-import MyContext from "../../utils/Context";
-import axios from "axios";
 import ProductShimmer from "../../Components/ShimmerUI/ProductShimmer/ProductShimmer";
 import { useNavigate } from "react-router-dom";
 import DropDownButton from "../../Components/Header/DropDownButton/DropDownButton";
@@ -12,14 +10,17 @@ import { adminGetAllProducts } from "../../app/Slice/adminSlices/productSlices/a
 const AdminProducts = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { filteredItems, setFilteredItems, render } = useContext(MyContext);
 
-  const { products, isLoading } = useSelector((state) => state.adminProducts);
-
+  const { products, isLoading,deletStatus } = useSelector((state) => state.adminProducts);
+  
   useEffect(() => {
     dispatch(adminGetAllProducts());
-  }, []);
-
+  
+    if (deletStatus) {
+      dispatch(adminGetAllProducts());
+    }
+  }, [deletStatus]);
+  
   return (
     <>
       <div className="flex justify-center mt-0">
