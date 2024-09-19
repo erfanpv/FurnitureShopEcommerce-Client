@@ -15,6 +15,7 @@ import CategoryDropdown from "../Products/CatogeryProduct/Catogory";
 import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
+import { loadWishList } from "../../app/Slice/wishListSlice/wishListThunk";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -23,25 +24,29 @@ function classNames(...classes) {
 export default function Header() {
   const { isLoggedIn } = useSelector((state) => state.users);
   const { cart } = useSelector((state) => state.cart);
+  const { wishlistCart } = useSelector((state) => state.wishList);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const accesstoken = localStorage.getItem("accesstoken");
   const user = localStorage.getItem("username");
   const dispatch = useDispatch();
+  const id = localStorage.getItem("id");
 
-  if (accesstoken) {
-    dispatch(setLoggedIn(true));
-  }
+  // if (id) {
+  //   dispatch(setLoggedIn(true));
+  // }
+
+  useEffect(() => {
+    dispatch(loadWishList());
+  }, []);
 
   const userNavigation = [
-    { name: "Your Profile", href: "/profile" },
-    { name: "Order Details", href: `/orders/${accesstoken}` },
+    // { name: "Profile", href: "/profile" },
+    { name: "Order Details", href: `/orders/${id}` },
     { name: "Sign out", href: "/" },
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem("accesstoken");
-    localStorage.removeItem("username");
+    localStorage.clear();
     dispatch(setLoggedIn(false));
   };
 
@@ -150,6 +155,28 @@ export default function Header() {
                 </MenuItems>
               </Menu>
             </div>
+
+            <Link to={"/wishlist"} className="mr-6">
+              <div className="relative text-sm font-semibold leading-6 w-6 sm:w-14 lg:ms-20 text-gray-900 cursor-pointer">
+                {wishlistCart?.products?.length > 0 && (
+                  <span className="absolute  bg-rose-600 text-white text-xs font-semibold rounded-full w-3 h-3 items-center justify-center md:ml-24 "></span>
+                )}
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-7 h-7 md:ml-20"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A6.51 6.51 0 0116.5 3 5.5 5.5 0 0122 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  />
+                </svg>
+              </div>
+            </Link>
 
             <Link
               to="/products/cart/mycart"

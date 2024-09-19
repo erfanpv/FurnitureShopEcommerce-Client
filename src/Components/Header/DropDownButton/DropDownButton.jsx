@@ -1,26 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { Link} from "react-router-dom";
-import MyContext from "../../../utils/Context";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUniqueProductCategories } from "../../../app/Slice/adminSlices/productSlices/adminProductThunk";
 
 const DropdownButton = () => {
-  const { render } = useContext(MyContext);
   const [isOpen, setIsOpen] = useState(false);
-  const [items, setItems] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { uniqueProductCategories } = useSelector(
+    (state) => state.adminProducts
+  );
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/products")
-      .then((response) => {
-        const uniqueTypes = [
-          ...new Set(response.data.map((item) => item.type)),
-        ];
-        setItems(uniqueTypes);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [render]);
+    dispatch(fetchUniqueProductCategories());
+  }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -69,7 +63,7 @@ const DropdownButton = () => {
             >
               All
             </Link>
-            {items.map((item, index) => (
+            {uniqueProductCategories.map((item, index) => (
               <Link
                 to={`/admin/productlist/${item.toLowerCase()}`}
                 key={index}
