@@ -1,5 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../../utils/axios/axiosIntercepter";
+import { useNavigate } from "react-router-dom";
+
 
 export const stripePaymentIntegration = async ({ cartId }) => {
   try {
@@ -22,14 +24,19 @@ export const stripePaymentIntegration = async ({ cartId }) => {
 export const stripePaymentSuccess = createAsyncThunk(
   "payment/stripePaymentSuccess",
   async (_, { rejectWithValue }) => {
+    const navigate = useNavigate()
     try {
+      const id = localStorage.getItem("id");
+      const response = await http.get(`/users/payment/success/${id}`);
+      console.log(response.data);
       
-      const response = await http.get(`/payment/success/:id`);
-      console.log();
+      if (response.data.success) {
+        navigate(`/payment/success/payment`)
+      }
       
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || "Failed to fetch products.");
+      return rejectWithValue(error.response.data.message || "Failed.");
     }
   }
 );

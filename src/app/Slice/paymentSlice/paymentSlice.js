@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { stripePaymentSuccess } from "./paymentThunk";
 
 const initialState = {
  paymentStatus:false,
@@ -11,16 +12,16 @@ const paymentSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state,action) => {
+      .addCase(stripePaymentSuccess.pending, (state,action) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
+      .addCase(stripePaymentSuccess.fulfilled, (state, action) => {
         state.paymentStatus = action.payload;
         state.isLoading = false;
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
-        state.isLoading = true;
+      .addCase(stripePaymentSuccess.rejected, (state, action) => {
+        state.isLoading = false;
         state.error = action.payload;
       })
     }

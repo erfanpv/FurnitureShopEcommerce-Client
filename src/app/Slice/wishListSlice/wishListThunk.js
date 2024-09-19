@@ -8,6 +8,7 @@ export const loadWishList = createAsyncThunk(
   "wishlist/loadWishList",
   async (_, { rejectWithValue }) => {
     try {
+      const id = localStorage.getItem("id");
       const response = await http.get(`users/${id}/wishlist`);
 
       return response.data.data;

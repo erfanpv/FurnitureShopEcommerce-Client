@@ -19,7 +19,7 @@ const store = configureStore({
     adminProducts: adminProductSlices,
     userManger: userMangerSlice,
     orders: ordersSlices,
-    // payment:paymentSlice,
+    payment:paymentSlice,
   },
 });
 
