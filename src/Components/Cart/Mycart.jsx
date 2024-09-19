@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SingleCart from "./SingleProductCart/SingleCart";
 import OrderSummary from "./OrderSummary/OrderSummary";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartShimmer from "../ShimmerUI/CartShimmer/CartShimmer";
+import { fetchCart } from "../../app/Slice/addCartSlice/cartThunk";
 
 const MyCart = () => {
   const { loading } = useSelector((state) => state.cart);
   // console.log(loading);
 
   // let loading = true;
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchCart())
+  },[])
 
   if (loading) {
     return (
