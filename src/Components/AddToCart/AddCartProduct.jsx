@@ -12,11 +12,15 @@ function AddCartProduct({ productItem }) {
 
   const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = (productItem,quantity) => {    
+  const handleAddToCart = (productItem, quantity) => {
+    if (!isLoggedIn) {
+      toast.info("You have not login ")
+      navigate("/login");
+    }
     if (quantity > 0) {
       if (productItem && productItem._id) {
         const productId = productItem._id;
-        dispatch(addToCartAsync({productId,quantity,navigate, toast}))
+        dispatch(addToCartAsync({ productId, quantity, navigate, toast }));
       } else {
         toast.error("Product data is not fully loaded. Please try again.");
       }
@@ -74,14 +78,14 @@ function AddCartProduct({ productItem }) {
                     />
                     <button
                       className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
-                      onClick={() => handleAddToCart(productItem,quantity)}
+                      onClick={() => handleAddToCart(productItem, quantity)}
                     >
                       Add to cart
                       <i className="fas fa-shopping-cart ml-1"></i>
                     </button>
-                    <button className="border border-indigo-600 text-indigo-600 px-4 py-2 rounded hover:bg-indigo-600 hover:text-white">
+                    {/* <button className="border border-indigo-600 text-indigo-600 px-4 py-2 rounded hover:bg-indigo-600 hover:text-white">
                       BUY NOW
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
