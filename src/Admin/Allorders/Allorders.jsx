@@ -67,27 +67,28 @@ const UserOrders = () => {
                     <ul>
                       {order.products.map((item) => (
                         <li
-                          key={item.productId._id}
+                          key={item?.productId?._id}
                           className="flex items-center mb-4"
                         >
                           <img
-                            src={item.productId.image}
-                            alt={item.productId.productName}
+                            src={item?.productId?.image}
+                            alt={item?.productId?.productName}
                             className="w-16 h-16 object-cover rounded-lg mr-4"
                           />
                           <div>
                             <h5 className="text-lg font-semibold">
-                              {item.productId.productName}
+                              {item?.productId?.productName}
                             </h5>
                             <p className="text-sm text-gray-600">
-                              Qty: {item.quantity}
+                              Qty: {item?.quantity}
                             </p>
                             <p className="text-sm text-gray-600">
-                              Price: ${item.productId.price.toFixed(2)}
+                              Price: ${item?.productId?.price.toFixed(2)}
                             </p>
                           </div>
                         </li>
-                      ))}
+                        
+                        ))}
                     </ul>
                   </td>
                   <td className="py-4 px-6 border-b border-gray-200">
