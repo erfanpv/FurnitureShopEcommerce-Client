@@ -11,7 +11,7 @@ const TotalOrders = () => {
   }, []);
 
   return (
-    <div className="flex w-72">
+    <div className="flex w-60">
       <div className="flex w-full max-w-full flex-col break-words rounded-lg border border-gray-100 bg-white text-gray-600 shadow-lg">
         <div className="p-3 relative">
           <div className="absolute -mt-10 h-16 w-16 rounded-xl bg-gradient-to-tr from-rose-700 to-rose-500 text-center text-white shadow-lg">

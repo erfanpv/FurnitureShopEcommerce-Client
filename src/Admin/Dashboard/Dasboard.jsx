@@ -17,8 +17,6 @@ import TotalStocks from "./TotalStocks/TotalStocks";
 import TotalRevenue from "./TotalRevenue/TotalRevenue";
 import TotalOrders from "./TotalOrders/TotalOrders";
 
-
-
 const salesData = [
   { name: "Jan", sales: 4000 },
   { name: "Feb", sales: 3000 },
@@ -36,49 +34,48 @@ const revenueData = [
   { name: "Fri", revenue: 10000 },
 ];
 
-// Dashboard Component
-// className="flex flex-wrap gap-x-4 lg:gap-x-16 gap-y-12 bg-white px-4 py-10 lg:px-20  mr-5 ml-5 md:ml-64 sm:ml-64 lg:ml-64"
+const recentActivities = [
+  { id: 1, action: "New product added", date: "2024-09-18" },
+  { id: 2, action: "User Jane Doe registered", date: "2024-09-17" },
+  { id: 3, action: "Order #12345 shipped", date: "2024-09-16" },
+  { id: 4, action: "Order #12346 returned", date: "2024-09-15" },
+];
+
+const notifications = [
+  { id: 1, message: "Low stock on product XYZ", date: "2024-09-18" },
+  { id: 2, message: "New user registration", date: "2024-09-17" },
+];
+
 const DashboardStats = () => {
   return (
-    <div className="bg-white-100 min-h-screen  px-4 py-10 lg:px-20 md:ml-60 sm:ml-60 lg:ml-60">
+    <div className="bg-white-100 min-h-screen px-4 py-10 lg:px-20 md:ml-60 sm:ml-60 lg:ml-60">
       {/* Dashboard Header */}
-      <div className="mb-10">
-        <h2 className="text-3xl font-bold text-indigo-800">Admin Dashboard</h2>
-        <p className="mt-2 text-gray-600">Real-time eCommerce statistics</p>
+      <div className="mb-12">
+        <h2 className="text-4xl font-bold text-indigo-800">Admin Dashboard</h2>
+        <p className="mt-2 text-gray-500">Comprehensive eCommerce statistics at a glance</p>
       </div>
 
       {/* Stats Cards */}
-      <div className="flex flex-wrap gap-x-4 lg:gap-x-16 gap-y-12  ">
-      
-      <Link to={"/admin/productlist"}>
-        <TotalProducts />
-      </Link>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <Link to={"/admin/productlist"} className="hover:scale-105 transform transition">
+          <TotalProducts />
+        </Link>
+        <Link to={"/admin/userslist"} className="hover:scale-105 transform transition">
+          <TotalCustomers />
+        </Link>
+        <Link to={"/admin/allorders"} className="hover:scale-105 transform transition">
+          <TotalOrders />
+        </Link>
+        <TotalRevenue />
+      </div>
 
-     
-      <Link to={"/admin/userslist"}>
-        <TotalCustomers />
-      </Link>
-
-      <TotalRevenue />
-
-      <Link to={"/admin/productlist"}>
-        <TotalStocks />
-      </Link>
-
-      <Link to={"/admin/allorders"}>
-        <TotalOrders />
-      </Link>
-      <Link to={"/admin/allorders"}>
-        <TotalOrders />
-      </Link>
-    </div>
       {/* Charts Section */}
-      <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Sales Chart */}
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-gray-700 mb-6">Sales Overview</h3>
+        <div className="bg-white shadow-lg rounded-lg p-8">
+          <h3 className="text-xl font-semibold text-gray-700 mb-4">Sales Overview</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={salesData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <BarChart data={salesData} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
@@ -89,10 +86,10 @@ const DashboardStats = () => {
         </div>
 
         {/* Revenue Chart */}
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-gray-700 mb-6">Revenue Trend</h3>
+        <div className="bg-white shadow-lg rounded-lg p-8">
+          <h3 className="text-xl font-semibold text-gray-700 mb-4">Revenue Trend</h3>
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={revenueData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <LineChart data={revenueData} margin={{ top: 10, right: 30, left: 20, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
               <YAxis />
@@ -104,30 +101,59 @@ const DashboardStats = () => {
       </div>
 
       {/* Recent Orders Section */}
-      <div className="mt-12 bg-white shadow-lg rounded-lg p-6">
+      <div className="bg-white shadow-lg rounded-lg p-8 mb-12">
         <h3 className="text-xl font-semibold text-gray-700 mb-6">Recent Orders</h3>
-        <ul className="divide-y divide-gray-200">
-          <li className="py-4 flex justify-between">
-            <div>
-              <p className="font-medium text-gray-900">Order #12345</p>
-              <p className="text-gray-500">Customer: John Doe</p>
-            </div>
-            <p className="text-gray-600">$500</p>
-          </li>
-          <li className="py-4 flex justify-between">
-            <div>
-              <p className="font-medium text-gray-900">Order #12346</p>
-              <p className="text-gray-500">Customer: Jane Smith</p>
-            </div>
-            <p className="text-gray-600">$750</p>
-          </li>
-          <li className="py-4 flex justify-between">
-            <div>
-              <p className="font-medium text-gray-900">Order #12347</p>
-              <p className="text-gray-500">Customer: Bill Gates</p>
-            </div>
-            <p className="text-gray-600">$1,200</p>
-          </li>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-left table-auto">
+            <thead className="bg-gray-100 text-gray-600">
+              <tr>
+                <th className="py-2 px-4">Order ID</th>
+                <th className="py-2 px-4">Customer</th>
+                <th className="py-2 px-4">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              <tr>
+                <td className="py-4 px-4 font-medium text-gray-900">#12345</td>
+                <td className="py-4 px-4 text-gray-600">John Doe</td>
+                <td className="py-4 px-4 text-green-500 font-semibold">$500</td>
+              </tr>
+              <tr>
+                <td className="py-4 px-4 font-medium text-gray-900">#12346</td>
+                <td className="py-4 px-4 text-gray-600">Jane Smith</td>
+                <td className="py-4 px-4 text-green-500 font-semibold">$750</td>
+              </tr>
+              <tr>
+                <td className="py-4 px-4 font-medium text-gray-900">#12347</td>
+                <td className="py-4 px-4 text-gray-600">Bill Gates</td>
+                <td className="py-4 px-4 text-green-500 font-semibold">$1,200</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Recent Activities Section */}
+      <div className="bg-white shadow-lg rounded-lg p-8 mb-12">
+        <h3 className="text-xl font-semibold text-gray-700 mb-6">Recent Activities</h3>
+        <ul className="space-y-4">
+          {recentActivities.map((activity) => (
+            <li key={activity.id} className="text-gray-600">
+              {activity.action} <span className="text-gray-400">({activity.date})</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Notifications Section */}
+      <div className="bg-white shadow-lg rounded-lg p-8 mb-12">
+        <h3 className="text-xl font-semibold text-gray-700 mb-6">Notifications</h3>
+        <ul className="space-y-4">
+          {notifications.map((notification) => (
+            <li key={notification.id} className="text-gray-600">
+              {notification.message} <span className="text-gray-400">({notification.date})</span>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
