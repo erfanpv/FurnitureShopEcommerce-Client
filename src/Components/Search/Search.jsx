@@ -1,22 +1,31 @@
-import React, { useContext, useEffect, useState } from "react";
-import MyContext from "../../utils/Context";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { searchProducts } from "../../app/Slice/adminSlices/productSlices/adminProductThunk";
+import { searchUsers } from "../../app/Slice/adminSlices/userMangementSlices/umsThunk";
 
-const SearchInput = () => {
-  const { searchFilter } = useContext(MyContext);
+const SearchInput = ({ userSearch }) => {
+  const dispatch = useDispatch();
 
   const [query, setQuery] = useState("");
 
   const handleSearch = (event) => {
     setQuery(event.target.value);
+    if (!userSearch) {
+      dispatch(searchProducts({ query }));
+    }
   };
 
-  const handleOnClick = () => {
-    searchFilter(query);
+  const handleOnClick = (query) => {
+    if (userSearch) {
+      dispatch(searchUsers({ query }));
+    } else {
+      dispatch(searchProducts({ query }));
+    }
   };
 
   const handleKey = (e) => {
     if (e.key === "Enter") {
-      handleOnClick();
+      handleOnClick(query);
     }
   };
 
@@ -32,7 +41,6 @@ const SearchInput = () => {
           type="text"
           onChange={handleSearch}
           onKeyDown={handleKey}
-
           value={query}
           id="Search"
           placeholder="Search for..."
@@ -41,7 +49,7 @@ const SearchInput = () => {
 
         <span className="absolute inset-y-0 end-0 grid w-10 place-content-center">
           <button
-            onClick={handleOnClick}
+            onClick={() => handleOnClick(query)}
             type="button"
             className="text-gray-600 hover:text-gray-700"
           >
