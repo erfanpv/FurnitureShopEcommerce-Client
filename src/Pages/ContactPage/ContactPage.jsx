@@ -8,6 +8,7 @@ const UserContactPage = () => {
   const initialValues = {
     name: "",
     email: "",
+    mobile: "", // Added mobile field
     subject: "",
     message: "",
   };
@@ -15,6 +16,11 @@ const UserContactPage = () => {
   const validationSchema = Yup.object({
     name: Yup.string().required("Full name is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
+    mobile: Yup.string()
+      .matches(/^[0-9]+$/, "Must be only digits")
+      .min(10, "Must be exactly 10 digits")
+      .max(10, "Must be exactly 10 digits")
+      .required("Mobile number is required"), // Mobile validation
     subject: Yup.string().required("Subject is required"),
     message: Yup.string().required("Message is required"),
   });
@@ -93,6 +99,25 @@ const UserContactPage = () => {
                 />
                 <ErrorMessage
                   name="email"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              {/* Mobile Number Field */}
+              <div className="mb-6">
+                <label className="block font-medium text-lg mb-2">
+                  <FaPhone className="inline mr-2 text-gray-500" />
+                  Mobile Number
+                </label>
+                <Field
+                  type="text"
+                  name="mobile"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Enter your mobile number"
+                />
+                <ErrorMessage
+                  name="mobile"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
