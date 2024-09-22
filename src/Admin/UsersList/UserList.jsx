@@ -1,39 +1,30 @@
-import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchInput from "../../Components/Search/Search";
 import MyContext from "../../utils/Context";
-import UserDeleteModal from "../../Components/Modal/DeleteModal/UserDeleteModal";
+import ToggleBlockUser from "../../Components/Modal/DeleteModal/ToggleBlockUser";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../../app/Slice/adminSlices/userMangementSlices/umsThunk";
 
 const UserList = () => {
-  const { users, setUsers, openModal, closeModal, isModalOpen, setRender } =
-    useContext(MyContext);
+  const { openModal, closeModal, isModalOpen } = useContext(MyContext);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { allUsers, isLoading } = useSelector((state) => state.userManger);
 
   const [uid, setUid] = useState(null);
+  const [isBlocked, setBlocked] = useState(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await axios.get("http://localhost:5000/users");
-        setUsers(data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
-    fetchUsers();
-  }, [setUsers]);
-
-  if (loading) return <p className="text-center mt-6">Loading...</p>;
+  if (isLoading) return <p className="text-center mt-6">Loading...</p>;
 
   return (
     <>
       <div className="flex justify-center">
-        <SearchInput />
+        <SearchInput userSearch={true} />
       </div>
       <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-5 md:ml-64 sm:ml-10 lg:ml-64">
         <h2 className="text-2xl font-bold mb-6">User List</h2>
@@ -56,30 +47,30 @@ const UserList = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((user) => (
-                <tr key={user.id}>
+              {allUsers.map((user, index) => (
+                <tr key={user._id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.id}
+                    {index + 1}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.fnName + " " + user.lastName}
+                    {user.firstName + " " + user.lastName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {user.email}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button
+                    {/* <button
                       className="text-indigo-600 hover:text-indigo-900"
                       onClick={() =>
-                        navigate(`/admin/userslist/viewcart/${user.id}`)
+                        navigate(`/admin/userslist/viewcart/${user._id}`)
                       }
                     >
                       View Cart
-                    </button>
+                    </button> */}
                     <button
                       className="text-indigo-600 hover:text-indigo-900 ml-4"
                       onClick={() =>
-                        navigate(`/admin/userslist/orders/${user.id}`)
+                        navigate(`/admin/userslist/orders/${user._id}`)
                       }
                     >
                       Orders
@@ -88,11 +79,12 @@ const UserList = () => {
                     <button
                       className="text-red-600 hover:text-red-900 ml-4"
                       onClick={() => {
-                        setUid(user.id);
+                        setUid(user._id);
                         openModal();
+                        setBlocked(user.is_blocked);
                       }}
                     >
-                      Delete
+                      {user.is_blocked ? "Unblock" : "Block"}
                     </button>
                   </td>
                 </tr>
@@ -101,10 +93,10 @@ const UserList = () => {
           </table>
         </div>
         {isModalOpen && (
-          <UserDeleteModal
+          <ToggleBlockUser
             id={uid}
             closeModal={closeModal}
-            setRender={setRender}
+            is_blocked={isBlocked}
           />
         )}
       </div>

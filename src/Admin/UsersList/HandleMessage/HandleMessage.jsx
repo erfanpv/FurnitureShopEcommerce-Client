@@ -5,12 +5,15 @@ import {
   FaCalendarAlt,
   FaFlag,
   FaEye,
+  FaPhone,
 } from "react-icons/fa";
 
 const dummyMessages = [
   {
     id: 1,
     user: "John Doe",
+    contact: "+123456789",
+    email: "john.doe@example.com",
     subject: "Order Inquiry",
     date: "2024-09-18",
     status: "Pending",
@@ -19,6 +22,8 @@ const dummyMessages = [
   {
     id: 2,
     user: "Jane Smith",
+    contact: "+987654321",
+    email: "jane.smith@example.com",
     subject: "Product Return",
     date: "2024-09-17",
     status: "Resolved",
@@ -27,6 +32,8 @@ const dummyMessages = [
   {
     id: 3,
     user: "Emily Johnson",
+    contact: "+567898765",
+    email: "emily.johnson@example.com",
     subject: "Feedback on Service",
     date: "2024-09-15",
     status: "Pending",
@@ -35,6 +42,8 @@ const dummyMessages = [
   {
     id: 4,
     user: "Alice Brown",
+    contact: "+1029384756",
+    email: "alice.brown@example.com",
     subject: "Delivery Delay",
     date: "2024-09-16",
     status: "Unresolved",
@@ -152,6 +161,12 @@ const AdminMessagesPage = () => {
               <>
                 <p>
                   <strong>User:</strong> {selectedMessage.user}
+                </p>
+                <p>
+                  <strong>Contact:</strong> {selectedMessage.contact}
+                </p>
+                <p>
+                  <strong>Email:</strong> {selectedMessage.email}
                 </p>
                 <p>
                   <strong>Subject:</strong> {selectedMessage.subject}
