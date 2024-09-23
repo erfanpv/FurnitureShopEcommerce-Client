@@ -16,6 +16,7 @@ import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
 import { loadWishList } from "../../app/Slice/wishListSlice/wishListThunk";
+import { fetchCart } from "../../app/Slice/addCartSlice/cartThunk";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,13 +32,12 @@ export default function Header() {
   const dispatch = useDispatch();
   const id = localStorage.getItem("id");
 
-  // if (id) {
-  //   dispatch(setLoggedIn(true));
-  // }
 
-  useEffect(() => {
-    dispatch(loadWishList());
-  }, []);
+    useEffect(() => {
+      dispatch(loadWishList());
+      dispatch(fetchCart());
+    }, [dispatch]);
+  
 
   const userNavigation = [
     // { name: "Profile", href: "/profile" },

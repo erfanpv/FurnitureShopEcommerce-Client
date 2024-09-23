@@ -32,7 +32,7 @@ const SearchWithSuggestions = () => {
   };
 
   return (
-    <div className="relative mx-10">
+    <div className="relative lg:mx-10 mx-2">
       <div>
         <label htmlFor="Search" className="sr-only">
           {" "}
@@ -68,17 +68,25 @@ const SearchWithSuggestions = () => {
         </span>
 
         {showSuggestions && suggestions.length > 0 && (
-          <ul className="absolute left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-1 max-h-60 overflow-auto z-10">
+          <ul className="absolute left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-2 max-h-60 overflow-auto z-20">
             {suggestions.map((suggestion) => (
               <Link to={`/products/cart/${suggestion._id}`} key={suggestion._id}>
                 <li
-                  className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+                  className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 transition-colors duration-150"
                   onClick={() => {
                     handleSuggestionClick(suggestion);
                     setSearchQuery("");
                   }}
                 >
-                  {suggestion.productName}
+                  <img
+                    src={suggestion.image} 
+                    alt={suggestion.productName}
+                    className="w-12 h-12 object-cover rounded-lg shadow-sm mr-4"
+                  />
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{suggestion.productName}</p>
+                    <p className="text-xs text-gray-500">Price: ${suggestion.price}</p>
+                  </div>
                 </li>
               </Link>
             ))}
