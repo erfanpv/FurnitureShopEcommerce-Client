@@ -8,12 +8,10 @@ const Footer = () => {
         <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
           <div className="sm:flex sm:items-center sm:justify-between">
             <div className="text-black-600">
-            <h1 className="text-2xl italic">Wood Gallery</h1>
+              <h1 className="text-2xl italic">Wood Gallery</h1>
             </div>
 
             <ul className="mt-8 flex justify-start gap-6 sm:mt-0 sm:justify-end">
-              
-
               <li>
                 <a
                   href="https://www.instagram.com/erfan__p_v?igsh=bjl2ZGV1ZjV1bXcx"
@@ -205,17 +203,12 @@ const Footer = () => {
               <p className="font-medium text-gray-900">Helpful Links</p>
 
               <ul className="mt-6 space-y-4 text-sm">
-                <Link to={"/contact"}>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-700 transition hover:opacity-75"
-                  >
-                    {" "}
-                    Contact{" "}
-                  </a>
-                </li>
+                <Link to="/contact">
+                  <li className="text-gray-700 transition hover:opacity-75">
+                    Contact
+                  </li>
                 </Link>
+
                 <li>
                   <a
                     href="#"
