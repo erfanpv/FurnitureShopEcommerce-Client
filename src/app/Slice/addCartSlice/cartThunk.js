@@ -1,26 +1,37 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../../utils/axios/axiosIntercepter";
 
+
 const id = localStorage.getItem("id");
 
-
-
-export const fetchCart = createAsyncThunk("cart/fetchCart", async (_,{ rejectWithValue }) => {
+export const fetchCart = createAsyncThunk("cart/fetchCart", async (_, { rejectWithValue }) => {
   try {
-    const response = await http.get(`/users/${id}/cart`);
-    
-    return {cartProduct:response.data.data,cartId:response.data.cartId}
+    const id = localStorage.getItem("id");
 
+    if (!id) {
+      return rejectWithValue("User ID not found.");
+    }
+
+    const response = await http.get(`/users/${id}/cart`);
+
+    if (response.data.success && response.data.data.length === 0) {
+      return { cartProduct: [], cartId: response.data.cartId }; 
+    }
+
+    return { cartProduct: response.data.data, cartId: response.data.cartId };
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Failed to fetch the cart");
   }
 });
 
 
+
 export const addToCartAsync = createAsyncThunk(
   "cart/addToCartAsync",
   async ({ productId, quantity, navigate, toast }, { rejectWithValue }) => {
     try {
+      const id = localStorage.getItem("id");
+
       const response = await http.post(`/users/${id}/cart`, { productId, quantity });
             
       toast.success("Product added to cart successfully");

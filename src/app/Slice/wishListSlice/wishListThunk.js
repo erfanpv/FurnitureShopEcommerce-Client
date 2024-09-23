@@ -9,16 +9,26 @@ export const loadWishList = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const id = localStorage.getItem("id");
+
+      if (!id) {
+        return rejectWithValue("User ID not found.");
+      }
+
       const response = await http.get(`users/${id}/wishlist`);
+
+      if (response.status === 204) {
+        return [];
+      }
 
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
-        error.response.data.message || "Failed to fetch products."
+        error.response?.data?.message || "Failed to fetch wishlist."
       );
     }
   }
 );
+
 
 export const toggleWishListItem = createAsyncThunk(
   "wishlist/toggleWishListItem",
@@ -30,7 +40,6 @@ export const toggleWishListItem = createAsyncThunk(
       );
 
       const response = await http.post(`users/${id}/wishlist`, { productId });
-      console.log(isInWishlist);
 
       if (!isInWishlist) {
         dispatch(addToWishlist(response.data.data));
@@ -48,4 +57,3 @@ export const toggleWishListItem = createAsyncThunk(
     }
   }
 );
-
