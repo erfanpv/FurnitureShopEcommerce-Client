@@ -1,7 +1,7 @@
 import {  createSlice } from "@reduxjs/toolkit";
-import { getAllordersData,ordersDataByUser } from "./ordersThunk";
+import { getAllordersData,ordersDataByUserForAdmin } from "./ordersThunk";
 
-const ordersSlice = createSlice({
+const ordersSliceByAdmin = createSlice({
   name: "orders",
   initialState: {
     ordersDetails: [],
@@ -24,15 +24,15 @@ const ordersSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload || "Failed";
       })
-      .addCase(ordersDataByUser.pending, (state) => {        
+      .addCase(ordersDataByUserForAdmin.pending, (state) => {        
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(ordersDataByUser.fulfilled, (state, action) => {
+      .addCase(ordersDataByUserForAdmin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orderDetailsByUser = action.payload;
       })
-      .addCase(ordersDataByUser.rejected, (state, action) => {
+      .addCase(ordersDataByUserForAdmin.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed";
       })
@@ -41,5 +41,5 @@ const ordersSlice = createSlice({
   },
 });
 
-export default ordersSlice.reducer;
+export default ordersSliceByAdmin.reducer;
 

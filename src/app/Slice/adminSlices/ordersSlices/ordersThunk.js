@@ -18,11 +18,29 @@ export const getAllordersData = createAsyncThunk(
   }
 );
 
-export const ordersDataByUser = createAsyncThunk(
+// export const ordersDataByUser = createAsyncThunk(
+//   "orders/ordersDataByUser",
+//   async ({ id }, { rejectWithValue }) => {
+//     try {
+//       const response = await http.get(`/users/orders/${id}`);
+
+//       if (response.data.success) {
+//         return response.data.data.orderDetails || []; 
+//       } else {
+//         return rejectWithValue(response.data.message || "No orders found.");
+//       }
+      
+//     } catch (error) {
+//       return rejectWithValue(error.response?.data?.message || "Failed to fetch orders.");
+//     }
+//   }
+// );
+
+export const ordersDataByUserForAdmin = createAsyncThunk(
   "orders/ordersDataByUser",
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await http.get(`/admin/orders/${id}`);
+      const response = await http.get(`/users/orders/${id}`);
 
       if (response.data.success) {
         return response.data.data.orderDetails || []; 

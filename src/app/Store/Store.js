@@ -6,7 +6,8 @@ import wishListSlice from "../Slice/wishListSlice/wishListSlice";
 import dashBoardSlices from "../Slice/adminSlices/dashBoardSlices/dashBoardSlices";
 import adminProductSlices from "../Slice/adminSlices/productSlices/adminProductSlices";
 import userMangerSlice from "../Slice/adminSlices/userMangementSlices/umsSlices";
-import ordersSlices from "../Slice/adminSlices/ordersSlices/ordersSlices";
+import ordersSliceByAdmin from "../Slice/adminSlices/ordersSlices/ordersSlices";
+import ordersSlice from "../Slice/userSlices/OrderSlice/ordersSlice";
 import paymentSlice from "../Slice/paymentSlice/paymentSlice";
 
 const store = configureStore({
@@ -18,8 +19,9 @@ const store = configureStore({
     dashboard: dashBoardSlices,
     adminProducts: adminProductSlices,
     userManger: userMangerSlice,
-    orders: ordersSlices,
+    orders: ordersSliceByAdmin,
     payment:paymentSlice,
+    ordersByUser:ordersSlice,
   },
 });
 
