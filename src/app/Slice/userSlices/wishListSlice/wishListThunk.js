@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import http from "../../../utils/axios/axiosIntercepter";
+import http from "../../../../utils/axios/axiosIntercepter";
 import { addToWishlist, removeFromWishlist } from "./wishListSlice";
 
 const id = localStorage.getItem("id");

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import http from "../../../utils/axios/axiosIntercepter";
+import http from "../../../../utils/axios/axiosIntercepter";
 import { useNavigate } from "react-router-dom";
 
 
