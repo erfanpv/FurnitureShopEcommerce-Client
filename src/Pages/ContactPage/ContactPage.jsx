@@ -1,33 +1,43 @@
 import React from "react";
-import { FaUser, FaEnvelope, FaFileAlt, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import {
+  FaUser,
+  FaEnvelope,
+  FaFileAlt,
+  FaPhone,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { sendMessage } from "../../app/Slice/adminSlices/contactSlice/contactThunk";
 
 const UserContactPage = () => {
+  const dispatch = useDispatch();
   const initialValues = {
     name: "",
     email: "",
-    mobile: "", // Added mobile field
+    mobile: "",
     subject: "",
     message: "",
   };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Full name is required"),
-    email: Yup.string().email("Invalid email address").required("Email is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
     mobile: Yup.string()
       .matches(/^[0-9]+$/, "Must be only digits")
       .min(10, "Must be exactly 10 digits")
       .max(10, "Must be exactly 10 digits")
-      .required("Mobile number is required"), // Mobile validation
+      .required("Mobile number is required"),
     subject: Yup.string().required("Subject is required"),
     message: Yup.string().required("Message is required"),
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    toast.success("Message sent successfully!");
-    resetForm();
+    dispatch(sendMessage({values, toast, resetForm}));
   };
 
   return (
@@ -37,7 +47,6 @@ const UserContactPage = () => {
       </h1>
 
       <div className="lg:flex lg:justify-between lg:items-start bg-white rounded-lg p-8 lg:w-3/4 gap-12">
-        
         <div className="mb-10 lg:mb-0 lg:w-1/3">
           <h2 className="text-2xl font-semibold mb-6 text-center text-indigo-800">
             Our Office
@@ -46,17 +55,17 @@ const UserContactPage = () => {
             <div className="flex flex-col items-center">
               <FaMapMarkerAlt className="text-3xl text-gray-500 mb-2" />
               <h3 className="font-medium text-lg">Office Address</h3>
-              <p>123 Main Street, City, Country</p>
+              <p>676122 Bridgeon Kinfra, Calicut, India</p>
             </div>
             <div className="flex flex-col items-center">
               <FaPhone className="text-3xl text-gray-500 mb-2" />
               <h3 className="font-medium text-lg">Phone</h3>
-              <p>+123 456 789</p>
+              <p>+91 7356848346</p>
             </div>
             <div className="flex flex-col items-center">
               <FaEnvelope className="text-3xl text-gray-500 mb-2" />
               <h3 className="font-medium text-lg">Email</h3>
-              <p>info@company.com</p>
+              <p>woodgaller@company.com</p>
             </div>
           </div>
         </div>
@@ -104,7 +113,6 @@ const UserContactPage = () => {
                 />
               </div>
 
-              {/* Mobile Number Field */}
               <div className="mb-6">
                 <label className="block font-medium text-lg mb-2">
                   <FaPhone className="inline mr-2 text-gray-500" />
@@ -142,7 +150,9 @@ const UserContactPage = () => {
               </div>
 
               <div className="mb-6">
-                <label className="block font-medium text-lg mb-2">Message</label>
+                <label className="block font-medium text-lg mb-2">
+                  Message
+                </label>
                 <Field
                   as="textarea"
                   name="message"
