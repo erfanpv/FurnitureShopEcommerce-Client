@@ -68,3 +68,29 @@ export const getTotalSalesCount = createAsyncThunk(
     }
   }
 );
+
+export const getRecentOrders = createAsyncThunk(
+  "dashboard/getRecentOrders",
+  async (_, { rejectWithValue }) => {
+    try {
+      const action = "recentOrders";
+      const response = await http.get(`/admin/dashboard`, { params: { action } });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed");
+    }
+  }
+);
+
+export const getRecentActivity= createAsyncThunk(
+  "dashboard/getRecentActivity",
+  async (_, { rejectWithValue }) => {
+    try {
+      const action = "recentActivity";
+      const response = await http.get(`/admin/dashboard`, { params: { action } });
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || "Failed");
+    }
+  }
+);

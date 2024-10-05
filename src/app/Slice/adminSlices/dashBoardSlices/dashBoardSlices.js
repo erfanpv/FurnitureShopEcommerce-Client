@@ -1,5 +1,5 @@
 import {  createSlice } from "@reduxjs/toolkit";
-import { totalUsers,totalProducts,totalStocks,totalRevenueAmount,getTotalSalesCount } from "./dashBoardThunk";
+import { totalUsers,totalProducts,totalStocks,totalRevenueAmount,getTotalSalesCount, getRecentOrders, getRecentActivity } from "./dashBoardThunk";
 
 const dashboard = createSlice({
   name: "dashboard",
@@ -9,12 +9,14 @@ const dashboard = createSlice({
     totalStockCount:null,
     totalSalesAmount:null,
     totalSalesCount:null,
+    recentOrders:[],
+    recentActivity:null,
     isLoading: false,
     error: null,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(totalUsers.pending, (state) => {        
+      .addCase(totalUsers.pending, (state,) => {        
         state.isLoading = true;
         state.error = null;
 
@@ -74,6 +76,24 @@ const dashboard = createSlice({
       })
       .addCase(getTotalSalesCount.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload || "Failed";
+      })
+      .addCase(getRecentOrders.pending, (state) => {        
+      })
+      .addCase(getRecentOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.recentOrders = action.payload;
+      })
+      .addCase(getRecentOrders.rejected, (state, action) => {
+        state.error = action.payload || "Failed";
+      })
+      .addCase(getRecentActivity.pending, (state) => {        
+      })
+      .addCase(getRecentActivity.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.recentActivity = action.payload;
+      })
+      .addCase(getRecentActivity.rejected, (state, action) => {
         state.error = action.payload || "Failed";
       })
 
