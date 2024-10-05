@@ -3,12 +3,14 @@ import { totalUsers } from "../../../app/Slice/adminSlices/dashBoardSlices/dashB
 import { useDispatch, useSelector } from "react-redux";
 
 const TotalCustomers = () => {
-  const { totalUsersCount } = useSelector((state) => state.dashboard);
+  const { totalUsersCount ,isLoading} = useSelector((state) => state.dashboard);
   
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(totalUsers());
   }, []);
+
+  
   return (
     <div className="flex w-60">
       <div className="flex w-full max-w-full flex-col break-words rounded-lg border border-gray-100 bg-white text-gray-600 shadow-lg">
