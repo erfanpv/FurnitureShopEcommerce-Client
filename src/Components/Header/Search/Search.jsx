@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { searchProductsUsers } from "../../../app/Slice/ProductsSlice/productThunk";
+import { searchProductsUsers } from "../../../app/Slice/userSlices/ProductsSlice/productThunk";
 
 const SearchWithSuggestions = () => {
   const [searchQuery, setSearchQuery] = useState("");

@@ -14,8 +14,8 @@ import SearchWithSuggestions from "./Search/Search";
 import CategoryDropdown from "../Products/CatogeryProduct/Catogory";
 import StoreLogo from "../../assets/Icons/StoreLgo.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoggedIn } from "../../app/Slice/usersSlice/usersSlice";
-import { loadWishList } from "../../app/Slice/wishListSlice/wishListThunk";
+import { setLoggedIn } from "../../app/Slice/userSlices/usersSlice/usersSlice";
+import { loadWishList } from "../../app/Slice/userSlices/wishListSlice/wishListThunk";
 import { fetchCart } from "../../app/Slice/addCartSlice/cartThunk";
 
 function classNames(...classes) {
@@ -30,18 +30,15 @@ export default function Header() {
 
   const user = localStorage.getItem("username");
   const dispatch = useDispatch();
-  const id = localStorage.getItem("id");
 
-
-    useEffect(() => {
-      dispatch(loadWishList());
-      dispatch(fetchCart());
-    }, [dispatch]);
-  
+  useEffect(() => {
+    dispatch(loadWishList());
+    dispatch(fetchCart());
+  }, [dispatch]);
 
   const userNavigation = [
     { name: "Profile", href: "/profile" },
-    { name: "Order Details", href: `/orders/${id}` },
+    { name: "Order Details", href: `/orders` },
     { name: "Sign out", href: "/" },
   ];
 
@@ -53,7 +50,7 @@ export default function Header() {
   return (
     <header className="bg-white">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8 pt-5"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8 pt-5 "
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
@@ -114,9 +111,10 @@ export default function Header() {
                   <MenuButton className="relative flex items-center">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
-                    <h1 className="text-sm font-semibold leading-6 text-gray-900">
+                    <h1 className="text-sm font-semibold leading-6 text-gray-900 whitespace-nowrap">
                       {user}
                     </h1>
+
                     <svg
                       className="-mr-1 ml-2 h-5 w-5"
                       xmlns="http://www.w3.org/2000/svg"
