@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadWishList, toggleWishListItem} from "../../app/Slice/wishListSlice/wishListThunk";
+import { loadWishList, toggleWishListItem} from "../../app/Slice/userSlices/wishListSlice/wishListThunk";
 import { Link } from "react-router-dom";
 
 const Wishlist = () => {
