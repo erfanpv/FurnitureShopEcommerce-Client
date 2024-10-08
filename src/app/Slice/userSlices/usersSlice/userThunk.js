@@ -54,7 +54,7 @@ export const loginUsers = createAsyncThunk(
         } else {
           toast.success(`${response.data.data.user.lastName} Loggin Success`);
           localStorage.setItem("accesstoken", response.data.data.token);
-          localStorage.setItem("username", response.data.data.user.lastName);
+          localStorage.setItem("username", response.data.data.user.firstName + " " + response.data.data.user.lastName);
           localStorage.setItem("id",response.data.data.user._id)
 
           navigate("/");

@@ -3,10 +3,10 @@ import http from "../../../../utils/axios/axiosIntercepter";
 
 export const getAllUsers = createAsyncThunk(
   "userManger/getAllUsers",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      const response = await http.get("/admin/users");
-      return response.data.data;
+      const response = await http.get(`/admin/users?page=${page}&limit=${limit}`);
+      return response.data; 
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch Users"

@@ -1,5 +1,5 @@
 import {  createSlice } from "@reduxjs/toolkit";
-import { ordersDataByUser } from "./ordersThunk"
+import { cancelOrderById, ordersDataByUser } from "./ordersThunk"
 
 const ordersSlice = createSlice({
   name: "orders",
@@ -23,6 +23,19 @@ const ordersSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload || "Failed";
       })
+      .addCase(cancelOrderById.pending, (state) => {        
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(cancelOrderById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderDetailsByUser = action.payload;
+      })
+      .addCase(cancelOrderById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || "Failed";
+      })
+
     }
   })
 
