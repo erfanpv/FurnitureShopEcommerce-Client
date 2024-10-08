@@ -28,9 +28,18 @@ const RecentOrders = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {recentOrders.map((order) => {
-                return (
-                  <tr key={order._id}>
+              {recentOrders.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="py-4 px-4 text-gray-600 text-center"
+                  >
+                    No recent orders available.
+                  </td>
+                </tr>
+              ) : (
+                recentOrders.map((order, index) => (
+                  <tr key={`${order._id}-${index}`}>
                     <td className="py-4 px-4 font-medium text-gray-900">
                       {order.orderDetails.payment_method}
                     </td>
@@ -38,11 +47,11 @@ const RecentOrders = () => {
                       {order.orderDetails.orderedUserName}
                     </td>
                     <td className="py-4 px-4 text-green-500 font-semibold">
-                      {order.orderDetails.total}
+                      ${order.orderDetails.total}
                     </td>
                   </tr>
-                );
-              })}
+                ))
+              )}
             </tbody>
           </table>
         </div>

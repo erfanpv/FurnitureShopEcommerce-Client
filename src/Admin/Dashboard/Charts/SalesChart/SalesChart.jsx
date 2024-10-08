@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import http from "../../../../utils/axios/axiosIntercepter";
-import {  BarChart,Bar,  XAxis, YAxis, CartesianGrid,  Tooltip, ResponsiveContainer} from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
 
 const SalesChart = () => {
   const [selectedYear, setSelectedYear] = useState(2024);
@@ -9,8 +17,8 @@ const SalesChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const action = "salesChart"
-        const response = await http.get(`/admin/dashboard?year=${selectedYear}`,{ params: { action } });
+        const action = "salesChart";
+        const response = await http.get(`/admin/dashboard?year=${selectedYear}`, { params: { action } });
         setSalesData(response.data);
       } catch (error) {
         console.error("Error fetching sales data:", error);
