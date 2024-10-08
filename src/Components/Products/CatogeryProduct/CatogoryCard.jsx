@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import FurnitureCard from "../ProductCard/Cards";
 import ProductShimmer from "../../ShimmerUI/ProductShimmer/ProductShimmer";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductsWithCategory } from "../../../app/Slice/ProductsSlice/productThunk";
+import { fetchProductsWithCategory } from "../../../app/Slice/userSlices/ProductsSlice/productThunk";
 
 const CategoryCard = () => {
   const { category } = useParams();

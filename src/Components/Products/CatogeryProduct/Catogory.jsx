@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUniqueProductCategories } from "../../../app/Slice/ProductsSlice/productThunk";
+import { fetchUniqueProductCategories } from "../../../app/Slice/userSlices/ProductsSlice/productThunk";
 
 const CategoryDropdown = ({ isMobile, onCloseMenu }) => {
   const [isOpen, setIsOpen] = useState(false);

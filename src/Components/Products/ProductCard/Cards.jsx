@@ -1,17 +1,22 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadWishList, toggleWishListItem } from "../../../app/Slice/wishListSlice/wishListThunk";
+import { loadWishList, toggleWishListItem } from "../../../app/Slice/userSlices/wishListSlice/wishListThunk";
+import { toast } from "react-toastify";
+import { fetchCart } from "../../../app/Slice/addCartSlice/cartThunk";
 
 const FurnitureCard = ({ productItem }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { wishlistCart } = useSelector((state) => state.wishList);
+  const { isLoggedIn } = useSelector((state) => state.users);
 
-  useEffect(() => {
-    dispatch(loadWishList());
-  }, [dispatch]);
+  if (isLoggedIn) {
+    useEffect(() => {
+      dispatch(loadWishList());
+    }, [dispatch]);
+  }
+ 
 
   const isInWishlist = wishlistCart?.products?.some(
     (item) => item.productId._id === productItem._id
@@ -22,18 +27,22 @@ const FurnitureCard = ({ productItem }) => {
   };
 
   return (
-    <div className="relative max-w-sm rounded-lg overflow-hidden shadow-lg mb-10 bg-white border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+    <div className="max-w-sm rounded-md overflow-hidden shadow-lg mb-10 bg-white">
       <div className="relative">
         <img
-          className="w-full h-60 object-cover rounded-t-lg"
+          className="w-96 h-60 object-cover"
           src={productItem.image}
           alt="Furniture"
         />
         <div
-          onClick={() => handleWishlistClick(productItem?._id)}
+          onClick={() =>
+            isLoggedIn
+              ? handleWishlistClick(productItem?._id)
+              : (toast.info("Please login"), navigate("/login"))
+          }
           className={`absolute top-2 right-2 inline-block rounded-full border border-rose-600 p-2 ${
             isInWishlist ? "bg-rose-600 text-white" : "bg-white text-rose-600"
-          } hover:bg-rose-600 hover:text-white focus:outline-none focus:ring active:bg-rose-500 transition-colors duration-300 cursor-pointer`}
+          } hover:bg-rose-600 hover:text-white focus:outline-none focus:ring transition-colors duration-300 cursor-pointer`}
         >
           <span className="sr-only">Add to Wishlist</span>
           <svg
@@ -54,22 +63,16 @@ const FurnitureCard = ({ productItem }) => {
       </div>
 
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2 text-gray-900">
-          {productItem?.productName}
-        </div>
-        <p className="text-lg text-gray-700 font-semibold mb-2">
-          ${productItem?.price}
-        </p>
-        <p className="text-gray-700 text-base mb-2">
-          {productItem?.description}
-        </p>
+        <div className="font-bold text-xl mb-2">{productItem?.productName}</div>
+        <p className="text-lg font-bold mb-2">${productItem?.price}</p>
+        <p className="text-gray-700 text-base">{productItem?.description}</p>
       </div>
 
-      <div className="px-6 pb-4">
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-indigo-700 mr-2">
+      <div className="px-6 py-4">
+        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
           #furniture
         </span>
-        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-indigo-700 mr-2">
+        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
           #{productItem?.category?.toLowerCase()}
         </span>
       </div>
@@ -101,3 +104,8 @@ const FurnitureCard = ({ productItem }) => {
 };
 
 export default FurnitureCard;
+
+
+
+
+  
