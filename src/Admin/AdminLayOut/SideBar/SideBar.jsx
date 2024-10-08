@@ -1,21 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
 import AdminNav from "../AdminNav/AdminNav";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
-import { setLoggedIn } from "../../../app/Slice/usersSlice/usersSlice";
+import { setLoggedIn } from "../../../app/Slice/userSlices/usersSlice/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getPendingContactCount } from "../../../app/Slice/adminSlices/contactSlice/contactThunk";
 
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isLoggedIn } = useSelector((state) => state.users);
+  const { pendingContactCount } = useSelector((state) => state.contact);
 
   const handleLogout = () => {
     localStorage.clear();
     dispatch(setLoggedIn(false));
     navigate("/login");
   };
+
+  useEffect(() => {
+    dispatch(getPendingContactCount());
+  }, []);
 
   const [isChecked, setIsChecked] = useState(false);
 
@@ -94,9 +100,9 @@ const AdminSidebar = () => {
                     />
                   </svg>
                   Messages
-                  <span className="ml-auto rounded-full bg-rose-600 px-2 text-xs text-white">
-                    6
-                  </span>
+                  {pendingContactCount > 0 ? <span className="ml-auto rounded-full bg-rose-600 px-2 text-xs text-white">
+                    {pendingContactCount}
+                  </span> : null}
                 </Link>
 
                 <div className="relative transition">
@@ -120,7 +126,7 @@ const AdminSidebar = () => {
                         />
                       </svg>
                     </span>
-                      Analytics
+                    Analytics
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className={`absolute right-0 top-4 ml-auto mr-5 h-4 text-gray-600 transition ${

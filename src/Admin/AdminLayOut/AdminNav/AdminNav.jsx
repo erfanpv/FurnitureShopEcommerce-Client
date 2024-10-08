@@ -32,7 +32,7 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
 import StoreLogo from "../../../assets/Icons/StoreLgo.jpg";
-import { setLoggedIn } from "../../../app/Slice/usersSlice/usersSlice";
+import { setLoggedIn } from "../../../app/Slice/userSlices/usersSlice/usersSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 
