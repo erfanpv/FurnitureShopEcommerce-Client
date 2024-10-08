@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import RegisterImg from "../../../assets/Images/Slide-2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../../app/Slice/usersSlice/userThunk";
+import { registerUser } from "../../../app/Slice/userSlices/usersSlice/userThunk";
 import{ toast} from "react-hot-toast";
 
 
@@ -183,13 +183,13 @@ const UserRegistration = () => {
                 <div className="col-span-6">
                   <p className="text-sm text-gray-500">
                     By creating an account, you agree to our
-                    <a href="#" className="text-blue-700 underline">
+                    <Link to="/terms" className="text-blue-700 underline">
                       terms and conditions
-                    </a>
+                    </Link>
                     and
-                    <a href="#" className="text-blue-700 underline">
+                    <Link to="/privacy" className="text-blue-700 underline">
                       privacy policy
-                    </a>
+                    </Link>
                     .
                   </p>
                 </div>
