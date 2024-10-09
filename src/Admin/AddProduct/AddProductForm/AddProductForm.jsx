@@ -30,16 +30,16 @@ const AddProduct = () => {
       .required("Required")
       .integer("Must be an integer")
       .min(1, "Stock can't be negative"),
-    is_Listed: Yup.string().required("Please select an option"),
+    // is_Listed: Yup.string().required("Please select an option"),
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    const formattedValues = {
-      ...values,
-      is_Listed: values.is_Listed === "true",
-    };
+    // const formattedValues = {
+    //   ...values,
+    //   is_Listed: values.is_Listed === "true",
+    // };
 
-    dispatch(addProducts({ values: formattedValues, toast, resetForm }));
+    dispatch(addProducts({ values, toast, resetForm }));
   };
 
   return (
@@ -178,7 +178,7 @@ const AddProduct = () => {
             </div>
           </div>
 
-          <div className="mb-4 flex items-start">
+          {/* <div className="mb-4 flex items-start">
             <label
               className="w-1/3 text-gray-700 text-sm font-bold mb-2"
               htmlFor="is_Listed"
@@ -200,7 +200,7 @@ const AddProduct = () => {
                 className="text-red-500 text-sm mt-1"
               />
             </div>
-          </div>
+          </div> */}
 
           <button
             type="submit"
