@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import FurnitureCard from "../../Components/Products/ProductCard/Cards";
 import ProductShimmer from "../../Components/ShimmerUI/ProductShimmer/ProductShimmer";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../app/Slice/ProductsSlice/productThunk.js";
+import { fetchProducts } from "../../app/Slice/userSlices/ProductsSlice/productThunk.js";
 
 const Products = () => {
   const { products, isLoading } = useSelector((state) => state.productsAll);
