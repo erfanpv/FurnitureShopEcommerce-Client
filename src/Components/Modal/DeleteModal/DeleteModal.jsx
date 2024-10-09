@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { adminGetAllProducts, deleteProduct} from "../../../app/Slice/adminSlices/productSlices/adminProductThunk";
 
 const DeleteModal = ({ id }) => {
-  const { isModalOpen, closeModal, setRender } = useContext(MyContext);
+  const { isModalOpen, closeModal } = useContext(MyContext);
 
   const { deletStatus } = useSelector((state) => state.adminProducts);
 
