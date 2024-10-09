@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AddCartProduct from "./AddCartProduct";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProductbyId } from "../../app/Slice/ProductsSlice/productThunk.js";
+import { fetchProductbyId } from "../../app/Slice/userSlices/ProductsSlice/productThunk.js";
 import SingleProductShimmer from "../ShimmerUI/ProductViewShimmer/ProductViewShimmer.jsx";
 
 const AddToCart = () => {

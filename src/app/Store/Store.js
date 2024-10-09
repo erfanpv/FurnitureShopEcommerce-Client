@@ -10,6 +10,7 @@ import ordersSliceByAdmin from "../Slice/adminSlices/ordersSlices/ordersSlices";
 import ordersSlice from "../Slice/userSlices/OrderSlice/ordersSlice";
 import paymentSlice from "../Slice/userSlices/paymentSlice/paymentSlice";
 import contactSlice from "../Slice/adminSlices/contactSlice/contactSlice";
+import walletSlice from "../Slice/userSlices/walletSlices/walletSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     payment: paymentSlice,
     ordersByUser: ordersSlice,
     contact: contactSlice,
+    wallet: walletSlice,
   },
 });
 

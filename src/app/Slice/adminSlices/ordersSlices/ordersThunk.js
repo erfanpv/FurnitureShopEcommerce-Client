@@ -86,10 +86,29 @@ export const rejectCancelOrReturnRequest = createAsyncThunk(
       const action = modalType
       
       const response = await http.put(`/admin/orders/reject/${orderId}`, { action });
-      console.log(response.data)
-      //  if (response.data) {
-      //   dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
-      // }
+       if (response.data.success) {
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+      }
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const acceptReturnOrCancelOrder = createAsyncThunk(
+  "orders/acceptReturnOrCancelOrder",
+  async ({ orderId, modalType ,currentPage ,ordersPerPage , dispatch }, { rejectWithValue }) => {
+    try {
+      const action = modalType
+
+      console.log(currentPage ,ordersPerPage)
+      
+      const response = await http.put(`/admin/orders/allow/${orderId}`, { action });
+      console.log(response.data.success)
+       if (response.data.success) {
+        console.log("erfan")
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+      }
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

@@ -6,9 +6,7 @@ import CancelOrReturn from "./CancelOrReturn/CancelOrReturn.jsx";
 
 const UserOrders = () => {
   const dispatch = useDispatch();
-  const { ordersDetails, isLoading, error, pagination } = useSelector(
-    (state) => state.orders
-  );
+  const { ordersDetails, isLoading, error, pagination } = useSelector( (state) => state.orders);
   const [selectedOrderDetails, setSelectedOrderDetails] = useState(null);
 
   const [selectedStatus, setSelectedStatus] = useState("All");

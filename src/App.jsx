@@ -3,6 +3,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Toaster } from 'react-hot-toast';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { setLoggedIn } from "./app/Slice/userSlices/usersSlice/usersSlice";
+import { useDispatch } from "react-redux";
+
+// user side
 import Home from "./Pages/Home/Home";
 import HomePage from "./Pages/HomePage/HomePage";
 import ProductStore from "./Pages/ProductStore/Products";
@@ -18,6 +22,10 @@ import PaymentSuccess from "./Components/PaymentSections/Stripe/StripeSuccess";
 import UserProtectedRoute from "./routes/userRoute/protectRouteUser";
 import UserContactPage from "./Pages/ContactPage/ContactPage";
 import ProfileSidebar from "./Pages/ProfilePage/ProfilePage";
+import PrivacyPolicy from "./Pages/LegalSide/PrivacyPolicy/PrivacyPolicy";
+import TermsOfService from "./Pages/LegalSide/TermsOfService/TermsOfService";
+import WalletPage from "./Components/ProfilePage/UserWallet/UserWallet";
+
 
 {
   /* Import Admin Details */
@@ -37,8 +45,8 @@ import AdminProtectedRoute from "./routes/AdminRoute/protectAdmin";
 import RevenueDetails from "./Admin/Analtycs/Revenue/Revenue";
 import RefundPage from "./Admin/Analtycs/Refund/Refund";
 import AdminMessagesPage from "./Admin/UsersList/HandleMessage/HandleMessage";
-import { setLoggedIn } from "./app/Slice/usersSlice/usersSlice";
-import { useDispatch } from "react-redux";
+
+
 
 const App = () => {
   let id = localStorage.getItem("id")
@@ -60,16 +68,24 @@ const App = () => {
             <Route path={"/products/:category"}element={<CatogoryCard/>} />
             <Route path={"/products/cart/mycart"} element={<UserProtectedRoute element={<UserCart />} />} />
             <Route path={"/wishlist"} element={<UserProtectedRoute element={<WishList/>} />} />
-            <Route path={"/orders/:id"} element={<UserProtectedRoute element={<ClientOrders/>} />} />
+            <Route path={"/orders"} element={<UserProtectedRoute element={<ClientOrders/>} />} />
             <Route path={"/contact"} element={<UserProtectedRoute element={<UserContactPage/>} />} />
-            <Route path={"/profile"} element={<UserProtectedRoute element={<ProfileSidebar/>} />} />
+            <Route path={"/privacy"} element={<PrivacyPolicy />} />
+            <Route path={"/terms"} element={<TermsOfService />} />
 
-
+            <Route path={"/profile"} element={<UserProtectedRoute element={<ProfileSidebar/>} />} > 
+              <Route path={"wallet"} element={<UserProtectedRoute element={<WalletPage/>} />} />
+              <Route path={"wishlist"} element={<UserProtectedRoute element={<WishList/>} />} />
+              <Route path={"privacy"} element={<PrivacyPolicy />} />
+              <Route path={"terms"} element={<TermsOfService />} />
+              <Route path={"orders"} element={<UserProtectedRoute element={<ClientOrders/>} />} />
+            </Route>
           </Route>
           {/* <Route path={"/payment/:id"} element={<PaymentPage />} /> */}
           <Route path={"/payment/success/payment"} element={<UserProtectedRoute element={<PaymentSuccess/>} />} />
           <Route path="login" element={<LoginForm />} />
           <Route path="register" element={<UserRegistration />} />
+          
 
           {/*---Admin Side---*/}
           <Route element={<AdminProtectedRoute />}>
@@ -102,15 +118,11 @@ export default App;
 {
   /*
   User Profile Adding tp Edit Option and Address Option
-  Protected Component
   Google signup mail automatically 
   otp system
   buynow button seperate cart
   
-  add wishlist
-  Admin Side
   Including search to All orders dertails
-  Including Message  reply option
   Navbar fixed at top mobile menu
   */
 }

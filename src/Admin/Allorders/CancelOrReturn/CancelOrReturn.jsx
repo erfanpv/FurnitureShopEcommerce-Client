@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { rejectCancelOrReturnRequest, updateOrderStatus } from "../../../app/Slice/adminSlices/ordersSlices/ordersThunk";
+import {
+  acceptReturnOrCancelOrder,
+  rejectCancelOrReturnRequest,
+  updateOrderStatus,
+} from "../../../app/Slice/adminSlices/ordersSlices/ordersThunk";
 import { useDispatch } from "react-redux";
 
 const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
@@ -22,11 +26,25 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
   };
 
   const handleReject = () => {
-    dispatch(rejectCancelOrReturnRequest({orderId:selectedOrder.orderDetails.orderId,modalType}))
+    dispatch(
+      rejectCancelOrReturnRequest({
+        orderId: selectedOrder.orderDetails.orderId,
+        modalType,
+        currentPage,
+        ordersPerPage,
+      })
+    );
     closeRequestModal();
   };
   const handleAllow = () => {
-    console.log(`Allow ${modalType} for Order ID: ${selectedOrder._id}`);
+    dispatch(
+      acceptReturnOrCancelOrder({
+        orderId: selectedOrder.orderDetails.orderId,
+        modalType,
+        currentPage,
+        ordersPerPage,
+      })
+    );
     closeRequestModal();
   };
   const openStatusModal = (order) => {
@@ -60,7 +78,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
   };
 
   return (
-    <div>
+    <>
       <td className="py-4 px-6 border-b border-gray-200">
         {order.orderDetails.status === "Returned" &&
         order.orderDetails.isCancelled ? (
@@ -72,6 +90,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth="2"
+              aria-label="Return Pending Icon"
             >
               <path
                 strokeLinecap="round"
@@ -83,7 +102,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
               className="font-mono text-sm underline"
               onClick={() => openRequestModal(order, "return")}
             >
-              Return Request Pending
+              Return Request
             </button>
           </div>
         ) : order.orderDetails.status === "Cancelled" &&
@@ -96,6 +115,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
               viewBox="0 0 24 24"
               stroke="currentColor"
               strokeWidth="2"
+              aria-label="Cancel Pending Icon"
             >
               <path
                 strokeLinecap="round"
@@ -107,13 +127,18 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
               className="font-mono text-sm underline"
               onClick={() => openRequestModal(order, "cancel")}
             >
-              Cancel Request Pending
+              Cancel Request
             </button>
           </div>
+        ) : order.orderDetails.status === "Delivered" ? (
+          <p className="text-green-600  py-2 px-4">{`Order Delivered on ${new Date(
+            order.orderDetails.deliveredAt
+          ).toLocaleDateString()}`}</p>
         ) : (
           <button
             onClick={() => openStatusModal(order.orderDetails)}
             className="bg-rose-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-rose-700 transition duration-200"
+            aria-label="Order Actions Button"
           >
             Actions
           </button>
@@ -136,7 +161,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
         <div className="mb-6 p-4 bg-gray-100 border-l-4 border-blue-600 rounded-md shadow-sm">
           <p className="font-semibold text-gray-800">User's Reason:</p>
           <p className="mt-1 text-gray-700">
-            {selectedOrder?.orderDetails.reason  || "No reason provided."}
+            {selectedOrder?.orderDetails.reason || "No reason provided."}
           </p>
         </div>
 
@@ -183,12 +208,22 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
                 className="w-full p-2 border rounded-md"
               >
                 <option value="">Select</option>
-                <option value="Processing">Processing</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Cancelled">Cancelled</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Returned">Returned</option>
-                <option value="Refunded">Refunded</option>
+                {(selectedOrderForStatus.status == "Placed" ||
+                  selectedOrderForStatus.status == "Processing" ||
+                  selectedOrderForStatus.status == "Shipped") && (
+                  <>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                  </>
+                )}
+                {(selectedOrderForStatus.status == "Cancelled" ||
+                  selectedOrderForStatus.status == "Returned") &&
+                  selectedOrderForStatus.isCancelled == false && (
+                    <>
+                      <option value="Refunded">Refunded</option>
+                    </>
+                  )}
               </select>
             </div>
           </div>
@@ -208,7 +243,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
           </button>
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 
