@@ -3,7 +3,7 @@ import OrderDetails from '../../Components/OrderDetails/OrderDetails'
 
 const ClientOrders = () => {
   return (
-    <div className='flex justify-center '>
+    <div>
       <OrderDetails/>
     </div>
   )
