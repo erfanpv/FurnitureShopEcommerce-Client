@@ -114,3 +114,19 @@ export const acceptReturnOrCancelOrder = createAsyncThunk(
     }
   }
 );
+
+export const refundPayment = createAsyncThunk(
+  'orders/refundPayment',
+  async ({ orderId, status ,currentPage ,ordersPerPage , dispatch  }, { rejectWithValue }) => {
+    try {
+      const response = await http.put(`/admin/orders/refund/${orderId}`, {
+        action: 'refunded',
+      });
+      if (response.data) {
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+      }
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
