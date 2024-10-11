@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import {
   acceptReturnOrCancelOrder,
+  refundPayment,
   rejectCancelOrReturnRequest,
   updateOrderStatus,
 } from "../../../app/Slice/adminSlices/ordersSlices/ordersThunk";
@@ -58,7 +59,16 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
   };
 
   const handleStatusUpdate = () => {
-    if (selectedOrderForStatus && newStatus) {
+    if (selectedOrderForStatus && newStatus === "Refunded") {
+      dispatch(
+        refundPayment({
+          orderId: selectedOrderForStatus.orderId,
+          currentPage,
+          ordersPerPage,
+          dispatch,
+        })
+      );
+    } else if (selectedOrderForStatus && newStatus) {
       dispatch(
         updateOrderStatus({
           orderId: selectedOrderForStatus.orderId,
@@ -102,7 +112,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
               className="font-mono text-sm underline"
               onClick={() => openRequestModal(order, "return")}
             >
-              Return Request
+              Return Request Pending
             </button>
           </div>
         ) : order.orderDetails.status === "Cancelled" &&
@@ -133,6 +143,10 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
         ) : order.orderDetails.status === "Delivered" ? (
           <p className="text-green-600  py-2 px-4">{`Order Delivered on ${new Date(
             order.orderDetails.deliveredAt
+          ).toLocaleDateString()}`}</p>
+        ) : order.orderDetails.status === "Refunded" ? (
+          <p className="text-green-600  py-2 px-4">{`Order Refunded on ${new Date(
+            order.orderDetails.refundedAt
           ).toLocaleDateString()}`}</p>
         ) : (
           <button
