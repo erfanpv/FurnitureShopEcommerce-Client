@@ -79,6 +79,8 @@ const App = () => {
               <Route path={"privacy"} element={<PrivacyPolicy />} />
               <Route path={"terms"} element={<TermsOfService />} />
               <Route path={"orders"} element={<UserProtectedRoute element={<ClientOrders/>} />} />
+              <Route path={"contact"} element={<UserProtectedRoute element={<UserContactPage/>} />} />
+
             </Route>
           </Route>
           {/* <Route path={"/payment/:id"} element={<PaymentPage />} /> */}
