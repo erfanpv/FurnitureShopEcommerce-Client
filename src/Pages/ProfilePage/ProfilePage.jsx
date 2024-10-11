@@ -9,6 +9,7 @@ import {
   FaSignOutAlt,
   FaAddressBook,
   FaUser,
+  FaEnvelope
 } from "react-icons/fa";
 import { setLoggedIn } from "../../app/Slice/userSlices/usersSlice/usersSlice";
 
@@ -88,6 +89,16 @@ const ProfileSidebar = () => {
                   <span>Privacy Policy</span>
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/profile/contact"
+                  className="flex items-center space-x-4 text-gray-600 hover:text-indigo-600 transition"
+                >
+                  <FaEnvelope className="text-lg" />
+                  <span>Contact Us</span>
+                </Link>
+              </li>
+
               <li>
                 <Link to={"/"}>
                   <button
