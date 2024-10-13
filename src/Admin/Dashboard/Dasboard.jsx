@@ -43,7 +43,12 @@ const DashboardStats = () => {
         >
           <TotalOrders />
         </Link>
-        <TotalRevenue />
+        <Link
+          to={"/admin/revenue"}
+          className="hover:scale-105 transform transition"
+        >
+          <TotalRevenue />
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-8 mb-12">

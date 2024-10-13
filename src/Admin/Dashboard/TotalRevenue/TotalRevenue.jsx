@@ -33,7 +33,7 @@ const TotalRevenue = () => {
           <div className="pt-1 text-right">
             <p className="text-sm font-light capitalize">Total Revenue</p>
             <h4 className="text-2xl font-semibold tracking-tighter xl:text-2xl">
-              ${totalSalesAmount}
+              ${totalSalesAmount?.toFixed(2)}
             </h4>
           </div>
         </div>
