@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
+import http from "../../../utils/axios/axiosIntercepter";
 
 const PaymentActivity = () => {
-  const [paymentDetails] = useState([
-    { paymentId: 'P001', transactionId: 'T001', user: 'John Doe', amount: 150.00, method: 'Credit Card', status: 'Completed', date: '2024-09-10' },
-    { paymentId: 'P002', transactionId: 'T002', user: 'Jane Smith', amount: 200.00, method: 'PayPal', status: 'Pending', date: '2024-09-11' },
-    { paymentId: 'P003', transactionId: 'T003', user: 'Alice Johnson', amount: 75.50, method: 'Debit Card', status: 'Failed', date: '2024-09-12' },
-    { paymentId: 'P004', transactionId: 'T004', user: 'Bob Brown', amount: 120.00, method: 'Bank Transfer', status: 'Completed', date: '2024-09-13' },
-    // Add more dummy data as needed
-  ]);
-  
+  const [paymentDetails, setPaymentDetails] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [pagination, setPagination] = useState({ totalPages: 0 });
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    const fetchPaymentDetails = async (page) => {
+      try {
+        const response = await http.get(`/admin/payment-activity?page=${page}`);
+        setPaymentDetails(response.data.payments);
+        setPagination(response.data.pagination);
+      } catch (error) {
+        console.error("Failed to fetch payment activity:", error);
+      }
+    };
+
+    fetchPaymentDetails(currentPage);
+  }, [currentPage]);
 
   const openModal = (payment) => {
     setSelectedPayment(payment);
@@ -20,22 +30,26 @@ const PaymentActivity = () => {
     setSelectedPayment(null);
   };
 
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="bg-white-100 min-h-screen px-4 py-10 lg:px-20 md:ml-60 sm:ml-60 lg:ml-60">
       <h1 className="text-4xl font-bold text-center mb-10 text-indigo-800">
-        Payment Activity
+        Payment Analytics
       </h1>
       <div className="overflow-x-auto rounded-lg shadow-md">
         <table className="min-w-full bg-white border border-gray-200 rounded-md">
           <thead>
             <tr>
               {[
+                "No",
                 "Payment ID",
-                "Transaction ID",
+                "Order ID",
                 "User",
                 "Amount",
                 "Payment Method",
-                "Status",
                 "Date",
                 "Actions",
               ].map((heading) => (
@@ -49,17 +63,32 @@ const PaymentActivity = () => {
             </tr>
           </thead>
           <tbody>
-            {paymentDetails.map((payment) => (
-              <tr key={payment.paymentId} className="hover:bg-gray-100 transition duration-200">
-                <td className="py-4 px-6 border-b border-gray-200">{payment.paymentId}</td>
-                <td className="py-4 px-6 border-b border-gray-200">{payment.transactionId}</td>
-                <td className="py-4 px-6 border-b border-gray-200">{payment.user}</td>
-                <td className="py-4 px-6 border-b border-gray-200">${payment.amount.toFixed(2)}</td>
-                <td className="py-4 px-6 border-b border-gray-200">{payment.method}</td>
-                <td className={`py-4 px-6 border-b border-gray-200 ${payment.status === 'Completed' ? 'text-green-600' : payment.status === 'Pending' ? 'text-yellow-600' : 'text-red-600'}`}>
-                  {payment.status}
+            {paymentDetails.map((payment, index) => (
+              <tr
+                key={payment.paymentId}
+                className="hover:bg-gray-100 transition duration-200"
+              >
+                <td className="py-4 px-6 border-b border-gray-200 text-sm break-all">
+                  {index + 1 + (currentPage - 1) * 10}{" "}
                 </td>
-                <td className="py-4 px-6 border-b border-gray-200">{new Date(payment.date).toLocaleDateString()}</td>
+                <td className="py-4 px-6 border-b border-gray-200 text-sm break-all">
+                  {payment.paymentId}
+                </td>
+                <td className="py-4 px-6 border-b border-gray-200 text-sm break-all">
+                  {payment.transactionId}
+                </td>
+                <td className="py-4 px-6 border-b border-gray-200 whitespace-nowrap">
+                  {payment.user}
+                </td>
+                <td className="py-4 px-6 border-b border-gray-200">
+                  ${payment.amount.toFixed(2)}
+                </td>
+                <td className="py-4 px-6 border-b border-gray-200">
+                  {payment.method}
+                </td>
+                <td className="py-4 px-6 border-b border-gray-200">
+                  {new Date(payment.date).toLocaleDateString()}
+                </td>
                 <td className="py-4 px-6 border-b border-gray-200">
                   <button
                     onClick={() => openModal(payment)}
@@ -74,7 +103,27 @@ const PaymentActivity = () => {
         </table>
       </div>
 
-      {/* Modal for Payment Details */}
+      {pagination?.totalPages > 1 && (
+        <div className="flex justify-center mt-6">
+          <ul className="inline-flex -space-x-px">
+            {Array.from({ length: pagination.totalPages }, (_, index) => (
+              <li key={index} className="px-2">
+                <button
+                  onClick={() => paginate(index + 1)}
+                  className={`px-3 py-2 leading-tight border ${
+                    currentPage === index + 1
+                      ? "bg-indigo-600 text-white"
+                      : "bg-white text-gray-700"
+                  } rounded-md`}
+                >
+                  {index + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {selectedPayment && (
         <Modal
           isOpen={!!selectedPayment}
@@ -83,15 +132,37 @@ const PaymentActivity = () => {
           className="relative p-8 bg-white rounded-lg shadow-lg mx-auto mt-10 max-w-2xl"
           overlayClassName="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center"
         >
-          <h2 className="text-2xl font-bold mb-6 text-gray-700 border-b pb-3">Payment Details</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-700 border-b pb-3">
+            Payment Details
+          </h2>
           <div className="space-y-4">
-            <p><strong className="text-gray-600">Payment ID:</strong> {selectedPayment.paymentId}</p>
-            <p><strong className="text-gray-600">Transaction ID:</strong> {selectedPayment.transactionId}</p>
-            <p><strong className="text-gray-600">Customer Name:</strong> {selectedPayment.user}</p>
-            <p><strong className="text-gray-600">Payment Date:</strong> {new Date(selectedPayment.date).toLocaleDateString()}</p>
-            <p><strong className="text-gray-600">Total Amount:</strong> ${selectedPayment.amount.toFixed(2)}</p>
-            <p><strong className="text-gray-600">Payment Method:</strong> {selectedPayment.method}</p>
-            <p><strong className="text-gray-600">Status:</strong> {selectedPayment.status}</p>
+            <p>
+              <strong className="text-gray-600">Payment ID:</strong>{" "}
+              {selectedPayment.paymentId}
+            </p>
+            <p>
+              <strong className="text-gray-600">Transaction ID:</strong>{" "}
+              {selectedPayment.transactionId}
+            </p>
+            <p>
+              <strong className="text-gray-600">Customer Name:</strong>{" "}
+              {selectedPayment.user}
+            </p>
+            <p>
+              <strong className="text-gray-600">Payment Date:</strong>{" "}
+              {new Date(selectedPayment.date).toLocaleDateString()}
+            </p>
+            <p>
+              <strong className="text-gray-600">Total Amount:</strong> $
+              {selectedPayment.amount.toFixed(2)}
+            </p>
+            <p>
+              <strong className="text-gray-600">Payment Method:</strong>{" "}
+              {selectedPayment.method}
+            </p>
+            <p>
+              <strong className="text-gray-600">Status:</strong> Completed
+            </p>
           </div>
 
           <button
