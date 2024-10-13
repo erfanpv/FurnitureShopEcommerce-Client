@@ -137,7 +137,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
               className="font-mono text-sm underline"
               onClick={() => openRequestModal(order, "cancel")}
             >
-              Cancel Request
+              Cancel Request Pending
             </button>
           </div>
         ) : order.orderDetails.status === "Delivered" ? (
