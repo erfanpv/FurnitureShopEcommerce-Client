@@ -25,6 +25,8 @@ import ProfileSidebar from "./Pages/ProfilePage/ProfilePage";
 import PrivacyPolicy from "./Pages/LegalSide/PrivacyPolicy/PrivacyPolicy";
 import TermsOfService from "./Pages/LegalSide/TermsOfService/TermsOfService";
 import WalletPage from "./Components/ProfilePage/UserWallet/UserWallet";
+import ManageAddresses from "./Components/ProfilePage/UserAddress/ManageAddress";
+import AccountInfo from "./Components/ProfilePage/AccountInfo/AccountInfo";
 
 
 {
@@ -75,6 +77,8 @@ const App = () => {
 
             <Route path={"/profile"} element={<UserProtectedRoute element={<ProfileSidebar/>} />} > 
               <Route path={"wallet"} element={<UserProtectedRoute element={<WalletPage/>} />} />
+              <Route path={"info"} element={<UserProtectedRoute element={<AccountInfo/>} />} />
+              <Route path={"address"} element={<UserProtectedRoute element={<ManageAddresses/>} />} />
               <Route path={"wishlist"} element={<UserProtectedRoute element={<WishList/>} />} />
               <Route path={"privacy"} element={<PrivacyPolicy />} />
               <Route path={"terms"} element={<TermsOfService />} />
