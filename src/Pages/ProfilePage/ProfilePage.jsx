@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaBox,
@@ -11,19 +11,23 @@ import {
   FaUser,
   FaEnvelope
 } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import { setLoggedIn } from "../../app/Slice/userSlices/usersSlice/usersSlice";
 
 const ProfileSidebar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.clear();
     dispatch(setLoggedIn(false));
+    navigate("/"); 
   };
+
   return (
     <div className="min-h-screen flex bg-white">
-      {/* Sidebar */}
-      <aside className="w-72 bg-white  h-screen flex flex-col justify-between">
+      <aside className="w-72 bg-white h-screen flex flex-col justify-between">
         <div className="p-6">
-          {/* Navigation Links */}
           <nav>
             <ul className="space-y-4">
               <li>
@@ -100,24 +104,20 @@ const ProfileSidebar = () => {
               </li>
 
               <li>
-                <Link to={"/"}>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-4 text-red-600 hover:text-red-700 transition w-full"
-                  >
-                    <FaSignOutAlt className="text-lg" />
-                    <span>Logout</span>
-                  </button>
-                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-4 text-red-600 hover:text-red-700 transition w-full"
+                >
+                  <FaSignOutAlt className="text-lg" />
+                  <span>Logout</span>
+                </button>
               </li>
             </ul>
           </nav>
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-grow p-8 bg-white">
-        {/* Outlet for rendering dynamic pages */}
         <Outlet />
       </main>
     </div>

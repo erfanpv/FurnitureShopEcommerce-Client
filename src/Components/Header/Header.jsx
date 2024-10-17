@@ -37,7 +37,7 @@ export default function Header() {
   }, [dispatch]);
 
   const userNavigation = [
-    { name: "Profile", href: "/profile" },
+    { name: "Profile", href: "/profile/info" },
     { name: "Order Details", href: `/orders` },
     { name: "Sign out", href: "/" },
   ];

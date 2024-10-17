@@ -20,7 +20,6 @@ const AccountInfo = () => {
       try {
         const id = localStorage.getItem("id")
         const response = await http.get(`users/profile/${id}`);
-        console.log(response.data)
         setUserInfo(response.data);
         setFormData(response.data);
         setLoading(false);
