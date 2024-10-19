@@ -3,8 +3,7 @@
 
   const PrivacyPolicy = () => {
     return (
-      <div className="max-w-5xl mx-auto px-6 py-12 bg-gradient-to-r from-white to-gray-50 rounded-lg  mt-10">
-        {/* Page Header */}
+      <div className="max-w-5xl mx-auto px-6 py-12  rounded-lg  mt-10">
         <header className="text-center mb-12">
           <h1 className="text-5xl font-bold text-indigo-900 mb-4">Privacy Policy</h1>
           <p className="text-gray-600 text-lg">
@@ -12,7 +11,6 @@
           </p>
         </header>
 
-        {/* Sections */}
         <section className="mb-12">
           <div className="flex items-center mb-6">
             <FaInfoCircle className="text-indigo-600 text-3xl mr-4" />

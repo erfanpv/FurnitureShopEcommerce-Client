@@ -39,7 +39,7 @@ const ProfileSidebar = () => {
                   <span>Account Information</span>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to="/profile/address"
                   className="flex items-center space-x-4 text-gray-600 hover:text-indigo-600 transition"
@@ -47,7 +47,7 @@ const ProfileSidebar = () => {
                   <FaAddressBook className="text-lg" />
                   <span>Manage Addresses</span>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to="/profile/orders"

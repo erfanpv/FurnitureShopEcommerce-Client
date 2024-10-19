@@ -14,11 +14,12 @@ const AccountInfo = () => {
   const [formData, setFormData] = useState(userInfo);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const id = localStorage.getItem("id")
+        const id = localStorage.getItem("id");
         const response = await http.get(`users/profile/${id}`);
         setUserInfo(response.data);
         setFormData(response.data);
@@ -42,12 +43,42 @@ const AccountInfo = () => {
     });
   };
 
+  const validateForm = () => {
+    let errors = {};
+
+    if (!formData.firstName.trim()) {
+      errors.firstName = "First Name is required";
+    }
+
+    if (!formData.lastName.trim()) {
+      errors.lastName = "Last Name is required";
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailPattern.test(formData.email)) {
+      errors.email = "Invalid email format";
+    }
+
+    const phonePattern = /^[0-9]{10}$/;
+    if (formData.phone && !phonePattern.test(formData.phone)) {
+      errors.phone = "Invalid phone number (must be 10 digits)";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSave = async () => {
+    if (!validateForm()) return;
+
     try {
       const id = localStorage.getItem("id");
-      const response = await http.put(`users/profile/${id}`,formData);
+      const response = await http.put(`users/profile/${id}`, formData);
       setUserInfo(response.data);
       setIsEditing(false);
+      setValidationErrors({});
     } catch (error) {
       setError("Failed to update user data");
     }
@@ -63,23 +94,28 @@ const AccountInfo = () => {
         </h1>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          {/* Display Account Information */}
           <h2 className="text-2xl font-semibold mb-6">Your Account</h2>
 
-          {/* Form */}
           <div className="space-y-6">
             <div>
               <label className="block text-gray-700 text-sm font-medium">
                 First Name
               </label>
               {isEditing ? (
-                <input
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 mt-2"
-                />
+                <>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg p-2 mt-2"
+                  />
+                  {validationErrors.firstName && (
+                    <p className="text-red-500 text-sm">
+                      {validationErrors.firstName}
+                    </p>
+                  )}
+                </>
               ) : (
                 <p className="mt-2 text-gray-600">{userInfo.firstName}</p>
               )}
@@ -90,47 +126,69 @@ const AccountInfo = () => {
                 Last Name
               </label>
               {isEditing ? (
-                <input
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 mt-2"
-                />
+                <>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg p-2 mt-2"
+                  />
+                  {validationErrors.lastName && (
+                    <p className="text-red-500 text-sm">
+                      {validationErrors.lastName}
+                    </p>
+                  )}
+                </>
               ) : (
                 <p className="mt-2 text-gray-600">{userInfo.lastName}</p>
               )}
             </div>
 
+            {/* Email */}
             <div>
               <label className="block text-gray-700 text-sm font-medium">
                 Email
               </label>
               {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 mt-2"
-                />
+                <>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg p-2 mt-2"
+                  />
+                  {validationErrors.email && (
+                    <p className="text-red-500 text-sm">
+                      {validationErrors.email}
+                    </p>
+                  )}
+                </>
               ) : (
                 <p className="mt-2 text-gray-600">{userInfo.email}</p>
               )}
             </div>
 
-            <div>
+             <div>
               <label className="block text-gray-700 text-sm font-medium">
                 Phone
               </label>
               {isEditing ? (
-                <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full border border-gray-300 rounded-lg p-2 mt-2"
-                />
+                <>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-lg p-2 mt-2"
+                  />
+                  {validationErrors.phone && (
+                    <p className="text-red-500 text-sm">
+                      {validationErrors.phone}
+                    </p>
+                  )}
+                </>
               ) : (
                 <p className="mt-2 text-gray-600">{userInfo.phone}</p>
               )}

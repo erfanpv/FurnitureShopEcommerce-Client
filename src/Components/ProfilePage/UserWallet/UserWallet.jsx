@@ -13,12 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 const WalletPage = ({ userId }) => {
   const handleAddFunds = async () => {};
 
-  const { walletData } = useSelector((state) => state.wallet);
+  const { loading, walletData, error } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getWalletData());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="max-w-7xl mx-auto px-8 py-16">
@@ -43,9 +43,19 @@ const WalletPage = ({ userId }) => {
               <p className="text-gray-500">Available funds in your wallet</p>
             </div>
           </div>
-          <p className="text-4xl font-semibold text-gray-800">
-            ${walletData?.balance.toFixed(2)}
-          </p>
+
+          {loading ? (
+            <p className="text-4xl font-semibold text-gray-400 animate-pulse">
+              Loading...
+            </p>
+          ) : error ? (
+            <p className="text-4xl font-semibold text-green-500">00</p>
+          ) : (
+            <p className="text-4xl font-semibold text-gray-800">
+              ${walletData?.balance?.toFixed(2)}
+            </p>
+          )}
+
           <button
             onClick={() => handleAddFunds()}
             className="mt-8 w-full bg-green-500 text-white py-3 rounded-lg flex justify-center items-center shadow-lg hover:bg-green-600 transition-colors duration-300"
@@ -66,43 +76,66 @@ const WalletPage = ({ userId }) => {
               </p>
             </div>
           </div>
-          <ul className="divide-y divide-gray-200">
-            {walletData?.transactions.map((transaction, index) => (
-              <li
-                key={transaction._id || index}
-                className="py-4 flex items-center justify-between"
-              >
+
+          {loading ? (
+            <p className="text-lg text-gray-400 animate-pulse">
+              Loading transactions...
+            </p>
+          ) : error ? (
+            <ul className="divide-y divide-gray-200">
+              <li className="py-4 flex items-center justify-between">
                 <div className="flex items-center">
-                  {transaction.walletUpdate === "credited" ? (
-                    <FaArrowDown className="text-2xl mr-4 text-green-500" />
-                  ) : (
-                    <FaArrowUp className="text-2xl mr-4 text-red-500" />
-                  )}
                   <div>
-                    <p className="text-lg font-semibold text-gray-700">
-                      {transaction.walletUpdate === "credited"
-                        ? "Deposit"
-                        : "Withdrawal"}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {new Date(transaction.date).toLocaleDateString()}
-                    </p>
+                    <p className="text-lg font-semibold text-gray-700"></p>
+                    <p className="text-sm text-gray-500"></p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p
-                    className={`text-lg font-semibold ${
-                      transaction.walletUpdate === "credited"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    ${transaction.total}
-                  </p>
+                  <p className={`text-lg font-semibol`}></p>
                 </div>
               </li>
-            ))}
-          </ul>
+            </ul>
+          ) : (
+            <ul className="divide-y divide-gray-200">
+              {walletData?.transactions
+                .slice(0, 4)
+                .map((transaction, index) => (
+                  <li
+                    key={transaction._id || index}
+                    className="py-4 flex items-center justify-between"
+                  >
+                    <div className="flex items-center">
+                      {transaction.walletUpdate === "credited" ? (
+                        <FaArrowDown className="text-2xl mr-4 text-green-500" />
+                      ) : (
+                        <FaArrowUp className="text-2xl mr-4 text-red-500" />
+                      )}
+                      <div>
+                        <p className="text-lg font-semibold text-gray-700">
+                          {transaction.walletUpdate === "credited"
+                            ? "Deposit"
+                            : "Withdrawal"}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(transaction.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p
+                        className={`text-lg font-semibold ${
+                          transaction.walletUpdate === "credited"
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
+                      >
+                        ${transaction.total}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
       </div>
 
@@ -113,38 +146,62 @@ const WalletPage = ({ userId }) => {
             Full Transaction History
           </h2>
         </div>
-        <table className="w-full text-left table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 text-gray-700">Date</th>
-              <th className="px-4 py-2 text-gray-700">Type</th>
-              <th className="px-4 py-2 text-gray-700">Amount</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {walletData?.transactions.map((transaction, index) => (
-              <tr key={transaction._ud || index}>
-                <td className="px-4 py-2 text-gray-600">
-                  {new Date(transaction.date).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-2 text-gray-600">
-                  {transaction.walletUpdate === "credited"
-                    ? "Deposit"
-                    : "Withdrawal"}
-                </td>
-                <td
-                  className={`px-4 py-2 ${
-                    transaction.walletUpdate === "credited"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  ${transaction.total}
-                </td>
+
+        {loading ? (
+          <p className="text-lg text-gray-400 animate-pulse">
+            Loading full transaction history...
+          </p>
+        ) : error ? (
+          <table className="w-full text-left table-auto">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 text-gray-700">Date</th>
+                <th className="px-4 py-2 text-gray-700">Type</th>
+                <th className="px-4 py-2 text-gray-700">Amount</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              <tr>
+                <td className="px-4 py-2 text-gray-600"></td>
+                <td className="px-4 py-2 text-gray-600"></td>
+                <td className={`px-4 py-2`}></td>
+              </tr>
+            </tbody>
+          </table>
+        ) : (
+          <table className="w-full text-left table-auto">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 text-gray-700">Date</th>
+                <th className="px-4 py-2 text-gray-700">Type</th>
+                <th className="px-4 py-2 text-gray-700">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {walletData?.transactions.map((transaction, index) => (
+                <tr key={transaction._id || index}>
+                  <td className="px-4 py-2 text-gray-600">
+                    {new Date(transaction.date).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-2 text-gray-600">
+                    {transaction.walletUpdate === "credited"
+                      ? "Deposit"
+                      : "Withdrawal"}
+                  </td>
+                  <td
+                    className={`px-4 py-2 ${
+                      transaction.walletUpdate === "credited"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    ${transaction.total}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

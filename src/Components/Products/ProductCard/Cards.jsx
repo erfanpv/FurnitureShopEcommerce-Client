@@ -42,7 +42,7 @@ const FurnitureCard = ({ productItem }) => {
           }
           className={`absolute top-2 right-2 inline-block rounded-full border border-rose-600 p-2 ${
             isInWishlist ? "bg-rose-600 text-white" : "bg-white text-rose-600"
-          } hover:bg-rose-600 hover:text-white focus:outline-none focus:ring transition-colors duration-300 cursor-pointer`}
+          } hover:bg-rose-600 hover:text-white focus:outline-none focus:ring transition-colors duration-300 cursor-pointer active:bg-rose-500`}
         >
           <span className="sr-only">Add to Wishlist</span>
           <svg
