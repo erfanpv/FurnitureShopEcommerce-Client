@@ -1,17 +1,24 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { stripePaymentIntegration } from "../../../app/Slice/userSlices/paymentSlice/paymentThunk";
+import { getWalletData } from "../../../app/Slice/userSlices/walletSlices/walletThunk";
+import { useNavigate } from "react-router-dom";
+import WalletPaymentPage from "../../PaymentSections/WalleOrderPlaced/WalletOrderPlaced";
 
 const OrderSummary = () => {
   const { cart: cartItems, cartId } = useSelector((state) => state.cart);
-
-  const [paymentMethod, setPaymentMethod] = useState("stripe"); 
+  const { walletData } = useSelector((state) => state.wallet);
+  const [paymentMethod, setPaymentMethod] = useState("stripe");
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false); 
 
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.productId.price * item.quantity,
     0
   );
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const estimatedTax = totalPrice * 0.1;
   const orderTotal = totalPrice + estimatedTax;
@@ -20,8 +27,17 @@ const OrderSummary = () => {
     if (orderTotal > 0) {
       if (paymentMethod === "stripe") {
         stripePaymentIntegration({ cartId, paymentMethod });
-      }
+      } else if (paymentMethod === "wallet") {
+        dispatch(getWalletData());
 
+        if (walletData?.balance < orderTotal) {
+          toast.error(
+            "Insufficient wallet balance to complete your purchase. Please add funds to your wallet."
+          );
+        } else {
+          setIsWalletModalOpen(true); 
+        }
+      }
     } else {
       toast.info("Your Cart is Empty");
     }
@@ -52,9 +68,11 @@ const OrderSummary = () => {
         <span>${orderTotal.toFixed(2)}</span>
       </div>
 
-      {/* Payment Method Selection */}
       <div className="mt-4">
-        <label htmlFor="payment-method" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="payment-method"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
           Payment Method:
         </label>
         <select
@@ -64,9 +82,7 @@ const OrderSummary = () => {
           className="block w-full border border-gray-300 rounded-md p-2"
         >
           <option value="stripe">Stripe</option>
-          {/* <option value="paypal">PayPal</option>
-          <option value="bank_transfer">Bank Transfer</option> */}
-         
+          {/* <option value="wallet">Wallet</option> */}
         </select>
       </div>
 
@@ -76,6 +92,20 @@ const OrderSummary = () => {
       >
         Place your order
       </button>
+
+      {isWalletModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+            <WalletPaymentPage cartId={cartId} orderTotal={orderTotal} />
+            <button
+              className="w-full py-2 mt-4 bg-red-500 text-white rounded-md"
+              onClick={() => setIsWalletModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

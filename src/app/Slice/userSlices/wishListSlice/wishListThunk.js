@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../../../utils/axios/axiosIntercepter";
 import { addToWishlist, removeFromWishlist } from "./wishListSlice";
 
-const id = localStorage.getItem("id");
 
 export const loadWishList = createAsyncThunk(
   "wishlist/loadWishList",
@@ -34,15 +33,19 @@ export const toggleWishListItem = createAsyncThunk(
   "wishlist/toggleWishListItem",
   async ({ productId }, { rejectWithValue, dispatch, getState }) => {
     try {
+      const id = localStorage.getItem("id");
+
       const { wishlistCart } = getState().wishList;
       const isInWishlist = wishlistCart?.products?.some(
         (item) => item.productId._id === productId
       );
 
-      const response = await http.post(`users/${id}/wishlist`, { productId });
+      console.log(isInWishlist)
+      const response = await http.post(`users/${id}/wishlist`, { productId });      
 
       if (!isInWishlist) {
-        dispatch(addToWishlist(response.data.data));
+        console.log("er")
+         dispatch(addToWishlist(response.data.data));
       } else {
         dispatch(removeFromWishlist(productId));
       }

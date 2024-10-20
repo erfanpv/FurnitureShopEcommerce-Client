@@ -36,9 +36,9 @@ const Wishlist = () => {
 
       {wishlistCart?.products?.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {wishlistCart.products.map((item) => (
+          {wishlistCart.products.map((item,index) => (
             <div
-              key={item?.productId?._id}
+              key={item?.productId?._id || index}
               className="relative bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
               <Link to={`/products/cart/${item.productId?._id}`}>

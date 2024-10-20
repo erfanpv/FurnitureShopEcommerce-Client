@@ -9,21 +9,21 @@ const Carousel = () => {
   const slides = [
     {
       imgSrc: Slide1,
-      label: "Wood Gallery",
+      label: "Crafted Elegance",
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore molestias eligendi ducimus excepturi voluptatem ipsam amet unde ab debitis suscipit, recusandae ratione iste cupiditate porro mollitia maxime dolores cum reiciendis?",
+        "Discover our meticulously crafted furniture that brings elegance and warmth to your home. Each piece is designed to reflect quality and style.",
     },
     {
       imgSrc: Slide2,
-      label: "Wood Gallery",
+      label: "Sustainable Materials",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam reprehenderit fugit temporibus distinctio repudiandae accusamus nam quam sint quod accusantium aperiam, minima consequuntur ab doloremque nesciunt deleniti totam officiis voluptas!",
+        "At Wood Gallery, we prioritize sustainability. Our furniture is made from eco-friendly materials that are both stylish and kind to the environment.",
     },
     {
       imgSrc: Slide3,
-      label: "Wood Gallery",
+      label: "Customize Your Space",
       description:
-        "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi eius, aperiam libero asperiores ipsa, consectetur voluptate explicabo eaque fuga voluptatibus tempora velit assumenda labore, ex soluta distinctio? Voluptate, est temporibus.",
+        "Create your dream space with our customizable furniture options. Tailor the colors and finishes to match your unique style and taste.",
     },
   ];
 
@@ -89,8 +89,8 @@ const Carousel = () => {
                 style={{ height: "85vh" }}
               />
               <div className="absolute bottom-0 left-0 right-0 p-6 text-center bg-black bg-opacity-50 text-white">
-                <h5>{slide.label}</h5>
-                <p>{slide.description}</p>
+                <h5 className="text-xl font-bold">{slide.label}</h5>
+                <p className="mt-2">{slide.description}</p>
                 <p>
                   <a href="#" className="btn btn-warning mt-3">
                     Learn More

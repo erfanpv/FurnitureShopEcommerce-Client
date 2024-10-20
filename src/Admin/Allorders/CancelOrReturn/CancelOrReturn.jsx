@@ -33,6 +33,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
         modalType,
         currentPage,
         ordersPerPage,
+        dispatch
       })
     );
     closeRequestModal();
@@ -44,6 +45,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
         modalType,
         currentPage,
         ordersPerPage,
+        dispatch
       })
     );
     closeRequestModal();
@@ -89,7 +91,7 @@ const CancelOrReturn = ({ order, currentPage, ordersPerPage }) => {
 
   return (
     <>
-      <td className="py-4 px-6 border-b border-gray-200">
+      <td className="py-4 px-6 border-b border-gray-200 w-fit">
         {order.orderDetails.status === "Returned" &&
         order.orderDetails.isCancelled ? (
           <div className="flex items-center bg-red-50 text-red-700 border border-red-500 p-2 space-x-2 rounded-lg">

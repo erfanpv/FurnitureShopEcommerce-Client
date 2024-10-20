@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { setLoggedIn } from "./usersSlice";
 
 let userBaseUrl = import.meta.env.VITE_USER_API;
 let adminrBaseUrl = import.meta.env.VITE_USER_API;
@@ -40,11 +41,13 @@ export const registerUser = createAsyncThunk(
 
 export const loginUsers = createAsyncThunk(
   "users/loginUser",
-  async ({ values, navigate, toast }) => {
+  async ({ values, navigate, toast,dispatch }) => {
     try {
+      
       const response = await axios.post(`${userBaseUrl}/login`, values);
       if (response.status >= 200 && response.status < 300) {
         if (response.data.data.user.role === "admin") {
+          dispatch(setLoggedIn(true))
           toast.success(`Admin Loggin Success`);          
           localStorage.setItem("accesstoken",response.data.data.token)
           localStorage.setItem("id",response.data.data.user._id)
@@ -52,11 +55,11 @@ export const loginUsers = createAsyncThunk(
           navigate("/admin");
           return response.data;
         } else {
+          dispatch(setLoggedIn(true))
           toast.success(`${response.data.data.user.lastName} Loggin Success`);
           localStorage.setItem("accesstoken", response.data.data.token);
           localStorage.setItem("username", response.data.data.user.firstName + " " + response.data.data.user.lastName);
           localStorage.setItem("id",response.data.data.user._id)
-
           navigate("/");
           return response.data;
         }

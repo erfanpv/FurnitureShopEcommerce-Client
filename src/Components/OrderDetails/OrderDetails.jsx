@@ -186,15 +186,17 @@ const OrderDetails = () => {
 
                 <p className="text-sm lg:text-base font-medium text-gray-700">
                   <strong className="text-gray-700">Shipping Address:</strong>{" "}
-                  {`${order.shippingAddress.line1}${
-                    order.shippingAddress.line2
-                      ? ", " + order.shippingAddress.line2
-                      : ""
-                  }, ${order.shippingAddress.city}, ${
-                    order.shippingAddress.state
-                  }, ${order.shippingAddress.country}, ${
-                    order.shippingAddress.postal_code
-                  }`}
+                  {order.payment_method === "stripe"
+                    ? `${order.shippingAddress.line1}${
+                        order.shippingAddress.line2
+                          ? ", " + order.shippingAddress.line2
+                          : ""
+                      }, ${order.shippingAddress.city}, ${
+                        order.shippingAddress.state
+                      }, ${order.shippingAddress.country}, ${
+                        order.shippingAddress.postal_code
+                      }`
+                    : null}
                 </p>
                 <ReturnOrCancel order={order} />
               </div>

@@ -27,6 +27,7 @@ import TermsOfService from "./Pages/LegalSide/TermsOfService/TermsOfService";
 import WalletPage from "./Components/ProfilePage/UserWallet/UserWallet";
 import ManageAddresses from "./Components/ProfilePage/UserAddress/ManageAddress";
 import AccountInfo from "./Components/ProfilePage/AccountInfo/AccountInfo";
+import WalletPaymentPage from "./Components/PaymentSections/WalleOrderPlaced/WalletOrderPlaced";
 
 
 {
@@ -51,7 +52,7 @@ import AdminMessagesPage from "./Admin/UsersList/HandleMessage/HandleMessage";
 
 
 const App = () => {
-  let id = localStorage.getItem("id")
+  let id = localStorage.getItem("id");
   const dispatch = useDispatch()
   if (id) {
   useEffect(() => {

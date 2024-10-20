@@ -5,13 +5,11 @@ import RegisterImg from "../../../assets/Images/Slide-2.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../../app/Slice/userSlices/usersSlice/userThunk";
-import{ toast} from "react-hot-toast";
-
+import { toast } from "react-hot-toast";
 
 const UserRegistration = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch(); 
-
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -32,8 +30,10 @@ const UserRegistration = () => {
           "Password must contain at least 6 characters, one uppercase, one lowercase, one number, and one special character"
         )
         .required("Required"),
-      cpassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Passwords do not match"),
+      cpassword: Yup.string().oneOf(
+        [Yup.ref("password"), null],
+        "Passwords do not match"
+      ),
     }),
 
     onSubmit: (values) => {
@@ -57,8 +57,9 @@ const UserRegistration = () => {
                 Welcome to Wood Gallery 🦑
               </h2>
               <p className="mt-4 leading-relaxed text-white/90">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Eligendi nam dolorum aliquam, quibusdam aperiam voluptatum.
+                Join our community today and experience seamless shopping with
+                premium quality wood products. Sign up now and get exclusive
+                access to offers and updates from Wood Gallery.
               </p>
             </div>
           </section>

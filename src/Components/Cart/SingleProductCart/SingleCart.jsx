@@ -9,7 +9,9 @@ const SingleCart = () => {
   const dispatch = useDispatch();
   const { cart, loading } = useSelector((state) => state.cart); 
 
+
   const handleIncrement = (productId) => {
+
     if (!productId) return;
     dispatch(quantityIncrementAsync(productId));
   };

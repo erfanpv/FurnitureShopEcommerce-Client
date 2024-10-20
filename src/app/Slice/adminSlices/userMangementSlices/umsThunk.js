@@ -5,8 +5,10 @@ export const getAllUsers = createAsyncThunk(
   "userManger/getAllUsers",
   async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      const response = await http.get(`/admin/users?page=${page}&limit=${limit}`);
-      return response.data; 
+      const response = await http.get(
+        `/admin/users?page=${page}&limit=${limit}`
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to fetch Users"
@@ -17,14 +19,17 @@ export const getAllUsers = createAsyncThunk(
 
 export const toggleBlockUser = createAsyncThunk(
   "userManager/toggleBlockUser",
-  async ({ id, toast, closeModal, dispatch }, { rejectWithValue }) => {
+  async (
+    { id, toast, closeModal, dispatch, page, limit },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await http.put(`/admin/users/${id}/toggle-block`);
 
       toast.success(response.data.message);
 
       closeModal();
-      dispatch(getAllUsers());
+      dispatch(getAllUsers({ page, limit }));
       return response.data;
     } catch (error) {
       toast.error(

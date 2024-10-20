@@ -89,7 +89,7 @@ const UserList = () => {
           </ul>
         </div>
         {isModalOpen && (
-          <ToggleBlockUser id={uid} closeModal={closeModal} is_blocked={isBlocked} />
+          <ToggleBlockUser id={uid} closeModal={closeModal} is_blocked={isBlocked} page={currentPage}/>
         )}
       </div>
     </>

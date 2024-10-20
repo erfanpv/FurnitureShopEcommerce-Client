@@ -33,7 +33,7 @@ const LoginForm = () => {
         .required("Required"),
     }),
     onSubmit: (values) => {
-      dispatch(loginUsers({ values, navigate, toast }));
+      dispatch(loginUsers({ values, navigate, toast,dispatch }));
     },
   });
 
@@ -43,13 +43,14 @@ const LoginForm = () => {
       <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-lg text-center">
           <div className="flex lg:flex-1 justify-center">
-            <span className="sr-only">Your Company</span>
-            <img className="h-20 rounded-md" src={StoreLogo} alt="" />
+          <span className="sr-only">WoodGallery</span>
+          <img className="h-20 rounded-md" src={StoreLogo} alt="" />
           </div>
-          <h1 className="text-2xl font-bold sm:text-3xl">Get started today!</h1>
-          <p className="mt-4 text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et libero
-            nulla eaque error neque ipsa culpa autem, at itaque nostrum!
+          <h1 className="text-2xl font-bold sm:text-3xl">Welcome to WoodGallery!</h1>
+           <p className="mt-4 text-gray-500">
+            Discover the finest collection of handcrafted furniture and décor pieces
+            that transform your living spaces. Log in to access your personalized
+            shopping experience, track orders, and manage your wishlist.
           </p>
         </div>
 

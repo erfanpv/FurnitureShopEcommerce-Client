@@ -2,7 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import http from "../../../utils/axios/axiosIntercepter";
 
 
-const id = localStorage.getItem("id");
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (_, { rejectWithValue }) => {
   try {
@@ -50,6 +49,8 @@ export const removeFromCartAsync = createAsyncThunk(
   "cart/removeFromCartAsync",
   async ( productId , { rejectWithValue }) => { 
     try {
+      const id = localStorage.getItem("id");
+
       const response = await http.delete(`/users/${id}/cart`, { data: { productId } });
       return response.data.cart.products;
     } catch (error) {
@@ -62,6 +63,8 @@ export const quantityIncrementAsync = createAsyncThunk(
   "cart/quantityIncrementAsync",
   async (productId, { rejectWithValue }) => {
     try {
+      const id = localStorage.getItem("id");
+
       const action = "increment"; 
 
       const response = await http.post(`/users/${id}/cart`, { productId, action });
@@ -78,6 +81,8 @@ export const quantityDecrementAsync = createAsyncThunk(
   "cart/quantityDecrementAsync",
   async ( productId , { rejectWithValue }) => {
     try {
+      const id = localStorage.getItem("id");
+
       const action = "decrement";
 
       const response = await http.post(`/users/${id}/cart`, { productId, action });

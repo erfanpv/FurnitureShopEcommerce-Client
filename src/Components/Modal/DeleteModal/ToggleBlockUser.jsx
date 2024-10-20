@@ -3,12 +3,12 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { toggleBlockUser } from "../../../app/Slice/adminSlices/userMangementSlices/umsThunk";
 
-const ToggleBlockUser = ({ id, closeModal, is_blocked }) => {
+const ToggleBlockUser = ({ id, closeModal, is_blocked,page }) => {
   const dispatch = useDispatch();
 
   const handleBlock = async (id) => {
     try {
-      dispatch(toggleBlockUser({ id, toast, closeModal, dispatch }));
+      dispatch(toggleBlockUser({ id, toast, closeModal, dispatch,page,limit:10 }));
     } catch (error) {
       toast.error("Failed to delete user");
       closeModal();

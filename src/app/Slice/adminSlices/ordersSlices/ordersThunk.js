@@ -70,7 +70,7 @@ export const updateOrderStatus = createAsyncThunk(
     try {
       const response = await http.put(`/admin/orders/${orderId}/status`, { status });
        if (response.data) {
-        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage}));
       }
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -86,8 +86,8 @@ export const rejectCancelOrReturnRequest = createAsyncThunk(
       const action = modalType
       
       const response = await http.put(`/admin/orders/reject/${orderId}`, { action });
-       if (response.data.success) {
-        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+       if (response.data) {
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage, status:"All"  }));
       }
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -100,14 +100,10 @@ export const acceptReturnOrCancelOrder = createAsyncThunk(
   async ({ orderId, modalType ,currentPage ,ordersPerPage , dispatch }, { rejectWithValue }) => {
     try {
       const action = modalType
-
-      console.log(currentPage ,ordersPerPage)
       
       const response = await http.put(`/admin/orders/allow/${orderId}`, { action });
-      console.log(response.data.success)
        if (response.data.success) {
-        console.log("erfan")
-        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage, status:"All"  }));
       }
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -123,7 +119,7 @@ export const refundPayment = createAsyncThunk(
         action: 'refunded',
       });
       if (response.data) {
-        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage  }));
+        dispatch(getAllordersData({ page: currentPage, limit: ordersPerPage, status:"All"  }));
       }
     } catch (error) {
       return rejectWithValue(error.response.data);
